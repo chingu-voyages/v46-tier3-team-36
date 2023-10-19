@@ -2,8 +2,8 @@
 import { useState, useEffect, useContext, createContext} from 'react';
 import { usePathname} from 'next/navigation';
 import axios from 'axios';
-import Navbar from '../components/dashboard/Navbar';
-import SideMenuBar from '../components/dashboard/SideMenuBar';
+import Navbar from '@/components/dashboard/Navbar';
+import SideMenuBar from '@/components/dashboard/SideMenuBar';
 
 type User = {
 	userid: number;
