@@ -4,6 +4,8 @@ import { usePathname} from 'next/navigation';
 import axios from 'axios';
 import Navbar from '@/components/dashboard/Navbar';
 import SideMenuBar from '@/components/dashboard/SideMenuBar';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 type User = {
 	userid: number;
@@ -36,19 +38,24 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
 	const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
 	const [showSideMenu, setShowSideMenu] = useState<boolean>(true);
-	
+	const router = useRouter();
+
 	useEffect(() => {
-		try {
-			const fetchUser = async () => {
+		const fetchUser = async () => {
+			try {
 				const response = await axios.get('/fakedata/user.json');
 				setUser(response.data);
 				setLoading(false);
-			};
-			fetchUser();
-		} catch(err) {
-			// User is either not logged on or failed to get current user. Redirect to the login page
-			console.log(err);
-		}
+			} catch(err) {
+				// User is either not logged on or failed to get current user. Redirect to the login page
+				toast.error('Please login.', {
+					toastId: 'auth-error',
+					position: toast.POSITION.TOP_CENTER
+				});
+				router.push('/login');
+			}
+		};
+		fetchUser();
 	}, []);
 
 	// Put something better for JSX later

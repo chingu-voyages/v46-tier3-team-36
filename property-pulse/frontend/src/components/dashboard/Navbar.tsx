@@ -4,7 +4,7 @@ import { BiSolidUser } from 'react-icons/bi';
 import { AiFillCaretDown } from 'react-icons/ai';
 import Logo from '../Logo';
 import DropdownMenuList from "./DropdownMenuList";
-import { ManagerMenuItems, TenantMenuItems, UserMenuItems } from "@/app/dashboard/menuItems";
+import { ManagerMenuItems, TenantMenuItems, UserMenuItems } from "@/utils/menuItems";
 
 const Navbar = () => {
 	const {

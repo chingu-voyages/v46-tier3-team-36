@@ -1,5 +1,5 @@
 import { useDashboardContext } from "@/app/dashboard/layout";
-import { ManagerMenuItems, TenantMenuItems } from "@/app/dashboard/menuItems";
+import { ManagerMenuItems, TenantMenuItems } from "@/utils/menuItems";
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import Link from "next/link";
 import Logo from "../Logo";
