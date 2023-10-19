@@ -1,35 +1,32 @@
 export const ManagerMenuItems = [{
-	path: "contractors",
+	path: "/admin/contractors",
 	label: "Contractors",
 },{
-	path: "noticeadmin",
+	path: "/admin/noticeadmin",
 	label: "Manage Notices",
 },{
-	path: "requestadmin",
+	path: "/admin/requestadmin",
 	label: "Manage Requests"
 },{
-	path: "notices",
-	label: "Notices"
-},{
-	path: "properties",
+	path: "/admin/properties",
 	label: "Properties"
 },{
-	path: "staff",
+	path: "/admin/staff",
 	label: "Staff"
 },{
-	path: "tenants",
+	path: "/admin/tenants",
 	label: "Tenants"
 }];
 
 export const TenantMenuItems = [{
-	path: "notices",
+	path: "/notices",
 	label: "Notices"
 },{
-	path: "requests",
+	path: "/requests",
 	label: "Requests"
 }];
 
 export const UserMenuItems =[{
-	path: "profile",
+	path: "/profile",
 	label: "My Profile"
 },];

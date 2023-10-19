@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@types/next": "^9.0.0",
-    "@heroicons/react": "^2.0.18",
     "axios": "^1.5.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",

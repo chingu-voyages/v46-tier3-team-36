@@ -2,8 +2,8 @@
 import { useState, useEffect, useContext, createContext} from 'react';
 import { usePathname} from 'next/navigation';
 import axios from 'axios';
-import Navbar from '../../../components/dashboard/Navbar';
-import SideMenuBar from '../../../components/dashboard/SideMenuBar';
+import Navbar from '../components/dashboard/Navbar';
+import SideMenuBar from '../components/dashboard/SideMenuBar';
 
 type User = {
 	userid: number;
@@ -30,7 +30,7 @@ const DashboardContext = createContext<Context>({} as Context);
 
 const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const pathname = usePathname();
-	const [activeRoute, setActiveRoute] = useState<string>(pathname.substring(pathname.lastIndexOf('/') + 1));
+	const [activeRoute, setActiveRoute] = useState<string>((pathname.substring('/dashboard'.length)));
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
@@ -40,7 +40,7 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	useEffect(() => {
 		try {
 			const fetchUser = async () => {
-				const response = await axios.get('/user.json');
+				const response = await axios.get('/fakedata/user.json');
 				setUser(response.data);
 				setLoading(false);
 			};
@@ -71,7 +71,7 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 		<DashboardContext.Provider value={contextValue}>
 			<Navbar/>
 			<SideMenuBar />
-			<main className={`pt-16 ${showSideMenu ? 'ml-72' : 'ml-0'}`}>
+			<main className={`p-4 pt-20 ${showSideMenu ? 'md:ml-72' : 'ml-5'}`}>
 				{children}
 			</main>
 		</DashboardContext.Provider>

@@ -4,7 +4,7 @@ import Image from 'next/image';
  * Main Application Logo
  * @returns TSX
  */
-export default function Logo() {
+export default function Logo({className}:{className?:string}) {
 	return (
 		<Image
 			src="/logo.svg"
@@ -13,7 +13,7 @@ export default function Logo() {
 			width={0}
 			height={0}
 			// Make the logo smaller for smaller screens
-			className="h-auto w-36 sm:w-60"
+			className={`h-auto w-36 sm:w-60 ${className}`}
 			priority
 		/>
 	)
