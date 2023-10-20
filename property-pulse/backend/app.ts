@@ -8,6 +8,6 @@ app.use(cors())
 // app.use(express.static('dist'))
 app.use(express.json())
 
-app.use('/auth/signup', signupController)
+app.use(signupController)
 
 module.exports = app
