@@ -10,7 +10,7 @@ const DashboardLanding = () => {
 		<section className="flex flex-col gap-5">
 			{/* Heading */}
 			<section className="flex flex-col items-center gap-5">
-				<Image src="/dashboard-landing.svg" alt="Dashboard Landing" width={0} height={0} className="w-[200px] md:w-[300px]" />
+				<Image src="/dashboard-landing.svg" alt="Dashboard Landing" width={0} height={0} priority className="w-[200px] md:w-[300px]" />
 				<h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-green-900 uppercase text-center">
 					welcome to rental property llc
 				</h1>
@@ -100,7 +100,7 @@ const DashboardLanding = () => {
 				</section>
 			</section>
 		</section>
-	)
+	);
 };
 
 export default DashboardLanding
