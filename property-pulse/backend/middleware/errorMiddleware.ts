@@ -1,5 +1,3 @@
-import { NextFunction } from "express";
-
 interface CustomError extends Error {
 	statusCode: number;
 	message: string;
@@ -40,16 +38,16 @@ export class NotFoundError extends CustomError {
 	}
 };
 
-const errorMiddleware = (
+const errorMiddleware = async (
   err: CustomError, 
   req: Request, 
   res: Response, 
-  next: NextFunction
 ) => {
 	const statusCode = err.statusCode || 500;
 	const message = err.message || 'Internal server error';
 	console.log(err);
-	res.status(statusCode).json({ msg: message });
+	// couldn't find fix for "This expression is not callable. Type 'Number' has no call signatures."
+	await res.status(statusCode).json({ msg: message });
 };
 
 export default errorMiddleware;
