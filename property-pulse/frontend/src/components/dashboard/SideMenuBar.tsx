@@ -20,7 +20,7 @@ const SideMenuBar = () => {
 				<li>
 					<Link href="/dashboard"
 						{...activeRoute === ''
-							? {className: "bg-green-300 text-green-900 pl-5 py-2 block"}
+							? {className: "bg-green-600 pl-5 py-2 block"}
 							: {className: "hover:bg-green-700 pl-5 py-2 block"}
 						}
 					>Home</Link>
@@ -30,7 +30,7 @@ const SideMenuBar = () => {
 						<Link data-route={item.path} href={`/dashboard${item.path}`}
 							{
 								...activeRoute === item.path
-								? {className: "bg-green-300 text-green-900 pl-5 py-2 block"}
+								? {className: "bg-green-600 pl-5 py-2 block"}
 								: {className: "hover:bg-green-700 pl-5 py-2 block"}
 							}
 						>{item.label}</Link>
@@ -41,14 +41,14 @@ const SideMenuBar = () => {
 						<Link data-route={item.path} href={`/dashboard${item.path}`}
 							{
 								...activeRoute === item.path
-								? {className: "bg-green-300 text-green-900 pl-5 py-2 block"}
+								? {className: "bg-green-600 pl-5 py-2 block"}
 								: {className: "hover:bg-green-700 pl-5 py-2 block"}
 							}
 						>{item.label}</Link>
 					</li>
 				))}
 			</ul>
-			<div onClick={toggleSideMenu} className={`transition-[left] fixed top-2/4 bg-green-900 hover:cursor-pointer py-7 px-[2px] rounded-tr-[8px] rounded-br-[8px] ${showSideMenu ? 'left-72' : 'left-0'}`}>
+			<div onClick={toggleSideMenu} className={`transition-[left] fixed top-2/4 bg-green-900 py-7 px-[2px] rounded-tr-[8px] rounded-br-[8px] hover:cursor-pointer hover:bg-green-700 ${showSideMenu ? 'left-72' : 'left-0'}`}>
 				{showSideMenu && <AiFillCaretLeft />}
 				{!showSideMenu && <AiFillCaretRight />}
 			</div>

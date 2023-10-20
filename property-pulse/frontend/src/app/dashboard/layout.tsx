@@ -25,6 +25,7 @@ type Context = {
 	setShowHamburgerMenu: React.Dispatch<React.SetStateAction<boolean>>;
 	showSideMenu: boolean;
 	setShowSideMenu: React.Dispatch<React.SetStateAction<boolean>>;
+	logout: () => void;
 }
 
 // Add any states that children of the Dashboard may require
@@ -39,6 +40,15 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
 	const [showSideMenu, setShowSideMenu] = useState<boolean>(true);
 	const router = useRouter();
+
+	const logout = () => {
+		// Delete auth token before taking user to the app landing page
+		toast.success('You have been logged out.', {
+			toastId: 'logout-success',
+			position: toast.POSITION.TOP_CENTER
+		});
+		router.push('/');
+	};
 
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -71,14 +81,15 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 		showHamburgerMenu: showHamburgerMenu,
 		setShowHamburgerMenu: setShowHamburgerMenu,
 		showSideMenu: showSideMenu,
-		setShowSideMenu: setShowSideMenu
+		setShowSideMenu: setShowSideMenu,
+		logout: logout
 	};
 
 	return (
 		<DashboardContext.Provider value={contextValue}>
 			<Navbar/>
 			<SideMenuBar />
-			<main className={`p-4 pt-20 ${showSideMenu ? 'md:ml-72' : 'ml-5'}`}>
+			<main className={`p-4 pt-20 ${showSideMenu ? 'md:ml-80' : 'ml-5'}`}>
 				{children}
 			</main>
 		</DashboardContext.Provider>
