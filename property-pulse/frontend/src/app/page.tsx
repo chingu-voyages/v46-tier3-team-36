@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import Logo from "@/components/Logo";
 import Buyhouse from "@/components/landing/BuyhouseSvg";
-import ComingHome from "@/components/landing/Cominghome";
 import HomeSvg from "@/components/landing/HomeSvg";
 import Testimonial from "@/components/landing/Testimonial";
 
@@ -8,11 +8,11 @@ import Testimonial from "@/components/landing/Testimonial";
 export default function Home() {
   return (
     <main className="h-screen">
-      <nav className="flex justify-between bg-lime-500">
+      <nav className="flex justify-between bg-lime-500 border-b-2 border-lime-600 w-full fixed">
         <Logo/>
         <div className="flex justify-end w-1/2 m-1 md:w-1/6 md:m-4">
-          <button className="m-1">Login</button>
-          <button className="m-1">Sign up</button>
+          <Link className="m-2" href="/login">Login</Link>
+          <Link className="m-2" href="/login">Get started</Link>
         </div>
       </nav>
       <section className="flex items-center justify-between bg-lime-500 h-4/5">
