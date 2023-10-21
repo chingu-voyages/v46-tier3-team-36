@@ -7,7 +7,7 @@ import { useDashboardContext } from './layout';
 const DashboardLanding = () => {
 	const { showSideMenu } = useDashboardContext();
 	return (
-		<section className="flex flex-col gap-5">
+		<div className="flex flex-col gap-5">
 			{/* Heading */}
 			<section className="flex flex-col items-center gap-5">
 				<Image src="/dashboard-landing.svg" alt="Dashboard Landing" width={0} height={0} priority className="w-[200px] md:w-[300px]" />
@@ -16,9 +16,9 @@ const DashboardLanding = () => {
 				</h1>
 			</section>
 			{/* Main Contents */}
-			<section className={`flex gap-5 justify-center lg:gap-36 flex-col ${showSideMenu ? 'sm:flex-col lg:flex-row' : 'md:flex-row'}`}>
+			<section className={`flex gap-5 justify-center lg:gap-10 flex-col ${showSideMenu ? 'sm:flex-col lg:flex-row' : 'md:flex-row'}`}>
 				{/* Important Dates Section */}
-				<aside className="bg-green-100 p-5 rounded-xl flex flex-col gap-5 md:self-start">
+				<aside className={`bg-green-100 p-5 rounded-xl flex flex-col gap-5  ${showSideMenu ? 'sm:self-center lg:self-start' : 'md:self-start'}`}>
 					<div>
 						<h2 className="underline text-lg font-bold capitalize">important dates</h2>
 						<p className="flex flex-col">
@@ -99,7 +99,7 @@ const DashboardLanding = () => {
 					</div>
 				</section>
 			</section>
-		</section>
+		</div>
 	);
 };
 
