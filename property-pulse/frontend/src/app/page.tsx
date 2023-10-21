@@ -3,7 +3,7 @@ import Logo from "@/components/Logo";
 import Buyhouse from "@/components/landing/BuyhouseSvg";
 import HomeSvg from "@/components/landing/HomeSvg";
 import Testimonial from "@/components/landing/Testimonial";
-
+import {testimonials, text} from '../components/landing/content';
 
 export default function Home() {
   return (
@@ -15,28 +15,23 @@ export default function Home() {
           <Link className="m-2" href="/login">Get started</Link>
         </div>
       </nav>
-      <section className="flex items-center justify-between bg-lime-500 h-4/5">
-          <p className="p-5 h-1/2 w-1/2 text-darkblue text-sm md:text-4xl">
-          Property Pulse streamlines all aspects of managing rental properties and fosters 
-          a harmonious relationship between landlord and tenant.
-          </p>
+      <section className="flex items-end justify-between bg-lime-500 h-4/5">
+        <p className="p-5 h-1/2 w-1/2 mb-44 text-darkblue text-sm md:text-4xl">
+          {text[0]}
+        </p>
         <HomeSvg />
-      </section>
-      
-      <section className="flex items-center bg-green-800 h-4/5 md:h-1/2 ">
+      </section>      
+      <section className="flex items-center bg-green-800 h-4/5  ">
         <Buyhouse />
         <p className="p-5 h-full w-1/2 text-white text-sm md:text-4xl">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt 
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          {text[1]}
         </p>
       </section>
-      
       <section className="flex justify-center items-center bg-lime-500 min-h-4/5 md:min-h-1/2 ">
         <div className="md:flex md:w-1/2 w-full h-1/2">
-          <Testimonial />
-          <Testimonial />
-          <Testimonial />
+          <Testimonial testimonial={testimonials[0]} />
+          <Testimonial testimonial={testimonials[1]} />
+          <Testimonial testimonial={testimonials[2]} />
         </div>
       </section>
     </main>
