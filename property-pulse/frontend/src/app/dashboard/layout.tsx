@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useContext, createContext} from 'react';
+import { useState, useEffect, useContext, createContext, useRef } from 'react';
 import { usePathname} from 'next/navigation';
 import axios from 'axios';
 import Navbar from '@/components/dashboard/Navbar';
@@ -39,6 +39,8 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
 	const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
 	const [showSideMenu, setShowSideMenu] = useState<boolean>(true);
+	const profileBtnRef = useRef<HTMLAnchorElement>(null);
+	const hamburgerRef = useRef<HTMLButtonElement>(null);
 	const router = useRouter();
 
 	const logout = () => {
@@ -49,6 +51,17 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 		});
 		router.push('/');
 	};
+
+	// When clicking outside the dropdown menu, close any open dropdown menus
+	const closeDropdownMenus = (event:React.MouseEvent<HTMLElement>) => {
+		const targetElement = event.target;
+		if(profileBtnRef?.current && !profileBtnRef.current.contains(targetElement as Node)) {
+			setShowUserMenu(false);
+		}
+		if(hamburgerRef?.current && !hamburgerRef.current.contains(targetElement as Node)) {
+			setShowHamburgerMenu(false);
+		}
+	}
 
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -87,10 +100,12 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 
 	return (
 		<DashboardContext.Provider value={contextValue}>
-			<Navbar/>
-			<SideMenuBar />
-			<main className={`p-4 pt-20 ${showSideMenu ? 'md:ml-80' : 'ml-5'}`}>
-				{children}
+			<main onClick={closeDropdownMenus}>
+				<Navbar profileBtnRef={profileBtnRef} hamburgerRef={hamburgerRef} />
+				<SideMenuBar />
+				<div className={`p-4 pt-20 min-h-screen ${showSideMenu ? 'md:ml-80' : 'ml-5'}`}>
+					{children}
+				</div>
 			</main>
 		</DashboardContext.Provider>
 	)
