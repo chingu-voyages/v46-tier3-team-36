@@ -15,13 +15,13 @@ export default function Home() {
           <Link className="m-2" href="/login">Get started</Link>
         </div>
       </nav>
-      <section className="flex items-end justify-between bg-lime-500 h-4/5">
-        <p className="p-5 h-1/2 w-1/2 mb-44 text-darkblue text-sm md:text-4xl">
+      <section className="flex items-end justify-between bg-lime-500 h-1/2 md:h-4/5">
+        <p className="p-5 h-1/2 w-1/2 mb-32 text-darkblue text-sm md:text-4xl">
           {text[0]}
         </p>
         <HomeSvg />
       </section>      
-      <section className="flex items-center bg-green-800 h-4/5  ">
+      <section className="flex items-center bg-green-800 h-1/2 md:h-4/5  ">
         <Buyhouse />
         <p className="p-5 h-full w-1/2 text-white text-sm md:text-4xl">
           {text[1]}
