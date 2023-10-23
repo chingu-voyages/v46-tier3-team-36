@@ -31,19 +31,18 @@ enum Role {
   tenant
 }
 
-model Property {
+// model Property {
 
-}
+// }
 
-model Unit {
+// model Unit {
 
-}
+// }
 
 model Issue {
-  resolved    Boolean 
-  // maintenanceRequest?
-  // complaint?
-  issueType  IssueType
+  id          Int            @id @default(autoincrement())
+  resolved    Boolean        @default(false)
+  issueType   IssueType
 }
 
 
@@ -53,14 +52,14 @@ enum IssueType {
   inquiry
 }
 
-model Notification {
+// model Notification {
 
-}
+// }
 
-model Message {
+// model Message {
 
-}
+// }
 
-model Bill {
+// model Bill {
 
-}
+// }
