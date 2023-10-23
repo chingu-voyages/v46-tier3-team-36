@@ -9,11 +9,12 @@ datasource db {
 
 model User {
   id                            Int            @id @default(autoincrement())
-  name                          String?
+  name                          String
   password                      String?
   email                         String         @unique
   emailVerified                 DateTime?
   image                         String?
+  role                          Role
 }
 
 model Session {
@@ -23,4 +24,43 @@ model Session {
 
   @@index([expire], map: "IDX_session_expire")
   @@map(name: "session")
+}
+
+enum Role {
+  manager
+  tenant
+}
+
+model Property {
+
+}
+
+model Unit {
+
+}
+
+model Issue {
+  resolved    Boolean 
+  // maintenanceRequest?
+  // complaint?
+  issueType  IssueType
+}
+
+
+enum IssueType {
+  maintenanceRequest
+  complaint
+  inquiry
+}
+
+model Notification {
+
+}
+
+model Message {
+
+}
+
+model Bill {
+
 }
