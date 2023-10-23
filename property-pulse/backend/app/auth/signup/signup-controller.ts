@@ -4,9 +4,9 @@ import express from 'express';
 const router = express.Router();
 
 router.post('/auth/signup', async (request, response) => {
-  const { email, password } = request.body;
+  const { name, email, password } = request.body;
 
-  const newUser = await signupService.saveUser(email, password );
+  const newUser = await signupService.saveUser(name, email, password );
   response.status(201).json(newUser);
 })
 
