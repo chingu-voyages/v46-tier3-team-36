@@ -2,11 +2,11 @@ export const ManagerMenuItems = [{
 	path: "/admin/contractors",
 	label: "Contractors",
 },{
-	path: "/admin/noticeadmin",
+	path: "/admin/notice",
 	label: "Manage Notices",
 },{
-	path: "/admin/requestadmin",
-	label: "Manage Requests"
+	path: "/admin/issues",
+	label: "Manage Issues"
 },{
 	path: "/admin/properties",
 	label: "Properties"

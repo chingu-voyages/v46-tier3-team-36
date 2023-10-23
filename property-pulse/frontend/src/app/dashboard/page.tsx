@@ -7,7 +7,7 @@ import { useDashboardContext } from './layout';
 const DashboardLanding = () => {
 	const { showSideMenu } = useDashboardContext();
 	return (
-		<div className="flex flex-col gap-5">
+		<div className="flex flex-col gap-5 text-black">
 			{/* Heading */}
 			<section className="flex flex-col items-center gap-5">
 				<Image src="/dashboard-landing.svg" alt="Dashboard Landing" width={0} height={0} priority className="w-[200px] md:w-[300px]" />
