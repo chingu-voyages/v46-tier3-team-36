@@ -1,5 +1,5 @@
 'use client'
-import { useState, useContext, createContext, useRef } from 'react';
+import { useState, useContext, createContext, useEffect, useRef } from 'react';
 import { usePathname} from 'next/navigation';
 import Navbar from '@/components/dashboard/Navbar';
 import SideMenuBar from '@/components/dashboard/SideMenuBar';
@@ -54,13 +54,15 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 		}
 	}
 
-	if(!user) {
-		toast.error('Please login.', {
-			toastId: 'auth-error',
-			position: toast.POSITION.TOP_CENTER
-		});
-		router.push('/login');
-	}
+	useEffect(() => {
+		if(!user) {
+			toast.error('Please login.', {
+				toastId: 'auth-error',
+				position: toast.POSITION.TOP_CENTER
+			});
+			router.push('/login');
+		}
+	}, [user])
 
 	const contextValue = {
 		activeRoute: activeRoute,
