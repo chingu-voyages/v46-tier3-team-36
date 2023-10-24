@@ -22,8 +22,8 @@ export const TenantMenuItems = [{
 	path: "/notices",
 	label: "Notices"
 },{
-	path: "/requests",
-	label: "Requests"
+	path: "/issues",
+	label: "Issues"
 }];
 
 export const UserMenuItems =[{

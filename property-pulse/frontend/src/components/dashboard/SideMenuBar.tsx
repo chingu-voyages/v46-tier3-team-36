@@ -3,9 +3,12 @@ import { ManagerMenuItems, TenantMenuItems } from "@/utils/menuItems";
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import Link from "next/link";
 import Logo from "../Logo";
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/features/user/userSlice';
 
 const SideMenuBar = () => {
-	const { user, showSideMenu, setShowSideMenu, setActiveRoute, activeRoute } = useDashboardContext();
+	const user = useSelector(selectUser);
+	const { showSideMenu, setShowSideMenu, setActiveRoute, activeRoute } = useDashboardContext();
 	const onLinkClick = (event:React.MouseEvent<HTMLElement>) => {
 		const newRouteName = (event.target as HTMLElement).closest('a')?.dataset.route as string || '';
 		setActiveRoute(newRouteName);
@@ -25,7 +28,7 @@ const SideMenuBar = () => {
 						}
 					>Home</Link>
 				</li>
-				{user.role === 'manager' && ManagerMenuItems.map((item) => (
+				{user?.role === 'manager' && ManagerMenuItems.map((item) => (
 					<li key={item.path}>
 						<Link data-route={item.path} href={`/dashboard${item.path}`}
 							{
@@ -36,7 +39,7 @@ const SideMenuBar = () => {
 						>{item.label}</Link>
 					</li>
 				))}
-				{user.role === 'tenant' && TenantMenuItems.map((item) => (
+				{user?.role === 'tenant' && TenantMenuItems.map((item) => (
 					<li key={item.path}>
 						<Link data-route={item.path} href={`/dashboard${item.path}`}
 							{

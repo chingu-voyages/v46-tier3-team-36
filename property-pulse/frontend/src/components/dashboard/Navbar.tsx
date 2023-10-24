@@ -6,12 +6,14 @@ import Logo from '../Logo';
 import DropdownMenuList from "./DropdownMenuList";
 import { ManagerMenuItems, TenantMenuItems, UserMenuItems } from "@/utils/menuItems";
 import { LegacyRef } from "react";
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/features/user/userSlice';
 
 const Navbar = (
 	{profileBtnRef, hamburgerRef}:{profileBtnRef:LegacyRef<HTMLAnchorElement>, hamburgerRef:LegacyRef<HTMLButtonElement>}
 ) => {
+	const user = useSelector(selectUser);
 	const {
-		user,
 		setActiveRoute,
 		showUserMenu,
 		setShowUserMenu,
@@ -46,7 +48,7 @@ const Navbar = (
 					<div className="relative">
 						<a ref={profileBtnRef} onClick={onUserBtnClick} className="flex items-center justify-center gap-1 text-white bg-green-700 rounded-full px-4 py-1 hover:cursor-pointer hover:bg-green-900">
 							<BiSolidUser className="h-5 w-5" />
-							{user.firstName} {user.lastName}
+							{user?.name}
 							<AiFillCaretDown className="h-5 w-5" />
 						</a>
 						<div className={`w-48 absolute right-0 top-6 ${showUserMenu ? '' : 'hidden'}`}>
@@ -55,8 +57,8 @@ const Navbar = (
 					</div>
 				</div>
 				<div className={`w-full md:hidden ${showHamburgerMenu ? '' : 'hidden'}`}>
-					{user.role === 'manager' && <DropdownMenuList menuItems={UserMenuItems.concat(ManagerMenuItems)} includeHomeLink={true} onClick={onLinkClick} />}
-					{user.role === 'tenant' && <DropdownMenuList menuItems={UserMenuItems.concat(TenantMenuItems)} includeHomeLink={true} onClick={onLinkClick} />}
+					{user?.role === 'manager' && <DropdownMenuList menuItems={UserMenuItems.concat(ManagerMenuItems)} includeHomeLink={true} onClick={onLinkClick} />}
+					{user?.role === 'tenant' && <DropdownMenuList menuItems={UserMenuItems.concat(TenantMenuItems)} includeHomeLink={true} onClick={onLinkClick} />}
 				</div>
 			</div>
 		</nav>
