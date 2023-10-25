@@ -5,10 +5,12 @@ import React, { useState } from 'react';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { userLoggedIn } from '@/features/user/userSlice';
+import { useRouter } from 'next/navigation';
 
 const AuthComponent: React.FC = () => {
 
   const dispatch = useDispatch();
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
 
   const [name, setName] = useState("");
@@ -18,7 +20,7 @@ const AuthComponent: React.FC = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await fetch('http://localhost:8080/auth/signup', {
+      const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -40,23 +42,16 @@ const AuthComponent: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password })
       });
-  
       const data = await response.json();
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
-        // Dispatch userLoggedIn action to update Redux state
-        dispatch(userLoggedIn(data.user));
-      } else {
-        // Handle errors (e.g., display error message to the user)
-        console.error(data.message);
-      }
+      dispatch(userLoggedIn(data.user));
+      router.push('/dashboard');
     } catch (error) {
       console.error("Error during login:", error);
     }
