@@ -1,7 +1,7 @@
 {
-	"userid": 12345,
+	"id": 12345,
 	"email": "jsmith@mail.com",
-	"firstName": "John",
-	"lastName": "Smith",
+	"name": "John Smith",
+	"unitId": 455,
 	"role": "manager"
 }

@@ -1,22 +1,14 @@
 'use client'
-import { useState, useEffect, useContext, createContext, useRef } from 'react';
+import { useState, useContext, createContext, useEffect, useRef } from 'react';
 import { usePathname} from 'next/navigation';
-import axios from 'axios';
 import Navbar from '@/components/dashboard/Navbar';
 import SideMenuBar from '@/components/dashboard/SideMenuBar';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/features/user/userSlice';
 
-type User = {
-	userid: number;
-	username: string;
-	firstName: string;
-	lastName: string;
-	role: string;
-}
-
-type Context = {
-	user: User;
+interface Context {
 	activeRoute: string;
 	setActiveRoute: React.Dispatch<React.SetStateAction<string>>;
 	showUserMenu: boolean;
@@ -34,14 +26,13 @@ const DashboardContext = createContext<Context>({} as Context);
 const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const pathname = usePathname();
 	const [activeRoute, setActiveRoute] = useState<string>((pathname.substring('/dashboard'.length)));
-	const [user, setUser] = useState<User | null>(null);
-	const [isLoading, setLoading] = useState<boolean>(true);
 	const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
 	const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
 	const [showSideMenu, setShowSideMenu] = useState<boolean>(true);
 	const profileBtnRef = useRef<HTMLAnchorElement>(null);
 	const hamburgerRef = useRef<HTMLButtonElement>(null);
 	const router = useRouter();
+	const user = useSelector(selectUser);
 
 	const logout = () => {
 		// Delete auth token before taking user to the app landing page
@@ -64,29 +55,16 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	}
 
 	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const response = await axios.get('/fakedata/user.json');
-				setUser(response.data);
-				setLoading(false);
-			} catch(err) {
-				// User is either not logged on or failed to get current user. Redirect to the login page
-				toast.error('Please login.', {
-					toastId: 'auth-error',
-					position: toast.POSITION.TOP_CENTER
-				});
-				router.push('/login');
-			}
-		};
-		fetchUser();
-	}, []);
-
-	// Put something better for JSX later
-	if(isLoading) return <p>Loading user data</p>;
-	if(!user) return <p>No user data</p>
+		if(!user) {
+			toast.error('Please login.', {
+				toastId: 'auth-error',
+				position: toast.POSITION.TOP_CENTER
+			});
+			router.push('/login');
+		}
+	}, [user])
 
 	const contextValue = {
-		user: user,
 		activeRoute: activeRoute,
 		setActiveRoute: setActiveRoute,
 		showUserMenu: showUserMenu,
