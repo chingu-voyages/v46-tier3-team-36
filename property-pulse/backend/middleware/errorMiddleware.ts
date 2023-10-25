@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 interface CustomError extends Error {
 	statusCode: number;
 	message: string;
@@ -46,7 +48,7 @@ const errorMiddleware = async (
 	const statusCode = err.statusCode || 500;
 	const message = err.message || 'Internal server error';
 	console.log(err);
-	// couldn't find fix for "This expression is not callable. Type 'Number' has no call signatures."
+
 	await res.status(statusCode).json({ msg: message });
 };
 
