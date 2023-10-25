@@ -14,7 +14,7 @@ model User {
   email                         String         @unique
   emailVerified                 DateTime?
   image                         String?
-  role                          Role
+  role                          Role           @default(tenant)
 }
 
 model Session {
