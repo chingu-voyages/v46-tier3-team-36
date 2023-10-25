@@ -3,7 +3,7 @@ import express from 'express';
 
 const router = express.Router();
 
-router.post('/auth/signup', async (request, response) => {
+router.post('/api/auth/signup', async (request, response) => {
   const { name, email, password } = request.body;
 
   const newUser = await signupService.saveUser(name, email, password );
