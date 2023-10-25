@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "frontend": "npm run dev --prefix frontend",
-    "backend": "npm run dev --prefix backend",
-    "dev": "concurrently --kill-others-on-fail \"npm run frontend\" \"npm run backend\"",
+    "frontend-dev": "npm run dev --prefix frontend",
+    "backend-dev": "npm run dev --prefix backend",
+    "dev": "concurrently --kill-others-on-fail \"npm run frontend-dev\" \"npm run backend-dev\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
