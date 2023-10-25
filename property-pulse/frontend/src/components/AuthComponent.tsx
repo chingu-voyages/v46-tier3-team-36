@@ -18,7 +18,7 @@ const AuthComponent: React.FC = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await fetch('/auth/signup', {
+      const response = await fetch('http://localhost:8080/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ const AuthComponent: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('/auth/login', {
+      const response = await fetch('http://localhost:8080/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
