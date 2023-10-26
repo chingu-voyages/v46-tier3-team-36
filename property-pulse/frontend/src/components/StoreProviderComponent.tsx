@@ -7,16 +7,15 @@ import store from '@/store/store';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const StoreProviderComponent = ({children}:{children: React.ReactNode}) => {
-	return (
-		<Provider store={store}>
-			<html lang="en">
-				<body className={inter.className}>
-					<ToastContainer />
-					{children}
-				</body>
-			</html>
-		</Provider>);
-};
+const StoreProviderComponent = ({children}:{children: React.ReactNode}) => (
+	<Provider store={store}>
+		<html lang="en">
+			<body className={inter.className}>
+				<ToastContainer />
+				{children}
+			</body>
+		</html>
+	</Provider>
+);
 
 export default StoreProviderComponent;
