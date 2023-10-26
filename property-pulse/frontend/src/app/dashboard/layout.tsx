@@ -34,12 +34,17 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const router = useRouter();
 	const user = useSelector(selectUser);
 
-	const logout = () => {
+	const logout = async () => {
 		// Delete auth token before taking user to the app landing page
-		toast.success('You have been logged out.', {
-			toastId: 'logout-success',
-			position: toast.POSITION.TOP_CENTER
-		});
+		try {
+			await fetch('/api/auth/logout', { method: 'POST' });
+			toast.success('You have been logged out.', {
+				toastId: 'logout-success',
+				position: toast.POSITION.TOP_CENTER
+			});
+		} catch(err) {
+			// May display an error toast later
+		}
 		router.push('/');
 	};
 

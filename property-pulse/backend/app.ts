@@ -8,8 +8,12 @@ const app = express();
 const cors = require('cors');
 import { PrismaClient } from '@prisma/client';
 import { Strategy as LocalStrategy } from './libs/strategy';
+import { authorize } from './middleware/authMiddleware';
+import { $Enums } from '@prisma/client';
 import signupController from './app/auth/signup/signup-controller';
+import logoutController from './app/auth/logout/logout-controller';
 import loginController from './app/auth/login/login-controller';
+import usersController from './app/users/users-controller';
 
 const prisma = new PrismaClient();
 
@@ -32,5 +36,7 @@ passport.use(LocalStrategy);
 
 app.use(signupController);
 app.use(loginController);
+app.use(logoutController);
+app.use('/api/admin', authorize($Enums.Role.manager), usersController);
 
 module.exports = app;

@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -36,21 +36,18 @@ export const Strategy = new LocalStrategy(
 // todo: fix any with
 // https://stackoverflow.com/questions/70632958/property-id-does-not-exist-on-type-user-with-passport-and-typescript
 passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+	process.nextTick(() => {
+		return done(null, {
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			role: user.role
+		});
+	});
 });
 
-passport.deserializeUser(async (id: number, done) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id },
-    });
-
-    if (user) {
-      done(null, user);
-    } else {
-      done(null, false);
-    }
-  } catch (error) {
-    done(error);
-  }
+passport.deserializeUser((user: User, done) => {
+  process.nextTick(() => {
+	return done(null, user);
+  })
 });
