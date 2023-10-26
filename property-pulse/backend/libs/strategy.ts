@@ -36,18 +36,21 @@ export const Strategy = new LocalStrategy(
 // todo: fix any with
 // https://stackoverflow.com/questions/70632958/property-id-does-not-exist-on-type-user-with-passport-and-typescript
 passport.serializeUser((user: any, done) => {
-	process.nextTick(() => {
-		return done(null, {
-			id: user.id,
-			name: user.name,
-			email: user.email,
-			role: user.role
-		});
-	});
+	done(null, user.id);
 });
 
-passport.deserializeUser((user: User, done) => {
-  process.nextTick(() => {
-	return done(null, user);
-  })
+passport.deserializeUser(async (id: number, done) => {
+    try {
+        const user = await prisma.user.findUnique({
+          where: { id },
+        });
+	
+        if (user) {
+          done(null, user);
+        } else {
+          done(null, false);
+        }
+      } catch (error) {
+        done(error);
+    }
 });
