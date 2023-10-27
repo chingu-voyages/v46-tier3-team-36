@@ -4,6 +4,8 @@ import { FormEvent, useState } from 'react';
 import { useDashboardContext } from "../../layout";
 import { User } from "@/features/users/userType";
 import { toast } from "react-toastify";
+import FormInput from "@/components/dashboard/FormInput";
+import FormSelect from "@/components/dashboard/FormSelect";
 import UserRoles from '@/utils/userRoles';
 
 const TenantsPage = () => {
@@ -115,30 +117,26 @@ const TenantsPage = () => {
 							<form className="flex flex-col items-center p-3 gap-5" onSubmit={onUpdateFormSubmit}>
 								<input type="number" name="id" defaultValue={tenant.id} hidden readOnly />
 								<p className="text-lg text-green-900">Edit User: <span className="font-bold">{tenant.name}</span></p>
-								<div className="flex flex-col justify-start">
+								<div className="flex flex-col justify-start gap-3">
 									<label className="flex flex-col">
 										Name
-										<input type="text" name="name" defaultValue={tenant.name} className="w-1/2"/>
+										<FormInput type="text" name="name" defaultValue={tenant.name} placeholder="first last" />
 									</label>
 									<label className="flex flex-col">
-										Email:
-										<input type="email" name="email" defaultValue={tenant.email} className="w-1/2"/>
+										Email
+										<FormInput type="email" name="email" defaultValue={tenant.email} />
 									</label>
 									<label className="flex flex-col">
-										Role:
-										<select name="role" defaultValue={tenant.role} className="w-1/2">
-											{Object.values(UserRoles).map(role => (
-												<option key={role} value={role}>{role.toUpperCase()}</option>
-											))}
-										</select>
+										Role
+										<FormSelect name="role" defaultValue={tenant.role} options={Object.values(UserRoles).map(role => ({value: role, label: role.toUpperCase()}))} />
 									</label>
 									<label className="flex flex-col">
-										Property:
-										<input type="text" className="w-1/2"/>
+										Property
+										<FormInput type="text" />
 									</label>
 									<label className="flex flex-col">
-										Unit:
-										<input type="text" name="unitId" className="w-1/2"/>
+										Unit
+										<FormInput type="text" name="unitId" />
 									</label>
 								</div>
 								<div className="flex flex-row gap-5">
