@@ -10,10 +10,12 @@ import { PrismaClient } from '@prisma/client';
 import { Strategy as LocalStrategy } from './libs/strategy';
 import { authorize } from './middleware/authMiddleware';
 import { $Enums } from '@prisma/client';
+import errorMiddleware from './middleware/errorMiddleware';
 import signupController from './app/auth/signup/signup-controller';
 import logoutController from './app/auth/logout/logout-controller';
 import loginController from './app/auth/login/login-controller';
 import usersController from './app/users/users-controller';
+import issuesController from './app/issues/issues-controller';
 
 const prisma = new PrismaClient();
 
@@ -37,6 +39,12 @@ passport.use(LocalStrategy);
 app.use(signupController);
 app.use(loginController);
 app.use(logoutController);
+app.use(issuesController);
 app.use('/api/admin', authorize($Enums.Role.manager), usersController);
+
+app.use('*', (req, res) => {
+	res.status(404).json({ msg: 'not found' });
+});
+app.use(errorMiddleware);
 
 module.exports = app;

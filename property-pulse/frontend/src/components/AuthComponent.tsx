@@ -3,13 +3,13 @@
 
 import React, { useState } from 'react';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@/store/store';
 import { userLoggedIn } from '@/features/user/userSlice';
 import { useRouter } from 'next/navigation';
 
 const AuthComponent: React.FC = () => {
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
 
@@ -51,6 +51,7 @@ const AuthComponent: React.FC = () => {
       });
       const data = await response.json();
       dispatch(userLoggedIn(data.user));
+	  localStorage.setItem('login', JSON.stringify(data.user));
       router.push('/dashboard');
     } catch (error) {
       console.error("Error during login:", error);

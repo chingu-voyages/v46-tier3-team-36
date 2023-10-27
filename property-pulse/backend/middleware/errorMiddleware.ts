@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 interface CustomError extends Error {
 	statusCode: number;
@@ -41,11 +41,12 @@ export class NotFoundError extends CustomError {
 };
 
 const errorMiddleware = async (
-  err: CustomError, 
+  err: Error, 
   req: Request, 
   res: Response, 
+  next: NextFunction
 ) => {
-	const statusCode = err.statusCode || 500;
+	const statusCode = (err as CustomError).statusCode || 500;
 	const message = err.message || 'Internal server error';
 	console.log(err);
 

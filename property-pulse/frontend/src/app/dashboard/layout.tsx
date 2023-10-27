@@ -1,12 +1,14 @@
 'use client'
 import { useState, useContext, createContext, useEffect, useRef } from 'react';
 import { usePathname} from 'next/navigation';
-import Navbar from '@/components/dashboard/Navbar';
-import SideMenuBar from '@/components/dashboard/SideMenuBar';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/features/user/userSlice';
+import { userLoggedIn } from '@/features/user/userSlice';
+import { useAppDispatch } from '@/store/store';
+import Navbar from '@/components/dashboard/Navbar';
+import SideMenuBar from '@/components/dashboard/SideMenuBar';
 
 interface Context {
 	activeRoute: string;
@@ -25,6 +27,7 @@ const DashboardContext = createContext<Context>({} as Context);
 
 const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const pathname = usePathname();
+	const dispatch = useAppDispatch();
 	const [activeRoute, setActiveRoute] = useState<string>((pathname.substring('/dashboard'.length)));
 	const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
 	const [showHamburgerMenu, setShowHamburgerMenu] = useState<boolean>(false);
@@ -35,9 +38,9 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const user = useSelector(selectUser);
 
 	const logout = async () => {
-		// Delete auth token before taking user to the app landing page
 		try {
 			await fetch('/api/auth/logout', { method: 'POST' });
+			localStorage.removeItem('login');
 			toast.success('You have been logged out.', {
 				toastId: 'logout-success',
 				position: toast.POSITION.TOP_CENTER
@@ -60,14 +63,28 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	}
 
 	useEffect(() => {
-		if(!user) {
-			toast.error('Please login.', {
-				toastId: 'auth-error',
-				position: toast.POSITION.TOP_CENTER
-			});
-			router.push('/login');
+		try {
+			// If user does not exist in the Redux store, check in the local storage.
+			if(!user) {
+				const userData = localStorage.getItem('login');
+				if(userData) {
+					// Login state found in local storage.
+					const loggedInuser = JSON.parse(localStorage.getItem('login') || '');
+					dispatch(userLoggedIn(loggedInuser));
+				} else {
+					// Login state does not exist in the local storage either. User must log on.
+					toast.error('Please login.', {
+						toastId: 'auth-error',
+						position: toast.POSITION.TOP_CENTER
+					});
+					router.push('/login');
+				}
+			}
+		} catch(err) {
+			dispatch(userLoggedIn(null));
+			localStorage.removeItem('login');
 		}
-	}, [user])
+	}, []);
 
 	const contextValue = {
 		activeRoute: activeRoute,
