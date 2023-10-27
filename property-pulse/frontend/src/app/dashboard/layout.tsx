@@ -40,7 +40,7 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 	const logout = async () => {
 		try {
 			await fetch('/api/auth/logout', { method: 'POST' });
-			localStorage.removeItem('login');
+			sessionStorage.removeItem('login');
 			toast.success('You have been logged out.', {
 				toastId: 'logout-success',
 				position: toast.POSITION.TOP_CENTER
@@ -66,10 +66,10 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 		try {
 			// If user does not exist in the Redux store, check in the local storage.
 			if(!user) {
-				const userData = localStorage.getItem('login');
+				const userData = sessionStorage.getItem('login');
 				if(userData) {
 					// Login state found in local storage.
-					const loggedInuser = JSON.parse(localStorage.getItem('login') || '');
+					const loggedInuser = JSON.parse(sessionStorage.getItem('login') || '');
 					dispatch(userLoggedIn(loggedInuser));
 				} else {
 					// Login state does not exist in the local storage either. User must log on.
@@ -82,7 +82,7 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 			}
 		} catch(err) {
 			dispatch(userLoggedIn(null));
-			localStorage.removeItem('login');
+			sessionStorage.removeItem('login');
 		}
 	}, []);
 

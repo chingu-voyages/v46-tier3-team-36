@@ -51,7 +51,7 @@ const AuthComponent: React.FC = () => {
       });
       const data = await response.json();
       dispatch(userLoggedIn(data.user));
-	  localStorage.setItem('login', JSON.stringify(data.user));
+	  sessionStorage.setItem('login', JSON.stringify(data.user));
       router.push('/dashboard');
     } catch (error) {
       console.error("Error during login:", error);
