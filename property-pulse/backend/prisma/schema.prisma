@@ -15,6 +15,8 @@ model User {
   emailVerified                 DateTime?
   image                         String?
   role                          Role           @default(tenant)
+  issues                        Issue[]
+  notifications                 Notification[]
 }
 
 model Session {
@@ -31,6 +33,40 @@ enum Role {
   tenant
 }
 
+model Issue {
+  id              Int              @id @default(autoincrement())
+  status          IssueStatus      @default(open)
+  type            IssueType
+  tenant          User             @relation(fields: [tenantId], references: [id])
+  tenantId        Int
+  createdAt       DateTime         @default(now()) @db.Timestamptz()
+  updatedAt       DateTime         @updatedAt
+  title           String
+  description     String
+}
+
+enum IssueStatus {
+  open
+  closed
+}
+
+enum IssueType {
+  maintenanceRequest
+  complaint
+  inquiry
+}
+
+model Notification {
+  id              Int              @id @default(autoincrement())
+  user            User             @relation(fields: [userId], references: [id])
+  userId          Int
+  createdAt       DateTime         @default(now()) @db.Timestamptz()
+  title           String
+  content         String
+  read            Boolean          @default(false)
+  isNew           Boolean          @default(true)
+}
+
 // model Property {
 
 // }
@@ -39,22 +75,7 @@ enum Role {
 
 // }
 
-model Issue {
-  id          Int            @id @default(autoincrement())
-  resolved    Boolean        @default(false)
-  issueType   IssueType
-}
 
-
-enum IssueType {
-  maintenanceRequest
-  complaint
-  inquiry
-}
-
-// model Notification {
-
-// }
 
 // model Message {
 
