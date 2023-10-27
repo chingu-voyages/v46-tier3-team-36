@@ -8,7 +8,7 @@ const userSlice = createSlice({
 		loggedInUser: null as User | null
 	},
 	reducers: {
-		userLoggedIn: (state, action: PayloadAction<User>) => {
+		userLoggedIn: (state, action: PayloadAction<User | null>) => {
 			state.loggedInUser = action.payload;
 		}
 	}
