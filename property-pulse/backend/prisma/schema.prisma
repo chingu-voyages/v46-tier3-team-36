@@ -8,21 +8,30 @@ datasource db {
 }
 
 model User {
-  id                            Int            @id @default(autoincrement())
-  name                          String
-  password                      String?
-  email                         String         @unique
-  emailVerified                 DateTime?
-  image                         String?
-  role                          Role           @default(tenant)
-  issues                        Issue[]
-  notifications                 Notification[]
+  id                     Int            @id @default(autoincrement())
+  name                   String
+  password               String?
+  email                  String         @unique
+  emailVerified          DateTime?
+  image                  String?
+  role                   Role           @default(tenant)
+  issues                 Issue[]
+  notifications          Notification[]
+
+  // tenants
+  residence              Property?      @relation(fields: [residenceId], references: [id], name: "Residences")
+  residenceId            Int? 
+  unit                   Unit?        @relation(fields: [unitId], references: [id])
+  unitId                 Int?
+
+  // managers
+  properties             Property[]   @relation("Properties")
 }
 
 model Session {
-  sid    String   @id @db.VarChar
-  sess   Json     @db.Json
-  expire DateTime @db.Timestamp(6)
+  sid                   String   @id @db.VarChar
+  sess                  Json     @db.Json
+  expire                DateTime @db.Timestamp(6)
 
   @@index([expire], map: "IDX_session_expire")
   @@map(name: "session")
@@ -33,6 +42,7 @@ enum Role {
   tenant
 }
 
+// Should issues be associated with tenant only, or manager too?
 model Issue {
   id              Int              @id @default(autoincrement())
   status          IssueStatus      @default(open)
@@ -67,13 +77,26 @@ model Notification {
   isNew           Boolean          @default(true)
 }
 
-// model Property {
+// Should both properties and units have tenants or just a property has units that has tenants?
+model Property {
+  id              Int              @id @default(autoincrement())
+  owner           User    @relation(fields: [ownerId], references: [id], name: "Properties")
+  ownerId         Int 
+  tenants         User[]  @relation("Residences")
+  name            String
+  description     String?
+  units           Unit[]
+}
 
-// }
-
-// model Unit {
-
-// }
+model Unit {
+  id              Int              @id @default(autoincrement())
+  property        Property         @relation(fields: [propertyId], references: [id])
+  propertyId      Int
+  tenants         User[]
+  name            String
+  description     String?
+  rent            Decimal          @db.Decimal(10,2)
+}
 
 
 
