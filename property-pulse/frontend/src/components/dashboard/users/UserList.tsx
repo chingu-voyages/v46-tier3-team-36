@@ -1,6 +1,6 @@
 import { User } from '@/features/users/userType';
 import { useDashboardContext } from '@/app/dashboard/layout'; 
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useDeleteUserMutation } from '@/features/users/usersSlice';
 import { toast } from "react-toastify";
 import { IoMdPersonAdd } from 'react-icons/io';
@@ -53,12 +53,12 @@ const UserList = ({users, userRole}:{users:User[], userRole:typeof UserRoles.MAN
 		const id:number = Number((event.target as HTMLButtonElement).value);
 		setUserIdEditing(id);
 	};
-	const onFilterSortFormSubmit = (event:FormEvent) => {
-		event.preventDefault();
-		const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
-		setSearchString(String(formData.search));
-		setSortByField(String(formData.sort));
-	};
+	const onSearchChange = (event:ChangeEvent<HTMLInputElement>) => {
+		setSearchString(event.target.value);
+	}
+	const onSortChange = (event:ChangeEvent<HTMLSelectElement>) => {
+		setSortByField(event.target.value);
+	}
 	const onDeleteClick = async (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		try {
 			if(confirm("Are you sure you want to delete this user?")) {
@@ -89,13 +89,12 @@ const UserList = ({users, userRole}:{users:User[], userRole:typeof UserRoles.MAN
 			{userAdding &&
 				<UserForm userRole={userRole} formCloseHandler={closeAddForm} />
 			}
-			<form onSubmit={onFilterSortFormSubmit} className="flex flex-row justify-center bg-green-100 p-5 rounded-xl">
+			<div className="flex flex-row justify-center bg-green-100 p-5 rounded-xl">
 				<div className="flex flex-col gap-10 w-full md:w-2/3 lg:w-1/3">
-					<label>Search: <FormInput type="text" name="search" placeholder="Enter text to search" /></label>
-					<label>Sort By: <FormSelect options={sortableOptions} name="sort" /></label>
-					<button type="submit" className="py-1 px-3 rounded-full text-black bg-green-400 hover:bg-green-900 hover:text-white">Apply</button>
+					<label>Search: <FormInput type="text" placeholder="Enter text to search" onChange={onSearchChange} /></label>
+					<label>Sort By: <FormSelect options={sortableOptions} onChange={onSortChange} /></label>
 				</div>
-			</form>
+			</div>
 			<ul className="flex flex-col gap-3">
 				{filteredUsers.map((tenant:User) => (
 					<li key={tenant.id} className="flex flex-col shadow-md hover:bg-green-50">
