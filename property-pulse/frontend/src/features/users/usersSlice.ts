@@ -1,9 +1,29 @@
-import { UseQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { apiSlice } from '../api/apiSlice';
 import { User } from './userType';
 
+interface PaginatedUsers<T> {
+	role: string;
+	page: number;
+	per_page: number;
+	total: number;
+	total_pages: number;
+	data: T[];
+};
+
+interface PaginationOption {
+	role: string;
+	page: number;
+	per_page: number
+}
+
 export const usersApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
+		getPaginatedUsers: builder.query<PaginatedUsers<User>, PaginationOption> ({
+			query: (paginationOptions:PaginationOption) => {
+				return `/admin/users/${paginationOptions.role}/${paginationOptions.per_page}/${paginationOptions.page}`;
+			},
+			providesTags: ['Users']
+		}),
 		getUsers: builder.query<User[], void>({
 			query: () => '/admin/users',
 			providesTags: ['Users']
