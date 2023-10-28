@@ -10,8 +10,8 @@ const getUser = async (id: number) => {
 			name: true,
 			email: true,
 			role: true,
-			residenceId: true,
-			unitId: true
+			residence: true,
+			unit: true
 		}
 	});
 };
@@ -23,13 +23,31 @@ const getAllUsers = async () => {
 			name: true,
 			email: true,
 			role: true,
-			residenceId: true,
-			unitId: true
+			residence: true,
+			unit: true
 		}
 	});
 };
 
-const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: number) => {
+const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: number, sortBy = 'name', search?:string) => {
+	let condition:Object = {role};
+	// Apply search string filter to the query condition.
+	if(search) {
+		condition = {
+			role,
+			OR: [
+				{ name: {contains: search, mode: 'insensitive'} },
+				{ email: {contains: search, mode: 'insensitive'} },
+				{ 
+					residence: { name: {contains: search, mode: 'insensitive'} }
+				},
+				{
+					unit: { name: {contains: search, mode: 'insensitive'} }
+				}
+			]
+		};
+	}
+	// Get paginated users
 	const users = await prisma.user.findMany({
 		skip: (page - 1) * per_page,
 		take: per_page,
@@ -38,17 +56,17 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 			name: true,
 			email: true,
 			role: true,
-			residenceId: true,
-			unitId: true
+			residence: true,
+			unit: true
 		},
-		where: {
-			role
+		where: condition,
+		orderBy: {
+			[sortBy]: 'asc'
 		}
 	});
+	// Get total number of users
 	const count = await prisma.user.count({
-		where: {
-			role
-		}
+		where: condition
 	});
 	const result = {
 		role: role,

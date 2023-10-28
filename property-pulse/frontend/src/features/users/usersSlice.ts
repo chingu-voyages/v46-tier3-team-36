@@ -13,14 +13,23 @@ interface PaginatedUsers<T> {
 interface PaginationOption {
 	role: string;
 	page: number;
-	per_page: number
+	per_page: number;
+	sortBy?: string;
+	search?: string;
 }
 
 export const usersApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getPaginatedUsers: builder.query<PaginatedUsers<User>, PaginationOption> ({
 			query: (paginationOptions:PaginationOption) => {
-				return `/admin/users/${paginationOptions.role}/${paginationOptions.per_page}/${paginationOptions.page}`;
+				return {
+					url: `/admin/users/${paginationOptions.role}/${paginationOptions.per_page}/${paginationOptions.page}`,
+					method: 'GET',
+					body: {
+						sortBy: paginationOptions.sortBy,
+						search: paginationOptions.search
+					}
+				};
 			},
 			providesTags: ['Users']
 		}),
