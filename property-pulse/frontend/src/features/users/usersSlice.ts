@@ -1,9 +1,33 @@
-import { UseQuery } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { apiSlice } from '../api/apiSlice';
 import { User } from './userType';
 
+export interface PaginatedUsers<T> {
+	role: string;
+	page: number;
+	per_page: number;
+	total: number;
+	total_pages: number;
+	data: T[];
+};
+
+export interface PaginationOption {
+	role: string;
+	page: number;
+	per_page: number;
+	sortBy: string;
+	search?: string;
+}
+
 export const usersApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
+		getPaginatedUsers: builder.query<PaginatedUsers<User>, PaginationOption> ({
+			query: (op:PaginationOption) => {
+				let url = `/admin/users/${op.role}/${op.per_page}/${op.page}?sortby=${op.sortBy}`;
+				if(op.search) url += `&search=${op.search}`;
+				return url;
+			},
+			providesTags: ['Users']
+		}),
 		getUsers: builder.query<User[], void>({
 			query: () => '/admin/users',
 			providesTags: ['Users']
@@ -36,6 +60,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
 export const {
 	useGetUsersQuery,
+	useGetPaginatedUsersQuery,
 	useCreateUserMutation,
 	useUpdateUserMutation,
 	useDeleteUserMutation

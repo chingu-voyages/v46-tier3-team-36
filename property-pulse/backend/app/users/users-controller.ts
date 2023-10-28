@@ -1,6 +1,8 @@
+import { $Enums } from '@prisma/client';
 import usersService from './users-service';
 import express from 'express';
 import hashPassword from '../../middleware/passwordHashMiddleware';
+import { BadRequestError } from '../../middleware/errorMiddleware';
 
 const router = express.Router();
 
@@ -22,6 +24,18 @@ router
 	.get('/users', async (req, res) => {
 		const users = await usersService.getAllUsers();
 		res.status(200).json(users);
+	})
+	/**
+	 * Get paginated users
+	 */
+	.get('/users/:role/:per_page/:page', async (req, res) => {
+		const { role, page, per_page } = req.params;
+		const { sortby, search } = req.query;
+		if(!Object.values($Enums.Role).includes(role as $Enums.Role) || !Number(page) || !Number(per_page)) {
+			throw new BadRequestError("Invalid parameters");
+		}
+		const result = await usersService.getPaginatedUsers(role as $Enums.Role, Number(page), Number(per_page), sortby as string, search as string);
+		res.status(200).json(result);
 	})
 	/**
 	 * Create a new user. Hash password in the body using hashPassword middleware
