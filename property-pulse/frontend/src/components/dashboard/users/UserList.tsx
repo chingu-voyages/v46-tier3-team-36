@@ -83,15 +83,18 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 		event.preventDefault();
 		const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
 		closeEditForm();
+		setPage(1);
 		setSortBy(String(formData.sort));
 		setSearch(String(formData.search));
 	};
 	const onSearchClear = () => {
 		closeEditForm();
+		setPage(1);
 		setSearch('');
 	}
 	const onPerPageChange = (event:ChangeEvent<HTMLSelectElement>) => {
 		setPerPage(Number(event.target.value));
+		setPage(1);
 	};
 	const onPrevPage = () => {
 		setPage(value => Math.max(1, value - 1));
