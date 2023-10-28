@@ -1,5 +1,5 @@
 import { apiSlice } from '../api/apiSlice';
-import { User } from './userType';
+import { User }  from '../../../../backend/prisma-proxy';
 
 export interface PaginatedUsers<T> {
 	role: string;

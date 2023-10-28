@@ -1,4 +1,4 @@
-import { User } from '@/features/users/userType';
+import { User } from '../../../../../backend/prisma-proxy';
 import { toast } from "react-toastify";
 import { FormEvent } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';

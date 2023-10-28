@@ -1,5 +1,5 @@
 import { useGetPaginatedUsersQuery, PaginationOption } from '@/features/users/usersSlice';
-import { User } from '@/features/users/userType';
+import { User } from '../../../../../backend/prisma-proxy';
 import { useDashboardContext } from '@/app/dashboard/layout'; 
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDeleteUserMutation } from '@/features/users/usersSlice';
