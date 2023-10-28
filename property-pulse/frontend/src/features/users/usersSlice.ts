@@ -16,7 +16,7 @@ export interface PaginationOption {
 	per_page: number;
 	sortBy: string;
 	search?: string;
-}
+};
 
 export const usersApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({

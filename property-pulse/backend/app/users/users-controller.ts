@@ -47,7 +47,7 @@ router
 	/**
 	 * Update a user
 	 */
-	.patch('/users/:id', async (req, res) => {
+	.patch('/users/:id', hashPassword, async (req, res) => {
 		const user = await usersService.updateUser(Number(req.params.id), req.body);
 		res.status(200).json(user);
 	})

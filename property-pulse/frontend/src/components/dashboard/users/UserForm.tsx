@@ -1,6 +1,6 @@
 import { User, $Enums } from '../../../../../backend/utils/prisma-proxy';
 import { toast } from "react-toastify";
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
 import FormInput from '../FormInput';
 
@@ -16,16 +16,29 @@ const UserForm = (
 ) => {
 	const [updateUser, updateUserResult] = useUpdateUserMutation();
 	const [createUser, createUserResult] = useCreateUserMutation();
+	const [resetPassword, setResetPassword] = useState<boolean>(false);
 	
+	const onPasswordResetChange = (event:ChangeEvent<HTMLInputElement>) => {
+		setResetPassword(event.target.checked);
+	}
 	const onFormSubmit = async (event:FormEvent) => {
 		try {
 			event.preventDefault();
 			const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
+			if(!user || resetPassword) {
+				if(String(formData.password) !== String(formData.passwordconfirm)) {
+					toast.error('Passwords do not match', {
+						toastId: 'password-validate-error',
+						position: toast.POSITION.TOP_CENTER
+					});
+					return false;
+				}
+			}
 			const userData = {
 				id: user ? Number(user.id) : undefined,
 				email: String(formData.email),
 				name: String(formData.name),
-				password: !user ? String(formData.password) : undefined,
+				password: !user || resetPassword ? String(formData.password) : undefined,
 				role: userRole
 			} as User;
 			if(user) {
@@ -35,13 +48,6 @@ const UserForm = (
 					position: toast.POSITION.TOP_CENTER
 				});
 			} else {
-				if(String(formData.password) !== String(formData.passwordconfirm)) {
-					toast.error('Passwords do not match', {
-						toastId: 'password-validate-error',
-						position: toast.POSITION.TOP_CENTER
-					});
-					return false;
-				}
 				await createUser(userData).unwrap();
 				toast.success('User successfully created', {
 					toastId: 'user-create-success',
@@ -55,6 +61,7 @@ const UserForm = (
 				toastId: 'user-update-error',
 				position: toast.POSITION.TOP_CENTER
 			});
+			return false;
 		}
 	};
 
@@ -70,13 +77,16 @@ const UserForm = (
 					Email
 					<FormInput type="email" name="email" defaultValue={user?.email} required />
 				</label>
-				{ !user &&
+				{ user &&
+					<label><input type="checkbox" onChange={onPasswordResetChange} /> Reset Password</label>
+				}
+				{ (!user || resetPassword) &&
 					<label className="flex flex-col">
 						Password
 						<FormInput type="password" name="password" required />
 					</label>
 				}
-				{ !user &&
+				{ (!user || resetPassword) &&
 					<label className="flex flex-col">
 						Password Confirm
 						<FormInput type="password" name="passwordconfirm" required />

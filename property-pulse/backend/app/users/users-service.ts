@@ -91,6 +91,7 @@ const updateUser = async (id:number, data:User) => {
 			name: data.name,
 			email: data.email,
 			role: data.role,
+			...data.password && {password: data.password}
 		}
 	});
 	return updatedUser;

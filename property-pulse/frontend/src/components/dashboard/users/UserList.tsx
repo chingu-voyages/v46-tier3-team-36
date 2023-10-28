@@ -139,7 +139,7 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 					<div onClick={onNextPage} className="p-3 border border-solid border-gray-200 hover:cursor-pointer hover:text-green-900">
 						<AiOutlineArrowRight {...page === paginatedUsers.total_pages && {className: 'text-gray-300'}} />
 					</div>
-					<p>Page {page} of {paginatedUsers.total_pages} ({paginatedUsers.total} items)</p>
+					<p>Page {page} of {paginatedUsers.total_pages} ({paginatedUsers.total} total)</p>
 				</div>
 				<label className="flex flex-row gap-3 items-center">
 					# per page:
