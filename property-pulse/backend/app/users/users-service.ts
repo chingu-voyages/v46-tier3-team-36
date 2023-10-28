@@ -29,7 +29,7 @@ const getAllUsers = async () => {
 	});
 };
 
-const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: number, sortBy = 'name', search?:string) => {
+const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: number, sortby = 'name', search?:string) => {
 	let condition:Object = {role};
 	// Apply search string filter to the query condition.
 	if(search) {
@@ -61,7 +61,7 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 		},
 		where: condition,
 		orderBy: {
-			[sortBy]: 'asc'
+			[sortby]: 'asc'
 		}
 	});
 	// Get total number of users

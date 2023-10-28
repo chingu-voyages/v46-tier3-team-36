@@ -30,11 +30,11 @@ router
 	 */
 	.get('/users/:role/:per_page/:page', async (req, res) => {
 		const { role, page, per_page } = req.params;
-		const { sortBy, search } = req.body;
+		const { sortby, search } = req.query;
 		if(!Object.values($Enums.Role).includes(role as $Enums.Role) || !Number(page) || !Number(per_page)) {
 			throw new BadRequestError("Invalid parameters");
 		}
-		const result = await usersService.getPaginatedUsers(role as $Enums.Role, Number(page), Number(per_page), sortBy, search);
+		const result = await usersService.getPaginatedUsers(role as $Enums.Role, Number(page), Number(per_page), sortby as string, search as string);
 		res.status(200).json(result);
 	})
 	/**
