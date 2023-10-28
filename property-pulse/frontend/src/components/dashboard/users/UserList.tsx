@@ -1,5 +1,5 @@
 import { useGetPaginatedUsersQuery, PaginationOption } from '@/features/users/usersSlice';
-import { User } from '../../../../../backend/prisma-proxy';
+import { User, $Enums } from '../../../../../backend/utils/prisma-proxy';
 import { useDashboardContext } from '@/app/dashboard/layout'; 
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDeleteUserMutation } from '@/features/users/usersSlice';
@@ -8,7 +8,6 @@ import { IoMdPersonAdd } from 'react-icons/io';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import UserForm from './UserForm';
-import UserRoles from '@/utils/userRoles';
 import FormInput from '../FormInput';
 import FormSelect from '../FormSelect';
 
@@ -18,7 +17,7 @@ import FormSelect from '../FormSelect';
  * @param userRole The user role for which this list is 
  * @returns
  */
-const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles.TENANT}) => {
+const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 	const { showSideMenu } = useDashboardContext();
 	const [ userIdEditing, setUserIdEditing ] = useState<number>(0);
 	const [ userAdding, setUserAdding ] = useState<boolean>(false);
@@ -159,13 +158,13 @@ const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles
 									<span className="font-bold text-green-900">Email</span>
 									<span>{tenant.email}</span>
 								</div>
-								{ userRole === UserRoles.TENANT &&
+								{ userRole === $Enums.Role.tenant &&
 									<div className="flex flex-col items-start xl:gap-2 w-1/4">
 										<span className="font-bold text-green-900">Property</span>
 										<span>None</span>
 									</div>
 								}
-								{ userRole === UserRoles.TENANT &&
+								{ userRole === $Enums.Role.tenant &&
 									<div className="flex flex-col items-start gap-2 w-1/4">
 										<span className="font-bold text-green-900">Unit</span>
 										<span>None</span>

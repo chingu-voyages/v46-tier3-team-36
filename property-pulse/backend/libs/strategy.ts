@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { PrismaClient, User } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { compare } from '../utils/passwordUtils';
 
 const prisma = new PrismaClient();
 
@@ -20,7 +20,7 @@ export const Strategy = new LocalStrategy(
         return done(null, false, { message: 'Email not found / password not entered' });
       }
 
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await compare(password, user.password);
 
       if (!passwordMatch) {
         return done(null, false, { message: 'Wrong password.' });

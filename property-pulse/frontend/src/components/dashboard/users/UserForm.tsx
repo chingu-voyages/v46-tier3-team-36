@@ -1,9 +1,8 @@
-import { User } from '../../../../../backend/prisma-proxy';
+import { User, $Enums } from '../../../../../backend/utils/prisma-proxy';
 import { toast } from "react-toastify";
 import { FormEvent } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
 import FormInput from '../FormInput';
-import UserRoles from '@/utils/userRoles';
 
 /**
  * User Form for create or update. If user is set, then it's an edit. Otherwise, it's an addition.
@@ -13,7 +12,7 @@ import UserRoles from '@/utils/userRoles';
  */
 const UserForm = (
 	{user, userRole, formCloseHandler}:
-	{user?:User, userRole:typeof UserRoles.MANAGER|typeof UserRoles.TENANT, formCloseHandler:()=>void}
+	{user?:User, userRole:$Enums.Role, formCloseHandler:()=>void}
 ) => {
 	const [updateUser, updateUserResult] = useUpdateUserMutation();
 	const [createUser, createUserResult] = useCreateUserMutation();
@@ -83,13 +82,13 @@ const UserForm = (
 						<FormInput type="password" name="passwordconfirm" required />
 					</label>
 				}
-				{ userRole === UserRoles.TENANT &&
+				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Property
 						<FormInput type="text" />
 					</label>
 				}
-				{ userRole === UserRoles.TENANT &&
+				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Unit
 						<FormInput type="text" name="unitId" />
