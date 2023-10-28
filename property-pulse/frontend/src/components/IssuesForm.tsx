@@ -1,3 +1,4 @@
+'use client';
 
 const formStyles = "flex flex-col justify-around absolute md:w-1/3 h-3/4 m-10 p-2 border-2 rounded-xl shadow-xl shadow-slate-600 border-slate-400 bg-slate-100"
 const formSection ="flex flex-col"
@@ -7,28 +8,44 @@ const textAreaStyles = "border-2 border-green-800 focus:outline-none focus-visib
 const selectStyles ="flex flex-col font-medium mt-4 rounded-lg bg-green-800  text-white p-2";
 
 
-/* IssuesForm for tenant view allows tenants to create a new issue to send to PMs
-Tenant adds <Title> <type> & <Details> manually.
-<created by> <timestamp> <edited timestamp> etc... will be added to formdata once "submit btn" is clicked. 
-See schema for what keys:value types Issues should have.
-*/
 const IssuesForm = () => {
+
+	const handleSubmit = async (e: { preventDefault: () => void; target: any; }) =>{
+		e.preventDefault();
+		const form = e.target
+		const formData = new FormData(form);
+		const newIssue = Object.fromEntries(formData.entries());
+		
+		const response = await fetch('/api/admin/issues',{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(newIssue)
+		});
+		const data = await response.json();
+		console.log(data)// error - {msg: '\nInvalid `prisma.issue.create()` invocation in\n/ho…id value for argument `type`. Expected IssueType.'}
+
+		console.log(newIssue)
+		form.reset();
+	}
+
 	return(
-			<form className={formStyles}>			
+			<form className={formStyles} onSubmit={handleSubmit}>			
 				<div className={formSection}>
 					<label>Title</label>
-					<input placeholder="e.g.Broken window" className={inputStyles} type = "text" />
+					<input name="title" placeholder="e.g.Broken window" className={inputStyles} type = "text" />
 				</div>
 				<div className={formSection}>
 					<label>Choose Type</label>
-					<select className={selectStyles}>
-						<option>Inquiry</option>
-						<option>Report</option>
-						<option>Request</option>
+					<select name="type"className={selectStyles}>
+						<option value="inquiry">Inquiry</option>
+						<option value="report">Report</option>
+						<option value="request">Request</option>
 					</select>
-				</div>			
+				</div>
 				<div className={formSection}>
-					<textarea rows={10} placeholder="details"className={textAreaStyles} />
+					<textarea rows={10} name="description" placeholder="details" className={textAreaStyles} />
 				</div>
 				<input className={btnInputStyles} type = "submit" />
 			</form>
