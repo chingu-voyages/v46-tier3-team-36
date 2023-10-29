@@ -11,7 +11,7 @@ const getUser = async (id: number) => {
 			email: true,
 			role: true,
 			residence: true,
-			unit: true
+			// unit: true
 		}
 	});
 };
@@ -24,7 +24,7 @@ const getAllUsers = async () => {
 			email: true,
 			role: true,
 			residence: true,
-			unit: true
+			// unit: true
 		}
 	});
 };
@@ -57,7 +57,7 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 			email: true,
 			role: true,
 			residence: true,
-			unit: true
+			// unit: true
 		},
 		where: condition,
 		orderBy: [{
@@ -88,8 +88,8 @@ const createUser = async (data:User) => {
 			name: data.name,
 			email: data.email,
 			role: data.role,
-			residenceId: data.residenceId,
-			unitId: data.unitId,
+			// residenceId: data.residenceId,
+			// unitId: data.unitId,
 			password: data.password
 		}
 	});
@@ -103,8 +103,8 @@ const updateUser = async (id:number, data:User) => {
 			name: data.name,
 			email: data.email,
 			role: data.role,
-			residenceId: data.residenceId,
-			unitId: data.unitId,
+			// residenceId: data.residenceId,
+			// unitId: data.unitId,
 			...data.password && {password: data.password}
 		}
 	});
