@@ -84,7 +84,7 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 			dispatch(userLoggedIn(null));
 			sessionStorage.removeItem('login');
 		}
-	}, []);
+	});
 
 	const contextValue = {
 		activeRoute: activeRoute,

@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import StoreProviderComponent from '@/components/StoreProviderComponent';
 import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'PropertyPulse',
@@ -15,5 +18,11 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode
 }) {
-	return (<StoreProviderComponent children={children} />)
+	return (
+		<html lang="en">
+			<body className={inter.className}>
+				<StoreProviderComponent>{children}</StoreProviderComponent>
+			</body>
+		</html>
+	)
 };

@@ -124,7 +124,7 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 				<div className="flex flex-col gap-10 w-full md:w-2/3 lg:w-1/3">
 					<div>
 						<label>Search: <FormInput type="text" name="search" placeholder="Enter text to search" /></label>
-						{search && <p className="text-green-900 pl-4">Current Search: "{search}"</p>}
+						{search && <p className="text-green-900 pl-4">Current Search: {`"${search}"`}</p>}
 					</div>
 					<div>
 						<label>Sort By: <FormSelect name="sort" options={sortableOptions} /></label>

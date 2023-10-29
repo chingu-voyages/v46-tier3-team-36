@@ -68,7 +68,7 @@ const PropertiesPage: React.FC = () => {
       <h1 className="text-3xl font-bold mb-6">Properties</h1>
       <div className="flex flex-wrap -m-2">
         {mockProperties.map(property => (
-          <div className="w-full md:w-1/2 p-2">
+          <div key={property.id} className="w-full md:w-1/2 p-2">
             <PropertyCard key={property.id} property={property} />
           </div>
         ))}
