@@ -98,10 +98,14 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 		setPage(1);
 	};
 	const onPrevPage = () => {
-		setPage(value => Math.max(1, value - 1));
+		if(page > 1) {
+			setPage(value => Math.max(1, value - 1));
+		}
 	};
 	const onNextPage = () => {
-		setPage(value => Math.min(paginatedUsers.total_pages, value + 1));
+		if(page < paginatedUsers.total_pages && paginatedUsers.total_pages !== 0) {
+			setPage(value => Math.min(paginatedUsers.total_pages, value + 1));
+		}
 	};
 	const closeEditForm = () => {
 		setUserIdEditing(0);
@@ -138,7 +142,7 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 						<AiOutlineArrowLeft {...page === 1 && {className: 'text-gray-300'}} />
 					</div>
 					<div onClick={onNextPage} className="p-3 border border-solid border-gray-200 hover:cursor-pointer hover:text-green-900">
-						<AiOutlineArrowRight {...page === paginatedUsers.total_pages && {className: 'text-gray-300'}} />
+						<AiOutlineArrowRight {...(page === paginatedUsers.total_pages || paginatedUsers.total_pages === 0) && {className: 'text-gray-300'}} />
 					</div>
 					<p>Page {page} of {paginatedUsers.total_pages} ({paginatedUsers.total} total)</p>
 				</div>
