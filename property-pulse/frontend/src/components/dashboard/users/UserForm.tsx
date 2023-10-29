@@ -73,9 +73,7 @@ const UserForm = (
 				name: String(formData.name),
 				password: !user || resetPassword ? String(formData.password) : undefined,
 				role: userRole,
-				residence: units.filter(unit => unit.id === Number(formData.unitId))
-				//residenceId: userRole === $Enums.Role.tenant ? Number(formData.residenceId) : undefined,
-				//unitId: userRole === $Enums.Role.tenant ? selectedUnitId : undefined
+				residence: userRole === $Enums.Role.tenant ? units.filter(unit => unit.id === Number(formData.unitId)): []
 			} as User;
 			if(user) {
 				await updateUser(userData).unwrap();
@@ -131,7 +129,7 @@ const UserForm = (
 				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Property
-						<FormSelect options={propertiesOptions} noneSelect={true} defaultValue={user?.residence[0]?.id} onChange={onPropertyChanged} />
+						<FormSelect options={propertiesOptions} noneSelect={true} value={selectedPropertyId} onChange={onPropertyChanged} />
 					</label>
 				}
 				{ userRole === $Enums.Role.tenant &&
