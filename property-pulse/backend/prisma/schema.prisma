@@ -26,9 +26,9 @@ model User {
 }
 
 model Session {
-  sid                   String   @id @db.VarChar
-  sess                  Json     @db.Json
-  expire                DateTime @db.Timestamp(6)
+  sid                   String        @id @db.VarChar
+  sess                  Json          @db.Json
+  expire                DateTime      @db.Timestamp(6)
 
   @@index([expire], map: "IDX_session_expire")
   @@map(name: "session")
@@ -39,13 +39,15 @@ enum Role {
   tenant
 }
 
-// Should issues be associated with tenant only, or manager too?
+// Associate issues with unit, except inquiries
 model Issue {
   id              Int              @id @default(autoincrement())
   status          IssueStatus      @default(open)
   type            IssueType
   tenant          User             @relation(fields: [tenantId], references: [id])
   tenantId        Int
+  unit            Unit?             @relation(fields: [unitId], references: [id])
+  unitId          Int
   createdAt       DateTime         @default(now()) @db.Timestamptz()
   updatedAt       DateTime         @updatedAt
   title           String
@@ -74,10 +76,9 @@ model Notification {
   isNew           Boolean          @default(true)
 }
 
-// Should both properties and units have tenants or just a property has units that has tenants?
 model Property {
   id              Int              @id @default(autoincrement())
-  owner           User    @relation(fields: [ownerId], references: [id], name: "Properties")
+  owner           User             @relation(fields: [ownerId], references: [id], name: "Properties")
   ownerId         Int 
   name            String
   description     String?
@@ -89,6 +90,7 @@ model Unit {
   property        Property         @relation(fields: [propertyId], references: [id])
   propertyId      Int
   tenants         User[]
+  issues          Issue[]
   name            String
   description     String?
   rent            Decimal          @db.Decimal(10,2)
