@@ -27,9 +27,15 @@ const getIssue = async (issueId: number) => {
 }
 
 // find all issues where tenant is a resident of one of the user's properties
-const getAllIssues = async () => {
+const getAllIssues = async (user) => {
   return await prisma.issue.findMany({
-
+    where: {
+      tenant: {
+        residence: {
+          ownerId: user.id
+        }
+      }
+    }
   })
 }
 

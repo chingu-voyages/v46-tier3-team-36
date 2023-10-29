@@ -19,10 +19,7 @@ model User {
   notifications          Notification[]
 
   // tenants
-  residence              Property?      @relation(fields: [residenceId], references: [id], name: "Residences")
-  residenceId            Int? 
-  unit                   Unit?        @relation(fields: [unitId], references: [id])
-  unitId                 Int?
+  residence              Unit[]
 
   // managers
   properties             Property[]   @relation("Properties")
@@ -82,7 +79,6 @@ model Property {
   id              Int              @id @default(autoincrement())
   owner           User    @relation(fields: [ownerId], references: [id], name: "Properties")
   ownerId         Int 
-  tenants         User[]  @relation("Residences")
   name            String
   description     String?
   units           Unit[]
