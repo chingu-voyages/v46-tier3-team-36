@@ -3,7 +3,7 @@ import { useGetPropertiesQuery } from '@/features/properties/propertiesSlice';
 import { useGetUnitsForPropertyQuery } from '@/features/units/unitsSlice';
 import User from '@/features/users/userType';
 import { toast } from "react-toastify";
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ErrorDisplay from '@/components/ErrorDisplay';
@@ -24,6 +24,7 @@ const UserForm = (
 	const [createUser, createUserResult] = useCreateUserMutation();
 	const [resetPassword, setResetPassword] = useState<boolean>(false);
 	const [selectedPropertyId, setSelectedPropertyId] = useState<number|undefined>(user?.residence?.id);
+	const [selectedUnitId, setSelectedUnitId] = useState<number|undefined>(user?.unit?.id);
 	const {
 		data: properties,
 		isLoading: isPropertiesLoading,
@@ -42,14 +43,17 @@ const UserForm = (
 
 	const unitOptions = units.map(unit => {
 		return { value: unit.id, label: unit.name };
-	})
+	});
 
 	const onPasswordResetChange = (event:ChangeEvent<HTMLInputElement>) => {
 		setResetPassword(event.target.checked);
-	}
+	};
 	const onPropertyChanged = (event:ChangeEvent<HTMLSelectElement>) => {
 		setSelectedPropertyId(Number(event.target.value));
-	}
+	};
+	const onUnitChanged = (event:ChangeEvent<HTMLSelectElement>) => {
+		setSelectedUnitId(Number(event.target.value));
+	};
 	const onFormSubmit = async (event:FormEvent) => {
 		try {
 			event.preventDefault();
@@ -70,7 +74,7 @@ const UserForm = (
 				password: !user || resetPassword ? String(formData.password) : undefined,
 				role: userRole,
 				residenceId: userRole === $Enums.Role.tenant ? Number(formData.residenceId) : undefined,
-				unitId: userRole === $Enums.Role.tenant ? Number(formData.unitId) : undefined
+				unitId: userRole === $Enums.Role.tenant ? selectedUnitId : undefined
 			} as User;
 			if(user) {
 				await updateUser(userData).unwrap();
@@ -132,7 +136,7 @@ const UserForm = (
 				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Unit
-						<FormSelect options={unitOptions} name="unitId" noneSelect={true} defaultValue={user?.unit?.id} />
+						<FormSelect options={unitOptions} name="unitId" noneSelect={true} value={selectedUnitId} onChange={onUnitChanged} />
 					</label>
 				}
 			</div>

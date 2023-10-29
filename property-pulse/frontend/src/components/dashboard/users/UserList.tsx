@@ -53,8 +53,8 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 		{label: '50', value: '50'}
 	];
 
-	if(isUsersLoading) return <LoadingSpinner />
-	if(!isUsersSuccess) return <ErrorDisplay message="Data retrieval failed. Please refresh your browser and try again." />
+	if(isUsersLoading) return <LoadingSpinner />;
+	if(!isUsersSuccess) return <ErrorDisplay message="Data retrieval failed. Please refresh your browser and try again." />;
 
 	const onAddClick = (event:React.MouseEvent<SVGElement, MouseEvent>) => {
 		setUserAdding(true);
@@ -92,7 +92,7 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 		closeEditForm();
 		setPage(1);
 		setSearch('');
-	}
+	};
 	const onPerPageChange = (event:ChangeEvent<HTMLSelectElement>) => {
 		setPerPage(Number(event.target.value));
 		setPage(1);
