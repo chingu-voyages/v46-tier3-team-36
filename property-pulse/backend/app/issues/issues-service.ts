@@ -3,12 +3,13 @@ import { PrismaClient, Issue } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const createIssue = async (user, issue: Issue) => {
-  const { type, title, description } = issue;
+  const { type, unitId, title, description } = issue;
 
   const createdIssue = await prisma.issue.create({
     data: {
       type,
       tenantId: user.id,
+      unitId,
       title,
       description
     }
