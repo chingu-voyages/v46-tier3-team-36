@@ -1,30 +1,31 @@
 import { apiSlice } from '../api/apiSlice';
+import { Property } from '../../../../backend/utils/prisma-proxy';
 
 export const propertiesApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		getProperties: builder.query({
-			query: () => '/properties',
+		getProperties: builder.query<Property[], void>({
+			query: () => '/admin/properties',
 			providesTags: ['Properties']
 		}),
-		createProperty: builder.mutation({
+		createProperty: builder.mutation<Property, Property>({
 			query: property => ({
-				url: '/properties/create',
+				url: '/admin/properties',
 				method: 'POST',
 				body: property
 			}),
 			invalidatesTags: ['Properties']
 		}),
-		updateProperty: builder.mutation({
+		updateProperty: builder.mutation<Property, Property>({
 			query: property => ({
-				url: `/properties/update/${property.id}`,
+				url: `/admin/properties/${property.id}`,
 				method: 'PATCH',
 				body: property
 			}),
 			invalidatesTags: ['Properties']
 		}),
-		deleteProperty: builder.mutation({
+		deleteProperty: builder.mutation<Property, number>({
 			query: propertyId => ({
-				url: `/properties/delete/${propertyId}`,
+				url: `/admin/properties/${propertyId}`,
 				method: 'DELETE'
 			}),
 			invalidatesTags: ['Properties']
