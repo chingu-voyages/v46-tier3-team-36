@@ -3,7 +3,7 @@ import { useGetPropertiesQuery } from '@/features/properties/propertiesSlice';
 import { useGetUnitsForPropertyQuery } from '@/features/units/unitsSlice';
 import User from '@/features/users/userType';
 import { toast } from "react-toastify";
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ErrorDisplay from '@/components/ErrorDisplay';
@@ -23,8 +23,8 @@ const UserForm = (
 	const [updateUser, updateUserResult] = useUpdateUserMutation();
 	const [createUser, createUserResult] = useCreateUserMutation();
 	const [resetPassword, setResetPassword] = useState<boolean>(false);
-	const [selectedPropertyId, setSelectedPropertyId] = useState<number|undefined>(user?.residence?.id);
-	const [selectedUnitId, setSelectedUnitId] = useState<number|undefined>(user?.unit?.id);
+	const [selectedPropertyId, setSelectedPropertyId] = useState<number|undefined>(user?.residence[0]?.propertyId);
+	const [selectedUnitId, setSelectedUnitId] = useState<number|undefined>(user?.residence[0]?.id);
 	const {
 		data: properties,
 		isLoading: isPropertiesLoading,
@@ -73,8 +73,9 @@ const UserForm = (
 				name: String(formData.name),
 				password: !user || resetPassword ? String(formData.password) : undefined,
 				role: userRole,
-				residenceId: userRole === $Enums.Role.tenant ? Number(formData.residenceId) : undefined,
-				unitId: userRole === $Enums.Role.tenant ? selectedUnitId : undefined
+				residence: units.filter(unit => unit.id === Number(formData.unitId))
+				//residenceId: userRole === $Enums.Role.tenant ? Number(formData.residenceId) : undefined,
+				//unitId: userRole === $Enums.Role.tenant ? selectedUnitId : undefined
 			} as User;
 			if(user) {
 				await updateUser(userData).unwrap();
@@ -130,7 +131,7 @@ const UserForm = (
 				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Property
-						<FormSelect options={propertiesOptions} name="residenceId" noneSelect={true} defaultValue={user?.residence?.id} onChange={onPropertyChanged} />
+						<FormSelect options={propertiesOptions} noneSelect={true} defaultValue={user?.residence[0]?.id} onChange={onPropertyChanged} />
 					</label>
 				}
 				{ userRole === $Enums.Role.tenant &&

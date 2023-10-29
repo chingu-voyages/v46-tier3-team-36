@@ -1,6 +1,17 @@
-import { $Enums, PrismaClient, User } from '@prisma/client';
+import { $Enums, PrismaClient, User, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
+
+// Build Include Unit object that includes property
+const unitProperty: Prisma.UnitInclude = {
+	property: true
+};
+
+const userWithResidence = Prisma.validator<Prisma.UserDefaultArgs> () ({
+	include: { residence: true, properties: true }
+});
+
+type UserWithResidence = Prisma.UserGetPayload<typeof userWithResidence>
 
 const getUser = async (id: number) => {
 	return await prisma.user.findUnique({
@@ -10,8 +21,7 @@ const getUser = async (id: number) => {
 			name: true,
 			email: true,
 			role: true,
-			residence: true,
-			// unit: true
+			residence: true
 		}
 	});
 };
@@ -23,8 +33,9 @@ const getAllUsers = async () => {
 			name: true,
 			email: true,
 			role: true,
-			residence: true,
-			// unit: true
+			residence: {
+				include: unitProperty
+			}
 		}
 	});
 };
@@ -39,10 +50,20 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 				{ name: {contains: search, mode: 'insensitive'} },
 				{ email: {contains: search, mode: 'insensitive'} },
 				{ 
-					residence: { name: {contains: search, mode: 'insensitive'} }
+					residence: {
+						some: {
+							name: {contains: search, mode: 'insensitive'}
+						}
+					}
 				},
 				{
-					unit: { name: {contains: search, mode: 'insensitive'} }
+					residence: {
+						some: {
+							property: {
+								name: {contains: search, mode: 'insensitive'}
+							}
+						}
+					}
 				}
 			]
 		};
@@ -56,8 +77,9 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 			name: true,
 			email: true,
 			role: true,
-			residence: true,
-			// unit: true
+			residence: {
+				include: unitProperty
+			}
 		},
 		where: condition,
 		orderBy: [{
@@ -81,30 +103,32 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 	return result;
 }
 
-const createUser = async (data:User) => {
+const createUser = async (data:UserWithResidence) => {
 	// Do not take any id given by the client. Let prisma auto-generate.
 	const newUser = await prisma.user.create({
 		data: {
 			name: data.name,
 			email: data.email,
 			role: data.role,
-			// residenceId: data.residenceId,
-			// unitId: data.unitId,
+			residence: {
+				connect: data.residence
+			},
 			password: data.password
 		}
 	});
 	return newUser;
 };
 
-const updateUser = async (id:number, data:User) => {
+const updateUser = async (id:number, data:UserWithResidence) => {
 	const updatedUser = await prisma.user.update({
 		where: { id },
 		data: {
 			name: data.name,
 			email: data.email,
 			role: data.role,
-			// residenceId: data.residenceId,
-			// unitId: data.unitId,
+			residence: {
+				set: data.residence
+			},
 			...data.password && {password: data.password}
 		}
 	});

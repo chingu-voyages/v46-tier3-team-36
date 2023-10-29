@@ -169,13 +169,13 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 								{ userRole === $Enums.Role.tenant &&
 									<div className="flex flex-col items-start xl:gap-2 w-1/4">
 										<span className="font-bold text-green-900">Property</span>
-										<span>{user.residence?.name ? user.residence.name : 'None'}</span>
+										<span>{user.residence[0]?.property?.name ? user.residence[0].property?.name : 'None'}</span>
 									</div>
 								}
 								{ userRole === $Enums.Role.tenant &&
 									<div className="flex flex-col items-start gap-2 w-1/4">
 										<span className="font-bold text-green-900">Unit</span>
-										<span>{user.unit?.name ? user.unit.name : 'None'}</span>
+										<span>{user.residence[0]?.name ? user.residence[0]?.name : 'None'}</span>
 									</div>
 								}
 							</div>
