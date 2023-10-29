@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '@/store/store';
-import { User } from '../../../../backend/utils/prisma-proxy';
+import User from '../users/userType';
 
 const userSlice = createSlice({
 	name: 'user',
