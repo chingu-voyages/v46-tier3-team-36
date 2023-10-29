@@ -80,7 +80,17 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 }
 
 const createUser = async (data:User) => {
-	const newUser = await prisma.user.create({data});
+	// Do not take any id given by the client. Let prisma auto-generate.
+	const newUser = await prisma.user.create({
+		data: {
+			name: data.name,
+			email: data.email,
+			role: data.role,
+			residenceId: data.residenceId,
+			unitId: data.unitId,
+			password: data.password
+		}
+	});
 	return newUser;
 };
 
@@ -91,6 +101,8 @@ const updateUser = async (id:number, data:User) => {
 			name: data.name,
 			email: data.email,
 			role: data.role,
+			residenceId: data.residenceId,
+			unitId: data.unitId,
 			...data.password && {password: data.password}
 		}
 	});

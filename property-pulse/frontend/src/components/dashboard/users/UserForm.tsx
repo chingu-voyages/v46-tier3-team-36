@@ -1,7 +1,13 @@
-import { User, $Enums } from '../../../../../backend/utils/prisma-proxy';
+import { $Enums } from '../../../../../backend/utils/prisma-proxy';
+import { useGetPropertiesQuery } from '@/features/properties/propertiesSlice';
+import { useGetUnitsForPropertyQuery } from '@/features/units/unitsSlice';
+import User from '@/features/users/userType';
 import { toast } from "react-toastify";
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import FormSelect from '../FormSelect';
 import FormInput from '../FormInput';
 
 /**
@@ -17,9 +23,32 @@ const UserForm = (
 	const [updateUser, updateUserResult] = useUpdateUserMutation();
 	const [createUser, createUserResult] = useCreateUserMutation();
 	const [resetPassword, setResetPassword] = useState<boolean>(false);
-	
+	const [selectedPropertyId, setSelectedPropertyId] = useState<number|undefined>(user?.residence?.id);
+	const {
+		data: properties,
+		isLoading: isPropertiesLoading,
+		isSuccess: isPropertiesSuccess
+	} = useGetPropertiesQuery();
+	const {
+		data: units = []
+	} = useGetUnitsForPropertyQuery(selectedPropertyId || 0);
+
+	if(isPropertiesLoading) return <LoadingSpinner />;
+	if(!isPropertiesSuccess) return <ErrorDisplay message="Data retrieval failed. Please refresh your browser and try again." />;
+
+	const propertiesOptions = properties.map(property => {
+		return { value: property.id, label: property.name };
+	});
+
+	const unitOptions = units.map(unit => {
+		return { value: unit.id, label: unit.name };
+	})
+
 	const onPasswordResetChange = (event:ChangeEvent<HTMLInputElement>) => {
 		setResetPassword(event.target.checked);
+	}
+	const onPropertyChanged = (event:ChangeEvent<HTMLSelectElement>) => {
+		setSelectedPropertyId(Number(event.target.value));
 	}
 	const onFormSubmit = async (event:FormEvent) => {
 		try {
@@ -39,7 +68,9 @@ const UserForm = (
 				email: String(formData.email),
 				name: String(formData.name),
 				password: !user || resetPassword ? String(formData.password) : undefined,
-				role: userRole
+				role: userRole,
+				residenceId: userRole === $Enums.Role.tenant ? Number(formData.residenceId) : undefined,
+				unitId: userRole === $Enums.Role.tenant ? Number(formData.unitId) : undefined
 			} as User;
 			if(user) {
 				await updateUser(userData).unwrap();
@@ -95,13 +126,13 @@ const UserForm = (
 				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Property
-						<FormInput type="text" />
+						<FormSelect options={propertiesOptions} name="residenceId" noneSelect={true} defaultValue={user?.residence?.id} onChange={onPropertyChanged} />
 					</label>
 				}
 				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Unit
-						<FormInput type="text" name="unitId" />
+						<FormSelect options={unitOptions} name="unitId" noneSelect={true} defaultValue={user?.unit?.id} />
 					</label>
 				}
 			</div>
