@@ -1,8 +1,8 @@
-export interface User {
-	id: number;
-	email: string;
-	name: string;
-	role: string;
-	unitId?: number;
-	residenceId?: number;
+import { User, Property, Unit } from "../../../../backend/utils/prisma-proxy";
+
+interface UserWithResidence extends User {
+	residence: Property,
+	unit: Unit
 }
+
+export default UserWithResidence;

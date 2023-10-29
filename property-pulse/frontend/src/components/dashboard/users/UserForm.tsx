@@ -1,9 +1,14 @@
-import { User } from '@/features/users/userType';
+import { $Enums } from '../../../../../backend/utils/prisma-proxy';
+import { useGetPropertiesQuery } from '@/features/properties/propertiesSlice';
+import { useGetUnitsForPropertyQuery } from '@/features/units/unitsSlice';
+import User from '@/features/users/userType';
 import { toast } from "react-toastify";
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import FormSelect from '../FormSelect';
 import FormInput from '../FormInput';
-import UserRoles from '@/utils/userRoles';
 
 /**
  * User Form for create or update. If user is set, then it's an edit. Otherwise, it's an addition.
@@ -13,21 +18,63 @@ import UserRoles from '@/utils/userRoles';
  */
 const UserForm = (
 	{user, userRole, formCloseHandler}:
-	{user?:User, userRole:typeof UserRoles.MANAGER|typeof UserRoles.TENANT, formCloseHandler:()=>void}
+	{user?:User, userRole:$Enums.Role, formCloseHandler:()=>void}
 ) => {
 	const [updateUser, updateUserResult] = useUpdateUserMutation();
 	const [createUser, createUserResult] = useCreateUserMutation();
-	
+	const [resetPassword, setResetPassword] = useState<boolean>(false);
+	const [selectedPropertyId, setSelectedPropertyId] = useState<number|undefined>(user?.residence?.id);
+	const [selectedUnitId, setSelectedUnitId] = useState<number|undefined>(user?.unit?.id);
+	const {
+		data: properties,
+		isLoading: isPropertiesLoading,
+		isSuccess: isPropertiesSuccess
+	} = useGetPropertiesQuery();
+	const {
+		data: units = []
+	} = useGetUnitsForPropertyQuery(selectedPropertyId || 0);
+
+	if(isPropertiesLoading) return <LoadingSpinner />;
+	if(!isPropertiesSuccess) return <ErrorDisplay message="Data retrieval failed. Please refresh your browser and try again." />;
+
+	const propertiesOptions = properties.map(property => {
+		return { value: property.id, label: property.name };
+	});
+
+	const unitOptions = units.map(unit => {
+		return { value: unit.id, label: unit.name };
+	});
+
+	const onPasswordResetChange = (event:ChangeEvent<HTMLInputElement>) => {
+		setResetPassword(event.target.checked);
+	};
+	const onPropertyChanged = (event:ChangeEvent<HTMLSelectElement>) => {
+		setSelectedPropertyId(Number(event.target.value));
+	};
+	const onUnitChanged = (event:ChangeEvent<HTMLSelectElement>) => {
+		setSelectedUnitId(Number(event.target.value));
+	};
 	const onFormSubmit = async (event:FormEvent) => {
 		try {
 			event.preventDefault();
 			const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
+			if(!user || resetPassword) {
+				if(String(formData.password) !== String(formData.passwordconfirm)) {
+					toast.error('Passwords do not match', {
+						toastId: 'password-validate-error',
+						position: toast.POSITION.TOP_CENTER
+					});
+					return false;
+				}
+			}
 			const userData = {
 				id: user ? Number(user.id) : undefined,
 				email: String(formData.email),
 				name: String(formData.name),
-				password: !user ? String(formData.password) : undefined,
-				role: userRole
+				password: !user || resetPassword ? String(formData.password) : undefined,
+				role: userRole,
+				residenceId: userRole === $Enums.Role.tenant ? Number(formData.residenceId) : undefined,
+				unitId: userRole === $Enums.Role.tenant ? selectedUnitId : undefined
 			} as User;
 			if(user) {
 				await updateUser(userData).unwrap();
@@ -36,13 +83,6 @@ const UserForm = (
 					position: toast.POSITION.TOP_CENTER
 				});
 			} else {
-				if(String(formData.password) !== String(formData.passwordconfirm)) {
-					toast.error('Passwords do not match', {
-						toastId: 'password-validate-error',
-						position: toast.POSITION.TOP_CENTER
-					});
-					return false;
-				}
 				await createUser(userData).unwrap();
 				toast.success('User successfully created', {
 					toastId: 'user-create-success',
@@ -56,6 +96,7 @@ const UserForm = (
 				toastId: 'user-update-error',
 				position: toast.POSITION.TOP_CENTER
 			});
+			return false;
 		}
 	};
 
@@ -71,28 +112,31 @@ const UserForm = (
 					Email
 					<FormInput type="email" name="email" defaultValue={user?.email} required />
 				</label>
-				{ !user &&
+				{ user &&
+					<label><input type="checkbox" onChange={onPasswordResetChange} /> Reset Password</label>
+				}
+				{ (!user || resetPassword) &&
 					<label className="flex flex-col">
 						Password
 						<FormInput type="password" name="password" required />
 					</label>
 				}
-				{ !user &&
+				{ (!user || resetPassword) &&
 					<label className="flex flex-col">
 						Password Confirm
 						<FormInput type="password" name="passwordconfirm" required />
 					</label>
 				}
-				{ userRole === UserRoles.TENANT &&
+				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Property
-						<FormInput type="text" />
+						<FormSelect options={propertiesOptions} name="residenceId" noneSelect={true} defaultValue={user?.residence?.id} onChange={onPropertyChanged} />
 					</label>
 				}
-				{ userRole === UserRoles.TENANT &&
+				{ userRole === $Enums.Role.tenant &&
 					<label className="flex flex-col">
 						Unit
-						<FormInput type="text" name="unitId" />
+						<FormSelect options={unitOptions} name="unitId" noneSelect={true} value={selectedUnitId} onChange={onUnitChanged} />
 					</label>
 				}
 			</div>

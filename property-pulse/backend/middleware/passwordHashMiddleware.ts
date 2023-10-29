@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+import { hash } from '../utils/passwordUtils';
 import { Request, Response, NextFunction } from 'express';
 
 /**
@@ -10,8 +10,7 @@ import { Request, Response, NextFunction } from 'express';
  */
 export const hashPassword = async (req: Request, res:Response, next:NextFunction) => {
 	if(req.body.password) {
-		const saltRounds = 10;
-		req.body.password = await bcrypt.hash(req.body.password, saltRounds);
+		req.body.password = await hash(req.body.password);
 	}
 	next();
 };

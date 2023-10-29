@@ -17,6 +17,7 @@ import loginController from './app/auth/login/login-controller';
 import usersController from './app/users/users-controller';
 import issuesController from './app/issues/issues-controller';
 import propertiesController from './app/properties/properties-controller';
+import unitsController from './app/units/units-controller';
 
 const prisma = new PrismaClient();
 
@@ -43,6 +44,7 @@ app.use(logoutController);
 app.use(issuesController);
 app.use(propertiesController);
 app.use('/api/admin', authorize($Enums.Role.manager), usersController);
+app.use('/api/admin', authorize($Enums.Role.manager), unitsController);
 
 app.use('*', (req, res) => {
 	res.status(404).json({ msg: 'not found' });

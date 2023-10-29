@@ -1,5 +1,6 @@
 import { useGetPaginatedUsersQuery, PaginationOption } from '@/features/users/usersSlice';
-import { User } from '@/features/users/userType';
+import { $Enums } from '../../../../../backend/utils/prisma-proxy';
+import User from '@/features/users/userType';
 import { useDashboardContext } from '@/app/dashboard/layout'; 
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDeleteUserMutation } from '@/features/users/usersSlice';
@@ -7,8 +8,9 @@ import { toast } from "react-toastify";
 import { IoMdPersonAdd } from 'react-icons/io';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import ErrorDisplay from '@/components/ErrorDisplay';
 import UserForm from './UserForm';
-import UserRoles from '@/utils/userRoles';
 import FormInput from '../FormInput';
 import FormSelect from '../FormSelect';
 
@@ -18,7 +20,7 @@ import FormSelect from '../FormSelect';
  * @param userRole The user role for which this list is 
  * @returns
  */
-const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles.TENANT}) => {
+const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 	const { showSideMenu } = useDashboardContext();
 	const [ userIdEditing, setUserIdEditing ] = useState<number>(0);
 	const [ userAdding, setUserAdding ] = useState<boolean>(false);
@@ -36,10 +38,8 @@ const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles
 	};
 	const {
 		data: paginatedUsers,
-		isLoading,
-		isSuccess,
-		isError,
-		error
+		isLoading: isUsersLoading,
+		isSuccess: isUsersSuccess
 	} = useGetPaginatedUsersQuery(paginationOptions);
 	const sortableOptions = [
 		{value: 'name', label: 'Name'},
@@ -53,8 +53,8 @@ const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles
 		{label: '50', value: '50'}
 	];
 
-	if(isLoading) return <p>Loading data...</p>
-	if(!isSuccess) return <p>Data retrieval failed...</p>
+	if(isUsersLoading) return <LoadingSpinner />;
+	if(!isUsersSuccess) return <ErrorDisplay message="Data retrieval failed. Please refresh your browser and try again." />;
 
 	const onAddClick = (event:React.MouseEvent<SVGElement, MouseEvent>) => {
 		setUserAdding(true);
@@ -84,21 +84,28 @@ const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles
 		event.preventDefault();
 		const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
 		closeEditForm();
+		setPage(1);
 		setSortBy(String(formData.sort));
 		setSearch(String(formData.search));
 	};
 	const onSearchClear = () => {
 		closeEditForm();
+		setPage(1);
 		setSearch('');
-	}
+	};
 	const onPerPageChange = (event:ChangeEvent<HTMLSelectElement>) => {
 		setPerPage(Number(event.target.value));
+		setPage(1);
 	};
 	const onPrevPage = () => {
-		setPage(value => Math.max(1, value - 1));
+		if(page > 1) {
+			setPage(value => Math.max(1, value - 1));
+		}
 	};
 	const onNextPage = () => {
-		setPage(value => Math.min(paginatedUsers.total_pages, value + 1));
+		if(page < paginatedUsers.total_pages && paginatedUsers.total_pages !== 0) {
+			setPage(value => Math.min(paginatedUsers.total_pages, value + 1));
+		}
 	};
 	const closeEditForm = () => {
 		setUserIdEditing(0);
@@ -135,9 +142,9 @@ const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles
 						<AiOutlineArrowLeft {...page === 1 && {className: 'text-gray-300'}} />
 					</div>
 					<div onClick={onNextPage} className="p-3 border border-solid border-gray-200 hover:cursor-pointer hover:text-green-900">
-						<AiOutlineArrowRight {...page === paginatedUsers.total_pages && {className: 'text-gray-300'}} />
+						<AiOutlineArrowRight {...(page === paginatedUsers.total_pages || paginatedUsers.total_pages === 0) && {className: 'text-gray-300'}} />
 					</div>
-					<p>Page {page} of {paginatedUsers.total_pages} ({paginatedUsers.total} items)</p>
+					<p>Page {page} of {paginatedUsers.total_pages} ({paginatedUsers.total} total)</p>
 				</div>
 				<label className="flex flex-row gap-3 items-center">
 					# per page:
@@ -147,42 +154,42 @@ const UserList = ({userRole}:{userRole:typeof UserRoles.MANAGER|typeof UserRoles
 				</label>
 			</div>
 			<ul className="flex flex-col gap-3">
-				{paginatedUsers.data.map((tenant:User) => (
-					<li key={tenant.id} className="flex flex-col shadow-md hover:bg-green-50">
+				{paginatedUsers.data.map((user:User) => (
+					<li key={user.id} className="flex flex-col shadow-md hover:bg-green-50">
 						<div className="flex flex-col gap-5 p-10 items-center xl:flex-row">
 							<div className={`flex flex-col text-sm gap-9 w-full ${!showSideMenu ? 'lg:flex-row lg:gap-0 lg:justify-between' : 'xl:flex-row xl:justify-start'}`}>
 								<div className="flex flex-col items-start xl:gap-2 w-1/4">
 									<span className="font-bold text-green-900">Name</span>
-									<span>{tenant.name}</span>
+									<span>{user.name}</span>
 								</div>
 								<div className="flex flex-col items-start xl:gap-2 w-1/4">
 									<span className="font-bold text-green-900">Email</span>
-									<span>{tenant.email}</span>
+									<span>{user.email}</span>
 								</div>
-								{ userRole === UserRoles.TENANT &&
+								{ userRole === $Enums.Role.tenant &&
 									<div className="flex flex-col items-start xl:gap-2 w-1/4">
 										<span className="font-bold text-green-900">Property</span>
-										<span>None</span>
+										<span>{user.residence?.name ? user.residence.name : 'None'}</span>
 									</div>
 								}
-								{ userRole === UserRoles.TENANT &&
+								{ userRole === $Enums.Role.tenant &&
 									<div className="flex flex-col items-start gap-2 w-1/4">
 										<span className="font-bold text-green-900">Unit</span>
-										<span>None</span>
+										<span>{user.unit?.name ? user.unit.name : 'None'}</span>
 									</div>
 								}
 							</div>
 							<div className="flex flex-row gap-3 justify-center w-[200px]">
-								{ userIdEditing !== tenant.id &&
-									<button value={tenant.id} onClick={onEditClick} className="py-1 px-3 rounded-full text-black bg-yellow-400 hover:bg-yellow-600 hover:text-white">Edit</button>
+								{ userIdEditing !== user.id &&
+									<button value={user.id} onClick={onEditClick} className="py-1 px-3 rounded-full text-black bg-yellow-400 hover:bg-yellow-600 hover:text-white">Edit</button>
 								}
-								{ userIdEditing !== tenant.id &&
-									<button value={tenant.id} onClick={onDeleteClick} className="py-1 px-3 rounded-full text-white bg-red-500 hover:bg-red-800 hover:text-white">Delete</button>
+								{ userIdEditing !== user.id &&
+									<button value={user.id} onClick={onDeleteClick} className="py-1 px-3 rounded-full text-white bg-red-500 hover:bg-red-800 hover:text-white">Delete</button>
 								}
 							</div>
 						</div>
-						{userIdEditing === tenant.id &&
-							<UserForm user={tenant} userRole={userRole} formCloseHandler={closeEditForm} />
+						{userIdEditing === user.id &&
+							<UserForm user={user} userRole={userRole} formCloseHandler={closeEditForm} />
 						}
 					</li>
 				))}

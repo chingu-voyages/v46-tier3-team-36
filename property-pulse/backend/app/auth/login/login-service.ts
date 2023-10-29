@@ -1,9 +1,10 @@
 import passport from "passport";
+import { BadRequestError } from "../../../middleware/errorMiddleware";
 
 const loginUser = async (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
 	if (err) return next(err);
-    if (!user) return res.status(401).json({ msg: info.message });
+    if (!user) throw new BadRequestError(info.message);
 
     req.logIn(user, function(err) {
       if (err) return next(err);
