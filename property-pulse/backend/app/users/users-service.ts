@@ -60,9 +60,11 @@ const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: numbe
 			unit: true
 		},
 		where: condition,
-		orderBy: {
+		orderBy: [{
 			[sortby]: 'asc'
-		}
+		},{
+			id: 'asc'
+		}]
 	});
 	// Get total number of users
 	const count = await prisma.user.count({
