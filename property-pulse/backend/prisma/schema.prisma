@@ -47,7 +47,7 @@ model Issue {
   tenant          User             @relation(fields: [tenantId], references: [id])
   tenantId        Int
   unit            Unit?             @relation(fields: [unitId], references: [id])
-  unitId          Int
+  unitId          Int?
   createdAt       DateTime         @default(now()) @db.Timestamptz()
   updatedAt       DateTime         @updatedAt
   title           String
