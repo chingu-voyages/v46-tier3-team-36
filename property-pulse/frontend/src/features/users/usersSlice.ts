@@ -1,5 +1,5 @@
 import { apiSlice } from '../api/apiSlice';
-import { User } from './userType';
+import User from './userType';
 
 export interface PaginatedUsers<T> {
 	role: string;
@@ -16,7 +16,7 @@ export interface PaginationOption {
 	per_page: number;
 	sortBy: string;
 	search?: string;
-}
+};
 
 export const usersApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({

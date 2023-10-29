@@ -29,7 +29,7 @@ router
 	 */
   .get('/api/admin/issues', async (req, res) => {
     const user = req.user;
-    const issues = await issuesService.getAllIssues()
+    const issues = await issuesService.getAllIssues(user)
     
     return res.status(200).json(issues)
   })

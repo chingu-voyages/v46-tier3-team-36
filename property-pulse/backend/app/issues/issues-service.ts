@@ -3,12 +3,13 @@ import { PrismaClient, Issue } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const createIssue = async (user, issue: Issue) => {
-  const { type, title, description } = issue;
+  const { type, unitId=null, title, description } = issue;
 
   const createdIssue = await prisma.issue.create({
     data: {
       type,
       tenantId: user.id,
+      unitId,
       title,
       description
     }
@@ -27,11 +28,33 @@ const getIssue = async (issueId: number) => {
 }
 
 // find all issues where tenant is a resident of one of the user's properties
-const getAllIssues = async () => {
+const getAllIssues = async (user) => {
   return await prisma.issue.findMany({
-
+    include: {
+      tenant: {
+        include: {
+          residence: {
+            include: {
+              property: true
+            }
+          }
+        }
+      }
+    },
+    where: {
+      tenant: {
+        residence: {
+          some: {
+            property: {
+              ownerId: user.id
+            }
+          }
+        }
+      }
+    }
   })
 }
+
 
 const updateIssue = async (issueId: number, data: Issue) => {
   const { type, title, description } = data;

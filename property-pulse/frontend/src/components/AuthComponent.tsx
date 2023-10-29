@@ -6,6 +6,7 @@ import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { useAppDispatch } from '@/store/store';
 import { userLoggedIn } from '@/features/user/userSlice';
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 const AuthComponent: React.FC = () => {
 
@@ -50,11 +51,16 @@ const AuthComponent: React.FC = () => {
         body: JSON.stringify({ email, password })
       });
       const data = await response.json();
+      if(!response?.ok) throw new Error(data.msg);
       dispatch(userLoggedIn(data.user));
-	  sessionStorage.setItem('login', JSON.stringify(data.user));
+      sessionStorage.setItem('login', JSON.stringify(data.user));
       router.push('/dashboard');
-    } catch (error) {
-      console.error("Error during login:", error);
+    } catch (error:any) {
+      toast.error(error.message, {
+        toastId: 'login-failure',
+        position: toast.POSITION.TOP_CENTER
+      });
+      return false;
     }
   };
 
