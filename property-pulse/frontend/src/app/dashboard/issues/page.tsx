@@ -6,15 +6,15 @@ const IssuesPage = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = useRef<HTMLFormElement>(null);
 
-
 	const handleClick = () =>{
 		if(isOpen === false){
 			setIsOpen(true)
 		}
 	}
-
 	
-	const closeForm = (e:React.MouseEvent<HTMLElement>) =>{
+	//clicking outside of the form closes it.---------------------
+	//possibly move this to the layout, making use of Context Provider?
+	const closeForm = (e:MouseEvent) =>{
 		if (ref.current && !ref.current.contains(e.target as Node)){
 			setIsOpen(false)
 		}
@@ -26,8 +26,7 @@ const IssuesPage = () => {
 			document.removeEventListener('click', closeForm);
 		}
 	});
-	
-
+	//-------------------------------------------------------------
 	return(
 		<section>
 			<h1>Your Requests</h1>

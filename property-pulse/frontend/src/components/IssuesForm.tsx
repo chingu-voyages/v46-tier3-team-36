@@ -13,7 +13,6 @@ const selectStyles ="flex flex-col font-medium mt-4 rounded-lg bg-green-800  tex
 
 /*form tenants use to create an issue.
 -error component should probably be moved up to page level.
--opening/closing form still needs to be added.
  */
 const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFormElement>}) => {
 	const [opened, setOpened] = useState(isOpen)
