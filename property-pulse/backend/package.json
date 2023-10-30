@@ -6,6 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "ts.check": "tsc --project tsconfig.json",
+	"start": "node index.ts",
     "build": "npx prisma generate && npx prisma migrate deploy && rimraf dist && tsc",
     "add-build": "git add dist",
     "dev": "ts-node-dev index.ts",
