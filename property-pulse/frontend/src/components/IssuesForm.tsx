@@ -53,8 +53,8 @@ const IssuesForm = ({isOpen}:{isOpen:boolean}) => {
 					<label>Choose Type</label>
 					<select name="type"className={selectStyles}>
 						<option value="inquiry">Inquiry</option>
-						<option value="report">Report</option>
-						<option value="request">Request</option>
+						<option value="complaint">Report</option>
+						<option value="maintenanceRequest">Request</option>
 					</select>
 				</div>
 				<div className={formSection}>
