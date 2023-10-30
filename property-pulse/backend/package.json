@@ -5,10 +5,18 @@
   "main": "index.ts",
   "scripts": {
     "tsc": "tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "build": "npx prisma generate && npx prisma migrate deploy && rimraf dist && tsc",
+    "add-build": "git add dist",
     "dev": "ts-node-dev index.ts",
     "lint": "eslint --ext .ts .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "author": "V46 Team 36",
   "license": "ISC",
   "devDependencies": {
@@ -33,6 +41,8 @@
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.3",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.5"
   }
 }
