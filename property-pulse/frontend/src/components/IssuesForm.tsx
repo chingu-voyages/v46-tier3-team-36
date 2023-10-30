@@ -1,6 +1,7 @@
 'use client';
 import {useState} from 'react';
 import ErrorDisplay from "./ErrorDisplay";
+import { LegacyRef } from "react";
 
 const formOpened = "flex flex-col justify-around absolute md:w-1/3 h-3/4 m-10 p-2 border-2 rounded-xl shadow-xl shadow-slate-600 border-slate-400 bg-slate-100"
 const formClosed ="invisible"
@@ -14,7 +15,7 @@ const selectStyles ="flex flex-col font-medium mt-4 rounded-lg bg-green-800  tex
 -error component should probably be moved up to page level.
 -opening/closing form still needs to be added.
  */
-const IssuesForm = ({isOpen}:{isOpen:boolean}) => {
+const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFormElement>}) => {
 	const [opened, setOpened] = useState(isOpen)
 	const [error, setError ] = useState(false);
 
@@ -44,7 +45,7 @@ const IssuesForm = ({isOpen}:{isOpen:boolean}) => {
 		return <ErrorDisplay message="an error occured."/>
 	}else{
 		return(
-			<form className={isOpen ===true ? formOpened : formClosed} onSubmit={handleSubmit}>
+			<form ref={formRef} className={opened ===true ? formOpened : formClosed} onSubmit={handleSubmit}>
 				<div className={formSection}>
 					<label>Title</label>
 					<input name="title" placeholder="e.g.Broken window" className={inputStyles} type = "text" />
