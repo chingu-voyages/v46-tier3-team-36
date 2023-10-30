@@ -1,19 +1,19 @@
 'use client';
+
 import {useState} from 'react';
 import ErrorDisplay from "./ErrorDisplay";
 import { LegacyRef } from "react";
+import { 
+	formOpened,
+	formClosed,
+	formSection,
+	inputStyles,
+	selectStyles,
+	textAreaStyles,
+	btnInputStyles 
+} from '@/lib/formStyles';
 
-const formOpened = "flex flex-col justify-around absolute md:w-1/3 h-3/4 m-10 p-2 border-2 rounded-xl shadow-xl shadow-slate-600 border-slate-400 bg-slate-100"
-const formClosed ="invisible"
-const formSection ="flex flex-col"
-const inputStyles = "border-2 border-slate-200 focus:outline-none focus-visible:border-green-600 rounded-xl p-2";
-const btnInputStyles ="mb-4 p-3 bg-green-800 hover:bg-green-600 text-white rounded";
-const textAreaStyles = "border-2 border-slate-200 focus:outline-none focus-visible:border-green-600 rounded-xl p-2"
-const selectStyles ="flex flex-col font-medium mt-4 rounded-lg bg-green-800  text-white p-2";
-
-/*form tenants use to create an issue.
--error component should probably be moved up to page level.
- */
+//Form which tenants use within 'Issues view on Dashboard' to send an request to PM.
 const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFormElement>}) => {
 	const [opened, setOpened] = useState(isOpen)
 	const [error, setError ] = useState(false);
@@ -30,7 +30,7 @@ const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFor
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(newIssue)
-				// body: throw error
+				//body: someError
 			});
 			//may use <data> in future for updating view(Redux) to avoid api call after new issue created...
 			const data = await response.json();
@@ -39,7 +39,8 @@ const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFor
 			setError(true)
 		}
 		form.reset();
-	}
+	};
+	//rendering: ErrorDisplay would probably be best invoked at 'page' level.
 	if(error){
 		return <ErrorDisplay message="an error occured."/>
 	}else{
