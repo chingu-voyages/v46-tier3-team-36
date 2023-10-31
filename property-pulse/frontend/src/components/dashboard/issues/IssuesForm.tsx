@@ -1,7 +1,7 @@
 'use client';
 
 import {useState} from 'react';
-import ErrorDisplay from "./ErrorDisplay";
+import ErrorDisplay from "../../ErrorDisplay";
 import { LegacyRef } from "react";
 import { 
 	formOpened,
