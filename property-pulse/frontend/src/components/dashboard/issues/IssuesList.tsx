@@ -1,6 +1,7 @@
 'use client'
 
 type Issue ={
+	id: number;
 	status: string;
 	type: string;
 	title: string;
@@ -26,7 +27,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 		<ul>
 			{issues.map((item)=>{
 				return(
-					 <li className={listItem}>
+					 <li className={listItem} key={item.id}>
 						<div className={listItemSection}>
 							<h1 className={heading}>{item.type}</h1>
 							<p>Status:{item.status}</p>
