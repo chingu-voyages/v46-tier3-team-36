@@ -15,7 +15,7 @@ import signupController from './app/auth/signup/signup-controller';
 import logoutController from './app/auth/logout/logout-controller';
 import loginController from './app/auth/login/login-controller';
 import usersController from './app/users/users-controller';
-import issuesController from './app/issues/issues-controller';
+import issuesController from './app/issues/admin/issues-controller';
 import propertiesController from './app/properties/properties-controller';
 import unitsController from './app/units/units-controller';
 
