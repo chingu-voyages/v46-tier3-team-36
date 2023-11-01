@@ -9,10 +9,9 @@ get all of a logged in user's issues.
  */
 .get('/api/tenant/issues', async(req,res) =>{
 	const user = req.user;
-	console.log("received a request")
-	
-	return res.status(200).json("got your request.")
-	//return res.status(200).json(user)
+	const issues = await issuesService.getAllIssues(user)
+
+	return res.status(200).json(issues)
 })
 
 export default router;
