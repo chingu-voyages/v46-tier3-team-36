@@ -66,6 +66,7 @@ Property Pulse - A property management application that streamlines all aspects 
 [![Express][Express.js]][Express-url]
 [![Prismaio][Prisma.io]][Prismaio-url]
 [![PostgreSQL][Postgresql]][Postgresql-url]
+[![TailwindCSS][Tailwindcss]][Tailwindcss-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -125,7 +126,7 @@ Property Pulse - A property management application that streamlines all aspects 
       - build: Downloads dependencies, Set up Prisma, and compile typescript
       - start: Starts express js
 
-The [Next JS](https://property-pulse.vercel.app/) application (Frontend) is hosted on [Vercel](https://vercel.com/). The [Express](https://property-pulse-backend.onrender.com/) application (backend) is hosted on [Render](https://render.com/). Express on Render may take a few minutes for fully start up.
+The [Next JS](https://property-pulse.vercel.app/) application (Frontend) is hosted on [Vercel](https://vercel.com/). The [Express](https://property-pulse-backend.onrender.com/) application (backend) is hosted on [Render](https://render.com/). Express on Render may take a few minutes for fully start up. The database instance is hosted on [Supabase](https://supabase.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -139,9 +140,9 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 <!-- Team -->
 ## Development Team
 * n3ndor
-* curtwl_
-* des_esseintes.
-* .tetraites
+* curtwl
+* MattRueter
+* mpark4656
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -149,9 +150,9 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 ## Acknowledgments
 
 * [Chingu](https://www.chingu.io/)
-* andresc1310 for guiding the development team
-* jenny_alexander for project ideas and concepts
-* crod7 for planning and tech stack selection
+* alcb1310 for guiding the development team
+* jenny-alexander for project ideas and concepts
+* RodCato for planning and tech stack selection
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -176,3 +177,5 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 [Prismaio-url]: https://www.prisma.io/
 [Postgresql]: https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
 [Postgresql-url]: https://www.postgresql.org/
+[Tailwindcss]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwindcss-url]: https://tailwindcss.com/
