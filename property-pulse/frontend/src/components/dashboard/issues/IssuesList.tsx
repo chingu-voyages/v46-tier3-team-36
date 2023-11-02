@@ -1,5 +1,5 @@
 'use client'
-
+import DescriptionModal from './DescriptionModal';
 import {
 	listItem, 
 	listItemSection, 
@@ -24,6 +24,7 @@ type IssuesListProps = {
 	issues: Issue[];
 };
 
+
 const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 	/* The 'issueType' names don't correspond to what user selects/sees e.g. 'maintenceRequest vs 'Request'
 	formatTitle() turns the issueType back into a more readable title for UI*/
@@ -38,6 +39,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 	const formatDate = ()=>{
 		//tidy up returned date obj.
 	};
+
 	return(
 		<ul>
 			{issues.map((item)=>{
@@ -51,12 +53,8 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 								<li className={issueTitle}>{item.title}</li>
 								<li className={date}>Created:{item.createdAt}</li>
 								<li className={date}>Updated:{item.updatedAt}</li>
-							</ul>
-							<div>
-								{/*Hovering over 'details' will render a modal displaying text
-								to edit user can click edit button (not implemented yet) */}
-								<h1>Details</h1>
-							</div>
+							</ul>							
+								<DescriptionModal  description={item.description}/>
 						</div>
 						<div className={listItemSection}>
 							<div className={buttonBox}>
