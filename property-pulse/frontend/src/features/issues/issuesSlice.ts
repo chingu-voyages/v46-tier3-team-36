@@ -6,10 +6,6 @@ export const issuesApiSlice = apiSlice.injectEndpoints({
 			query: () => '/issues',
 			providesTags: ['Issues']
 		}),
-		getTenantsIssues:builder.query({
-			query: () => '/tenant/issues',
-			providesTags: ['Issues']
-		}),
 		createIssue: builder.mutation({
 			query: issue => ({
 				url: '/issues/create',
@@ -38,7 +34,6 @@ export const issuesApiSlice = apiSlice.injectEndpoints({
 
 export const {
 	useGetIssuesQuery,
-	useGetTenantsIssuesQuery,
 	useCreateIssueMutation,
 	useUpdateIssueMutation,
 	useDeleteIssueMutation

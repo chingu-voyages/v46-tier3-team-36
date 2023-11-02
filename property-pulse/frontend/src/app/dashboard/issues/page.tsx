@@ -2,10 +2,10 @@
 import {useState, useRef, useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/features/user/userSlice';
-import { useGetTenantsIssuesQuery} from '@/features/issues/issuesSlice';
+import { useGetIssuesQuery} from '@/features/issues/tenantIssuesSlice';
 import IssuesForm from "@/components/dashboard/issues/IssuesForm";
 import IssuesList from '@/components/dashboard/issues/IssuesList';
-import fakeIssues from '@/components/dashboard/issues/fakeIssueData';
+//import fakeIssues from '@/components/dashboard/issues/fakeIssueData';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ErrorDisplay from '@/components/ErrorDisplay';
 
@@ -14,11 +14,8 @@ const IssuesPage: React.FC = () => {
 	//const [issues, setIssues] = useState(fakeIssues)
 	const user = useSelector(selectUser);
 	const ref = useRef<HTMLFormElement>(null);
-	const {data, isLoading, isSuccess}=useGetTenantsIssuesQuery(user)
+	const {data, isLoading, isSuccess}=useGetIssuesQuery(user)
 
-//----------------------------------------------
-
-//----------------------------------------------
 	const handleClick = () =>{
 		if(isOpen === false){
 			setIsOpen(true)
@@ -31,8 +28,7 @@ const IssuesPage: React.FC = () => {
 		if (ref.current && !ref.current.contains(e.target as Node)){
 			setIsOpen(false)
 		}
-	};
-	
+	};	
 	useEffect(() =>{
 		document.addEventListener('click', closeForm);
 		return () => {
@@ -40,6 +36,7 @@ const IssuesPage: React.FC = () => {
 		}
 	});
 	//-------------------------------------------------------------
+	
 	if(isLoading) return <LoadingSpinner/>;
 	if(!isSuccess) return <ErrorDisplay message="Data retrieval failed. Please refresh your browser and try again." />;
 	return(
