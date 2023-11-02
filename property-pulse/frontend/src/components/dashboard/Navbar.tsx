@@ -7,7 +7,7 @@ import DropdownMenuList from "./DropdownMenuList";
 import { ManagerMenuItems, TenantMenuItems, UserMenuItems } from "@/utils/menuItems";
 import { LegacyRef } from "react";
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/features/user/userSlice';
+import { selectUser } from '@/features/users/userReducer';
 
 const Navbar = (
 	{profileBtnRef, hamburgerRef}:{profileBtnRef:LegacyRef<HTMLAnchorElement>, hamburgerRef:LegacyRef<HTMLButtonElement>}

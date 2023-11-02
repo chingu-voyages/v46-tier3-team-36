@@ -4,7 +4,7 @@ import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import Link from "next/link";
 import Logo from "../Logo";
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/features/user/userSlice';
+import { selectUser } from '@/features/users/userReducer';
 
 const SideMenuBar = () => {
 	const user = useSelector(selectUser);

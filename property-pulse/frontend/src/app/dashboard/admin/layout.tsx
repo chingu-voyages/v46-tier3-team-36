@@ -1,7 +1,7 @@
 'use client'
 
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/features/user/userSlice';
+import { selectUser } from '@/features/users/userReducer';
 import { $Enums } from '../../../../../backend/utils/prisma-proxy';
 import LoadingSpinner from '@/components/LoadingSpinner';
 /**
