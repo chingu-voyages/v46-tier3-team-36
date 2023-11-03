@@ -5,10 +5,6 @@ const prisma = new PrismaClient();
 const createNotification = async (loggedInUser, notification: Notification) => {
   const { title, content, userId } = notification;
 
-  // const findRecipient = await prisma.user.findUnique({
-    
-  // })
-
   const createdNotification = await prisma.notification.create({
     data: {
       title,
@@ -25,38 +21,19 @@ const createNotification = async (loggedInUser, notification: Notification) => {
   return createdNotification;
 }
 
-const getNotification = async (issueId: number) => {
-  return await prisma.issue.findUnique({
+const getNotification = async (notificationId: number) => {
+  return await prisma.notification.findUnique({
     where: {
-      id: issueId
+      id: notificationId
     }
   })
 }
 
-// find all issues where tenant is a resident of one of the user's properties
+// find all notifications for logged in user
 const getAllNotifications = async (user) => {
-  return await prisma.issue.findMany({
-    include: {
-      tenant: {
-        include: {
-          residence: {
-            include: {
-              property: true
-            }
-          }
-        }
-      }
-    },
+  return await prisma.notification.findMany({
     where: {
-      tenant: {
-        residence: {
-          some: {
-            property: {
-              ownerId: user.id
-            }
-          }
-        }
-      }
+      userId: user.id
     }
   })
 }
