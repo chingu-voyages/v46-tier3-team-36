@@ -23,4 +23,30 @@ const getAllIssues = async (user) => {
 	})
 }
 
-export default {createIssue, getAllIssues};
+const updateIssue = async (issueId:number, data:Issue) =>{
+	const {type, title, description} = data;
+
+	const updatedIssue = await prisma.issue.update({
+		where:{
+			id: issueId
+		},
+		data:{
+			type,
+			title,
+			description
+		}
+	})
+
+	return updatedIssue;
+}
+
+const deleteIssue = async (issueId: number) => {
+	const deletedIssue = await prisma.issue.delete({
+		where:{
+			id:issueId
+		}
+	})
+	return deletedIssue;
+}
+
+export default {createIssue, getAllIssues, updateIssue, deleteIssue};
