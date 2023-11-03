@@ -31,10 +31,12 @@ type IssuesListProps = {
 
 const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 	const [ deleteIssue ] = useDeleteIssueMutation();
+	//updateIssue is set up in RTK and on BE but needs to be
+	//implemented in this component OR from the form component 
 	const [ updateIssue ] = useUpdateIssueMutation();
-	/* The 'issueType' names don't correspond to what user selects/sees e.g. 'maintenceRequest vs 'Request'
-	formatTitle() turns the issueType back into a more readable title for UI*/
+
 	const formatTitle= (inquiryType:string)=>{
+		/*Makes a more readable title for the UI*/
 		const titles:{ [key:string]:string} = {
 			inquiry:"Inquiry", 
 			complaint:"Report", 
@@ -43,7 +45,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 		return titles[inquiryType];
 	};
 	const formatDate = ()=>{
-		//tidy up returned date obj.
+		//Tidy up returned date obj.
 	};
 
 	const handleDeleteClick = async (id:number) => {

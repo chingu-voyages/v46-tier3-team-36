@@ -12,11 +12,13 @@ import {
 	textAreaStyles,
 	btnInputStyles 
 } from '@/lib/formStyles';
+import { useCreateIssueMutation } from '@/features/issues/tenantIssuesSlice';
 
 //Form which tenants use within 'Issues view on Dashboard' to send an request to PM.
 const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFormElement>}) => {
 	const [opened, setOpened] = useState(isOpen)
 	const [error, setError ] = useState(false);
+	const [ createdIssue ] = useCreateIssueMutation();
 
 	const handleSubmit = async (e: { preventDefault: () => void; target: any; }) =>{
 		e.preventDefault();
@@ -24,23 +26,14 @@ const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFor
 		const formData = new FormData(form);
 		const newIssue = Object.fromEntries(formData.entries());
 		try{
-			const response = await fetch('/api/tenant/issues',{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(newIssue)
-				//body: someError
-			});
-			//may use <data> in future for updating view(Redux) to avoid api call after new issue created...
-			const data = await response.json();
+			await createdIssue(newIssue);
+
 		}catch(error){
 			console.log(error)
 			setError(true)
 		}
 		form.reset();
 	};
-	//rendering: ErrorDisplay would probably be best invoked at 'page' level.
 	if(error){
 		return <ErrorDisplay message="an error occured."/>
 	}else{
