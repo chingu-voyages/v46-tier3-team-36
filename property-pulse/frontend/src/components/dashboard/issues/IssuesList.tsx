@@ -1,5 +1,9 @@
 'use client'
 import DescriptionModal from './DescriptionModal';
+import { 
+	useDeleteIssueMutation, 
+	useUpdateIssueMutation
+} from '@/features/issues/tenantIssuesSlice';
 import {
 	listItem, 
 	listItemSection, 
@@ -26,6 +30,8 @@ type IssuesListProps = {
 
 
 const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
+	const [ deleteIssue ] = useDeleteIssueMutation();
+	const [ updateIssue ] = useUpdateIssueMutation();
 	/* The 'issueType' names don't correspond to what user selects/sees e.g. 'maintenceRequest vs 'Request'
 	formatTitle() turns the issueType back into a more readable title for UI*/
 	const formatTitle= (inquiryType:string)=>{
@@ -39,6 +45,16 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 	const formatDate = ()=>{
 		//tidy up returned date obj.
 	};
+
+	const handleDeleteClick = async (id:number) => {
+		try{
+			console.log(id)
+			await deleteIssue(id).unwrap()
+			
+		}catch(err){
+			console.log(err)
+		}
+	}
 
 	return(
 		<ul>
@@ -59,7 +75,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 						<div className={listItemSection}>
 							<div className={buttonBox}>
 								<button className={editBtn}>Edit</button>
-								<button className={deleteBtn}>Delete</button>
+								<button className={deleteBtn} onClick={()=>handleDeleteClick(item.id)}>Delete</button>
 							</div>
 						</div>
 					</li>

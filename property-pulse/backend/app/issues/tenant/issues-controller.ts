@@ -19,17 +19,17 @@ router
 	return res.status(200).json(issues)
 })
 /*Tenant updates an issue */
-.patch('/api/tenant/issues', async (req,res) => {
+.patch('/api/tenant/issues/:id', async (req,res) => {
 	const user = req.user;
-	const issue = await issuesService.updateIssue(Number(req.query.id), req.body);
+	const issue = await issuesService.updateIssue(Number(req.params.id), req.body);
 
 	return res.status(200).json(issue)
 })
 /*Tenant deletes an issue */
-.delete('/api/tenant/issues', async (req, res) =>{
+.delete('/api/tenant/issues/:id', async (req, res) =>{
 	console.log("received a delete request.")
 	const user = req.user;
-	const issue = await issuesService.deleteIssue(Number(req.query.id));
+	const issue = await issuesService.deleteIssue(Number(req.params.id));
 
 	return res.status(200).json(issue);
 })
