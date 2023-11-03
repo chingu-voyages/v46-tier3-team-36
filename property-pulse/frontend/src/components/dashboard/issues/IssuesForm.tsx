@@ -24,7 +24,7 @@ const IssuesForm = ({isOpen, formRef}:{isOpen:boolean, formRef:LegacyRef<HTMLFor
 		const formData = new FormData(form);
 		const newIssue = Object.fromEntries(formData.entries());
 		try{
-			const response = await fetch('/api/admin/issues',{
+			const response = await fetch('/api/tenant/issues',{
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
