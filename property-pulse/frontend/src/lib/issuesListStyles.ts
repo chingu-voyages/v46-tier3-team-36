@@ -1,6 +1,6 @@
 const listItem = "flex md:flex-row flex-col justify-between shadow-md hover:bg-green-50";
-const listItemSection ="flex flex-col gap-5 p-10 items-center w-full md:justify-between xl:flex-row";
-const headingStyles = "text-blue-600 text-xl "
+const listItemSection ="flex flex-col gap-5 p-10 items-center w-full md:justify-between  xl:flex-row";
+const headingStyles = "text-blue-600 text-xl w-1/2"
 const issueTitle = "text-blue-600";
 const date ="text-slate-500 text-sm"
 const buttonBox = "flex flex-row gap-3 justify-end md:w-full"

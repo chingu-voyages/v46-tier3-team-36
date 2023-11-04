@@ -61,8 +61,8 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 					 <li className={listItem} key={item.id}>
 						<div className={listItemSection}>
 							<h1 className={headingStyles}>{heading}</h1>
-							<p>Status:{item.status}</p>
-							<ul className="md:w-1/3">
+							<p className="w-1/2">Status:{item.status}</p>
+							<ul className="md:w-3/4">
 								<li className={issueTitle}>{item.title}</li>
 								<li className={date}>Created:{item.createdAt}</li>
 								<li className={date}>Updated:{item.updatedAt}</li>
