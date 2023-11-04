@@ -1,9 +1,6 @@
 'use client'
 import DescriptionModal from './DescriptionModal';
-import { 
-	useDeleteIssueMutation, 
-	useUpdateIssueMutation
-} from '@/features/issues/tenantIssuesSlice';
+import { useDeleteIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
 import {
 	listItem, 
 	listItemSection, 
@@ -14,7 +11,6 @@ import {
 	editBtn, 
 	deleteBtn
 } from '@/lib/issuesListStyles';
-import IssuesForm from './IssuesForm';
 
 type Issue ={
 	id: number;
@@ -33,9 +29,6 @@ type IssuesListProps = {
 
 const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 	const [ deleteIssue ] = useDeleteIssueMutation();
-	//updateIssue is set up in RTK and on BE but needs to be
-	//implemented in this component OR from the form component 
-	const [ updateIssue ] = useUpdateIssueMutation();
 
 	const formatTitle= (inquiryType:string)=>{
 		/*Makes a more readable title for the UI*/
@@ -46,13 +39,13 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 		};
 		return titles[inquiryType];
 	};
+	
 	const formatDate = ()=>{
 		//Tidy up returned date obj.
 	};
 
 	const handleDeleteClick = async (id:number) => {
 		try{
-			console.log(id)
 			await deleteIssue(id).unwrap()
 			
 		}catch(err){
