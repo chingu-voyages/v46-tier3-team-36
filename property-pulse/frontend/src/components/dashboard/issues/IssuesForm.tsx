@@ -51,45 +51,29 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 	//render UI-------------------------------------------------------------------
 	if(error){
 		return <ErrorDisplay message="an error occured. Refresh browser."/>
-	}else if(!isCreate){
-		return(
-			<form ref={formRef} className={opened ===true ? formOpened : formClosed} onSubmit={handleSubmit}>
-				<div className={formSection}>
-					<label>Title</label>
-					<input name="title" placeholder={issue.title} className={inputStyles} type = "text" />
-				</div>
-				<div className={formSection}>
-					<label>Choose Type</label>
-					<select name="type"className={selectStyles}>
-						<option value={issue.type}>{issue.type}</option>
-						<option value="inquiry">Inquiry</option>
-						<option value="complaint">Complaint</option>
-						<option value="maintenanceRequest">Request</option>
-					</select>
-				</div>
-				<div className={formSection}>
-					<textarea rows={10} name="description" placeholder={issue.description} className={textAreaStyles} />
-				</div>
-				<input className={btnInputStyles} type = "submit" />
-			</form>
-		)
 	}else{
 		return(
 			<form ref={formRef} className={opened ===true ? formOpened : formClosed} onSubmit={handleSubmit}>
 				<div className={formSection}>
 					<label>Title</label>
-					<input name="title" placeholder="e.g.Broken window" className={inputStyles} type = "text" />
+					{/*Update or Create?*/}
+					{!isCreate && <input name="title" placeholder={issue.title} className={inputStyles} type = "text" />}
+					{isCreate && <input name="title" placeholder="e.g.Broken window" className={inputStyles} type = "text" />}
 				</div>
 				<div className={formSection}>
 					<label>Choose Type</label>
 					<select name="type"className={selectStyles}>
+						{/*Update or Create?*/}
+						{!isCreate && <option value={issue.type}>{issue.type}</option>}
 						<option value="inquiry">Inquiry</option>
 						<option value="complaint">Report</option>
 						<option value="maintenanceRequest">Request</option>
 					</select>
 				</div>
 				<div className={formSection}>
-					<textarea rows={10} name="description" placeholder="details" className={textAreaStyles} />
+					{/*Update or Create?*/}
+					{!isCreate && <textarea rows={10} name="description" placeholder={issue.description} className={textAreaStyles} />}
+					{isCreate && <textarea rows={10} name="description" placeholder="details" className={textAreaStyles} />}
 				</div>
 				<input className={btnInputStyles} type = "submit" />
 			</form>
