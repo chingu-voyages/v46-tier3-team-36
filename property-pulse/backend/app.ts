@@ -16,6 +16,7 @@ import logoutController from './app/auth/logout/logout-controller';
 import loginController from './app/auth/login/login-controller';
 import usersController from './app/users/users-controller';
 import issuesController from './app/issues/admin/issues-controller';
+import tenantIssuesController from './app/issues/tenant/issues-controller';
 import propertiesController from './app/properties/properties-controller';
 import unitsController from './app/units/units-controller';
 
@@ -42,6 +43,7 @@ app.use(signupController);
 app.use(loginController);
 app.use(logoutController);
 app.use(issuesController);
+app.use(tenantIssuesController);
 app.use(propertiesController);
 app.use('/api/admin', authorize($Enums.Role.manager), usersController);
 app.use('/api/admin', authorize($Enums.Role.manager), unitsController);
