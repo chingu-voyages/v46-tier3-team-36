@@ -18,6 +18,7 @@ import usersController from './app/users/users-controller';
 import issuesController from './app/issues/admin/issues-controller';
 import propertiesController from './app/properties/properties-controller';
 import unitsController from './app/units/units-controller';
+import notificationsController from './app/notifications/notifications-controller';
 
 const prisma = new PrismaClient();
 
@@ -43,6 +44,7 @@ app.use(loginController);
 app.use(logoutController);
 app.use(issuesController);
 app.use(propertiesController);
+app.use(notificationsController);
 app.use('/api/admin', authorize($Enums.Role.manager), usersController);
 app.use('/api/admin', authorize($Enums.Role.manager), unitsController);
 

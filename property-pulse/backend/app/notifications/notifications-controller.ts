@@ -17,7 +17,7 @@ router
   /**
 	 * Get a single notification by the given id
 	 */
-  .get('/api/users/:userId/notifications/:id', async (req, res) => {
+  .get('/api/users/:userId/notifications/:id([0-9]+)', async (req, res) => {
     const user = req.user;
     const notification = await notificationsService.getNotification(Number(req.params.id))
     
@@ -33,5 +33,14 @@ router
     
     return res.status(200).json(notifications)
   })
+  
+    /**
+	 * Get new notifications for the logged in user
+	 */
+    .get('/api/users/:userId/notifications/new', async (req, res) => {
+      const notifications = await notificationsService.getNewNotifications(req, res)
+      
+      return res.status(200).json(notifications)
+    })
 
 export default router;
