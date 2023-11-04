@@ -14,6 +14,7 @@ import {
 	editBtn, 
 	deleteBtn
 } from '@/lib/issuesListStyles';
+import IssuesForm from './IssuesForm';
 
 type Issue ={
 	id: number;
@@ -26,10 +27,11 @@ type Issue ={
 };
 type IssuesListProps = {
 	issues: Issue[];
+	openForm: Function;
 };
 
 
-const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
+const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 	const [ deleteIssue ] = useDeleteIssueMutation();
 	//updateIssue is set up in RTK and on BE but needs to be
 	//implemented in this component OR from the form component 
@@ -39,7 +41,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 		/*Makes a more readable title for the UI*/
 		const titles:{ [key:string]:string} = {
 			inquiry:"Inquiry", 
-			complaint:"Report", 
+			complaint:"Complaint", 
 			maintenanceRequest:"Request"
 		};
 		return titles[inquiryType];
@@ -76,7 +78,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues}) => {
 						</div>
 						<div className={listItemSection}>
 							<div className={buttonBox}>
-								<button className={editBtn}>Edit</button>
+								<button className={editBtn} onClick={()=>openForm(item)}>Edit</button>
 								<button className={deleteBtn} onClick={()=>handleDeleteClick(item.id)}>Delete</button>
 							</div>
 						</div>
