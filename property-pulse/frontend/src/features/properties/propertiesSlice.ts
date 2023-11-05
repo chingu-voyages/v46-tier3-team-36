@@ -1,17 +1,19 @@
 import { apiSlice } from '../api/apiSlice';
 import { Property } from '../../../../backend/utils/prisma-proxy';
+import { PropertyWithOwner, NewPropertyData } from './PropertyTypes';
+
 
 export const propertiesApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		getProperties: builder.query<Property[], void>({
+		getProperties: builder.query<PropertyWithOwner[], void>({
 			query: () => '/admin/properties',
 			providesTags: ['Properties']
 		}),
-		createProperty: builder.mutation<Property, Property>({
-			query: property => ({
+		createProperty: builder.mutation<Property, NewPropertyData>({
+			query: newPropertyData => ({
 				url: '/admin/properties',
 				method: 'POST',
-				body: property
+				body: newPropertyData
 			}),
 			invalidatesTags: ['Properties']
 		}),
