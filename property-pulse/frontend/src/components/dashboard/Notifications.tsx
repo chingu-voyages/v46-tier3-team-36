@@ -21,7 +21,7 @@ const Notifications = () => {
     // }
     
     eventSource.addEventListener('update', (event) => {
-      console.log(eventSource, 'event listener')
+      console.log(eventSource, 'event listener');
       const notifications = JSON.parse(event.data);
       setNewNotifications((newNotifications: Notification[]) => [notifications, ...newNotifications]);
       setNewNotificationsCount((count) => count + notifications.length);
@@ -36,7 +36,7 @@ const Notifications = () => {
       eventSource.close();
     };
   }, []);
-  console.log(newNotifications)
+  console.log(newNotifications);
   return (
     <div>
       {newNotificationsCount > 0 && (
