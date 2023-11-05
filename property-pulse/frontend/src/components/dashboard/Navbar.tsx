@@ -8,6 +8,7 @@ import { ManagerMenuItems, TenantMenuItems, UserMenuItems } from "@/utils/menuIt
 import { LegacyRef } from "react";
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/features/users/userReducer';
+import Notifications from "./Notifications";
 
 const Navbar = (
 	{profileBtnRef, hamburgerRef}:{profileBtnRef:LegacyRef<HTMLAnchorElement>, hamburgerRef:LegacyRef<HTMLButtonElement>}
@@ -42,8 +43,9 @@ const Navbar = (
 				</div>
 				<Logo className={`${showSideMenu ? 'md:hidden' : 'md:block'}`} />
 				<div className="flex-wrap items-center hidden gap-8 md:flex">
-					<div className="relative">
+					<div className="relative flex">
 						<BsBell className="h-8 w-8 text-green-700 hover:cursor-pointer hover:text-green-900"/>
+						<Notifications />
 					</div>
 					<div className="relative">
 						<a ref={profileBtnRef} onClick={onUserBtnClick} className="flex items-center justify-center gap-1 text-white bg-green-700 rounded-full px-4 py-1 hover:cursor-pointer hover:bg-green-900">
