@@ -1,7 +1,7 @@
 'use client'
 import {useState, useRef, useEffect} from 'react';
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/features/user/userSlice';
+import { selectUser } from '@/features/users/userReducer';
 import { useGetIssuesQuery } from '@/features/issues/tenantIssuesSlice';
 import IssuesForm from "@/components/dashboard/issues/IssuesForm";
 import IssuesList from '@/components/dashboard/issues/IssuesList';
