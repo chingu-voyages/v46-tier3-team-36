@@ -41,14 +41,17 @@ const getAllNotifications = async (user) => {
 const getNewNotifications = (req, res) => {
   // SSE headers
   res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
-  
+
+  // setInterval(() => {
+  //   res.write('data: ' + 'test2' + '\n\n')
+  // }, 1000)
+
   const sendNotifications = async () => {
     const user = req.user;
     
-    console.log('test')
     const newNotifications = await prisma.notification.findMany({
       where: {
         userId: user.id,
@@ -57,21 +60,37 @@ const getNewNotifications = (req, res) => {
       orderBy: { createdAt: 'asc' },
     });
     console.log(newNotifications)
+
     if (newNotifications.length > 0) {
+      res.write(`event: update\n`);
       res.write(`data: ${JSON.stringify(newNotifications)}\n\n`);
+      console.log('test')
+
+      await prisma.notification.updateMany({
+        where: { 
+          id: { 
+            in: newNotifications.map((notification) => notification.id) 
+          } 
+        },
+        data: { isNew: false },
+      })
+    } else {
+      console.log('no notifications')
     }
+
   };
   
-  // Send notifications every 5 seconds
-  const intervalId = setInterval(sendNotifications, 5000);
+  // check for notifications every 100 seconds
+  // shorten as needed, just setting this as the default so that if someone forgets
+  // to shutdown the server, we won't go over the Supabase free tier as easily
+  const notificationsInterval = setInterval(sendNotifications, 100000);
   
-  // Handle client disconnect -- for some reason this runs immediately and 
-  // sendNotifications is never called
-  // req.on('close', () => {
-  //   console.log('Client disconnected');
-  //   clearInterval(intervalId);
-  //   res.end();
-  // });
+  req.on('close', () => {
+    console.log('Client disconnected');
+    clearInterval(notificationsInterval);
+    res.end();
+  });
+
 };
 
 export default { createNotification, getNotification, getAllNotifications, getNewNotifications };

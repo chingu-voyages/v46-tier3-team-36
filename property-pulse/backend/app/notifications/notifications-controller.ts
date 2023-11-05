@@ -35,12 +35,10 @@ router
   })
   
     /**
-	 * Get new notifications for the logged in user
+	 * SSE route: Get new notifications for the logged in user
 	 */
     .get('/api/users/:userId/notifications/new', async (req, res) => {
-      const notifications = await notificationsService.getNewNotifications(req, res)
-      
-      return res.status(200).json(notifications)
+      await notificationsService.getNewNotifications(req, res)
     })
 
 export default router;
