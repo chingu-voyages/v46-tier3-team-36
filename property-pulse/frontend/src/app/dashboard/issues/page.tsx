@@ -50,7 +50,7 @@ const IssuesPage: React.FC = () => {
 			<h1>{user && user.name +"'s"} Requests</h1>
 			<p></p>
 			<button className="bg-green-600 text-white p-2 m-2 rounded-xl" onClick={openAddForm}>New issue</button>
-			{isOpen && <IssuesForm issue={issueToEdit} isCreate={isCreate} isOpen={isOpen} formRef={ref}/>}
+			{isOpen && <IssuesForm issue={issueToEdit} isCreate={isCreate} isOpen={isOpen} setIsOpen={setIsOpen} formRef={ref}/>}
 			<IssuesList openForm={openEditForm} issues={data}/>
 		</section>		
 	)

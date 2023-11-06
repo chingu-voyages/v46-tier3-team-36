@@ -1,7 +1,6 @@
 'use client';
 
-import {useState} from 'react';
-import { LegacyRef } from "react";
+import {useState,  Dispatch, SetStateAction, LegacyRef} from 'react';
 import ErrorDisplay from "../../ErrorDisplay";
 import { useCreateIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
 
@@ -17,7 +16,7 @@ import {
 
 //Form both creates and edits depending on how it was rendered from Page parent component. 
 // <isCreate> boolean prop is used to determine either 'updating' or 'creating' branching within IssuesForm.
-const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:string,title:string, description:string},isCreate:boolean, isOpen:boolean, formRef:LegacyRef<HTMLFormElement>}) => {
+const IssuesForm = ({issue, isCreate, isOpen, setIsOpen,formRef}:{issue:{id:number,type:string,title:string, description:string},isCreate:boolean, isOpen:boolean, setIsOpen:Dispatch<SetStateAction<boolean>>,formRef:LegacyRef<HTMLFormElement>}) => {
 	const [ opened, setOpened ] = useState(isOpen)
 	const [ error, setError ] = useState(false);
 	const [ createdIssue ] = useCreateIssueMutation();
@@ -47,6 +46,7 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 				console.log(error);
 			}
 		}
+		setIsOpen(false);
 		form.reset();
 	};
 	//render UI-------------------------------------------------------------------
