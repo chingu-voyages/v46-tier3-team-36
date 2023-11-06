@@ -5,13 +5,13 @@ import { selectUser } from '@/features/users/userReducer';
 import { useGetUnreadNotificationsQuery } from '@/features/notifications/notificationsSlice';
 
 const Notifications = () => {
-  const { data } = useGetUnreadNotificationsQuery()
+  const { data, isLoading, isSuccess } = useGetUnreadNotificationsQuery()
   const [newNotifications, setNewNotifications] = useState<Notification[]>(data || []);
   // fetch unread count to initialize newNotificationsCount state
   // why doesn't this work? newNotificationsCount undefined
   const [newNotificationsCount, setNewNotificationsCount] = useState(data?.length);
   const user = useSelector(selectUser);
-
+const testcount = data?.length
   console.log(data?.length, newNotificationsCount)
 
   useEffect(() => {
@@ -40,8 +40,8 @@ const Notifications = () => {
   console.log(newNotifications);
   return (
     <div>
-      {newNotificationsCount && (
-        <span className="">{newNotificationsCount}</span>
+      {testcount && (
+        <span className="">{testcount}</span>
         )}
     </div>
   );
