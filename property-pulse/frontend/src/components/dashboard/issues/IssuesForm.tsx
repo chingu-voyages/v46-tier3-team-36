@@ -1,10 +1,10 @@
 'use client';
 
-import {useState} from 'react';
-import { LegacyRef } from "react";
+import {useState,  Dispatch, SetStateAction, LegacyRef} from 'react';
 import ErrorDisplay from "../../ErrorDisplay";
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { useCreateIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
-import { getUpdatedObject } from '@/utils/utilityFunctions';
+
 import { 
 	formOpened,
 	formClosed,
@@ -15,13 +15,26 @@ import {
 	btnInputStyles 
 } from '@/lib/formStyles';
 
+type IssueFormProps = {
+	issue:{
+		id:number;
+		type:string;
+		title:string;
+		description:string;
+	};
+	isCreate:boolean; 
+	isOpen:boolean; 
+	setIsOpen:Dispatch<SetStateAction<boolean>>;
+	formRef:LegacyRef<HTMLFormElement>;
+}
+
 //Form both creates and edits depending on how it was rendered from Page parent component. 
 // <isCreate> boolean prop is used to determine either 'updating' or 'creating' branching within IssuesForm.
-const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:string,title:string, description:string},isCreate:boolean, isOpen:boolean, formRef:LegacyRef<HTMLFormElement>}) => {
-	const [ opened, setOpened ] = useState(isOpen)
+const IssuesForm = ({issue, isCreate, isOpen, setIsOpen, formRef}:IssueFormProps) => {
 	const [ error, setError ] = useState(false);
 	const [ createdIssue ] = useCreateIssueMutation();
 	const [ updatedIssue ] = useUpdateIssueMutation();
+	const [loading, setLoading] = useState(false);
 
 	const handleSubmit = async (e: { preventDefault: () => void; target: any; }) =>{
 		e.preventDefault();
@@ -30,6 +43,7 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 		const newIssue = Object.fromEntries(formData.entries());
 		if(isCreate){
 			try{
+				setLoading(true);
 				await createdIssue(newIssue);
 			}catch(error){
 				console.log(error)
@@ -39,16 +53,17 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 			const { type, title, description } = newIssue;
 			const { id } = issue;
 			let editedIssue:Record<string,any> = { id, type, title, description };
-			//only include any changed values to send to BE. * a value of <""> is "unchanged"
-			//for purposes of edit form.
-			editedIssue = getUpdatedObject(editedIssue)
+			
 			try{
-				await updatedIssue(editedIssue)
+				setLoading(true);
+				const data = await updatedIssue(editedIssue)
 			}
 			catch(error){
 				console.log(error);
 			}
 		}
+		setIsOpen(false);
+		setLoading(false);
 		form.reset();
 	};
 	//render UI-------------------------------------------------------------------
@@ -56,11 +71,11 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 		return <ErrorDisplay message="an error occured. Refresh browser."/>
 	}else{
 		return(
-			<form ref={formRef} className={opened ===true ? formOpened : formClosed} onSubmit={handleSubmit}>
+			<form ref={formRef} className={isOpen ===true ? formOpened : formClosed} onSubmit={handleSubmit}>
 				<div className={formSection}>
 					<label>Title</label>
 					{/*Update or Create?*/}
-					{!isCreate && <input name="title" placeholder={issue.title} className={inputStyles} type = "text" />}
+					{!isCreate && <input name="title" defaultValue={issue.title} className={inputStyles} type = "text" />}
 					{isCreate && <input name="title" placeholder="e.g.Broken window" className={inputStyles} type = "text" />}
 				</div>
 				<div className={formSection}>
@@ -75,10 +90,11 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 				</div>
 				<div className={formSection}>
 					{/*Update or Create?*/}
-					{!isCreate && <textarea rows={10} name="description" placeholder={issue.description} className={textAreaStyles} />}
+					{!isCreate && <textarea rows={10} name="description" defaultValue={issue.description} className={textAreaStyles} />}
 					{isCreate && <textarea rows={10} name="description" placeholder="details" className={textAreaStyles} />}
 				</div>
 				<input className={btnInputStyles} type = "submit" />
+			{loading && <LoadingSpinner/> }
 			</form>
 		)
 	}
