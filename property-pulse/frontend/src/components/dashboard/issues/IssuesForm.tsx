@@ -4,6 +4,7 @@ import {useState} from 'react';
 import { LegacyRef } from "react";
 import ErrorDisplay from "../../ErrorDisplay";
 import { useCreateIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
+import { getUpdatedObject } from '@/utils/utilityFunctions';
 import { 
 	formOpened,
 	formClosed,
@@ -37,13 +38,15 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 		}else if(!isCreate){
 			const { type, title, description } = newIssue;
 			const { id } = issue;
-			const editedIssue = {id,type,title,description};
+			let editedIssue:Record<string,any> = { id, type, title, description };
+			//only include any changed values to send to BE. * a value of <""> is "unchanged"
+			//for purposes of edit form.
+			editedIssue = getUpdatedObject(editedIssue)
 			try{
 				await updatedIssue(editedIssue)
 			}
 			catch(error){
-				console.log(error)
-				setError(true)
+				console.log(error);
 			}
 		}
 		form.reset();
