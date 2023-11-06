@@ -23,4 +23,33 @@ const getUnitsForProperty = async (propertyId:number) => {
 	});
 };
 
-export default { getAllUnits, getUnitsForProperty };
+const createUnit = async (user, unit: Unit) => {
+	const { propertyId, name, description, rent } = unit;
+
+  const createdUnit = await prisma.unit.create({
+    data: {
+      propertyId,
+      name,
+      description,
+			rent,
+    }
+  })
+
+	// const updatedUser = await prisma.user.update({
+	// 	where: {
+	// 		id: user.id
+	// 	},
+	// 	data: {
+	// 		residence: {
+	// 			connect: {
+	// 				id: createdUnit.id
+	// 			}
+	// 		}
+	// 	}
+	// })
+
+  console.log(createdUnit)
+  return createdUnit;
+}
+
+export default { getAllUnits, getUnitsForProperty, createUnit };

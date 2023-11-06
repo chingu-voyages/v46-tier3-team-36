@@ -17,6 +17,16 @@ router
 			units = await unitsService.getAllUnits();
 		}
 		res.status(200).json(units);
-	});
+	})
+
+		/**
+	 * Create a new unit
+	 */
+		.post('/units', async (req, res) => {
+			const user = req.user;
+			const newUnit = await unitsService.createUnit(user, req.body);
+	
+			return res.status(201).json(newUnit);
+		})
 
 export default router;
