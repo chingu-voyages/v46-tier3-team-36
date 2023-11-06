@@ -2,6 +2,7 @@
 "use client"
 
 import React, { useState } from 'react';
+import { apiSlice } from '@/features/api/apiSlice';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { useAppDispatch } from '@/store/store';
 import { useLoginUserMutation } from '@/features/users/usersSlice';
@@ -47,6 +48,7 @@ const AuthComponent: React.FC = () => {
       const response = await loginUser({ email, password }).unwrap();
       if(response.user) {
         dispatch(userLoggedIn(response.user));
+        dispatch(apiSlice.util.resetApiState());
         sessionStorage.setItem('login', JSON.stringify(response.user));
         router.push('/dashboard');
       }

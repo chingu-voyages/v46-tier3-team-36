@@ -34,7 +34,7 @@ router
 		if(!Object.values($Enums.Role).includes(role as $Enums.Role) || !Number(page) || !Number(per_page)) {
 			throw new BadRequestError("Invalid parameters");
 		}
-		const result = await usersService.getPaginatedUsers(role as $Enums.Role, Number(page), Number(per_page), sortby as string, search as string);
+		const result = await usersService.getPaginatedUsers(Number(req.user?.id), role as $Enums.Role, Number(page), Number(per_page), sortby as string, search as string);
 		res.status(200).json(result);
 	})
 	/**

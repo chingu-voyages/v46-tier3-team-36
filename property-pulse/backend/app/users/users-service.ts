@@ -40,32 +40,67 @@ const getAllUsers = async () => {
 	});
 };
 
-const getPaginatedUsers = async (role:$Enums.Role, page: number, per_page: number, sortby = 'name', search?:string) => {
-	let condition:Object = {role};
+const getPaginatedUsers = async (userId:number, role:$Enums.Role, page: number, per_page: number, sortby = 'name', search?:string) => {
+	const loggedInUser = await prisma.user.findUnique({
+		where: {id: userId},
+		select: {
+			properties: true
+		}
+	});
+
+	let condition:Object = {
+		role,
+		OR: [{
+			residence: {
+				some: {
+					propertyId: {
+						in: loggedInUser?.properties?.map(property => property.id)
+					}
+				}
+			}
+		},{
+			residence: { none: {} }
+		}]
+	};
+
 	// Apply search string filter to the query condition.
 	if(search) {
 		condition = {
 			role,
-			OR: [
-				{ name: {contains: search, mode: 'insensitive'} },
-				{ email: {contains: search, mode: 'insensitive'} },
-				{ 
+			AND: [{
+				OR: [{
 					residence: {
 						some: {
-							name: {contains: search, mode: 'insensitive'}
-						}
-					}
-				},
-				{
-					residence: {
-						some: {
-							property: {
-								name: {contains: search, mode: 'insensitive'}
+							propertyId: {
+								in: loggedInUser?.properties?.map(property => property.id)
 							}
 						}
 					}
-				}
-			]
+				},{
+					residence: { none: {} }
+				}]
+			},{
+				OR: [
+					{ name: {contains: search, mode: 'insensitive'} },
+					{ email: {contains: search, mode: 'insensitive'} },
+					{ 
+						residence: {
+							some: {
+								name: {contains: search, mode: 'insensitive'}
+							}
+						}
+					},
+					{
+						residence: {
+							some: {
+								property: {
+									name: {contains: search, mode: 'insensitive'}
+								}
+							}
+						}
+					}
+				]
+			}]
 		};
 	}
 	// Get paginated users
