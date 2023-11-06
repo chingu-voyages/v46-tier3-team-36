@@ -1,4 +1,5 @@
 import { PrismaClient, Notification } from '@prisma/client';
+import { NotFoundError } from '../../middleware/errorMiddleware';
 
 const prisma = new PrismaClient();
 
@@ -21,12 +22,28 @@ const createNotification = async (loggedInUser, notification: Notification) => {
   return createdNotification;
 }
 
-const getNotification = async (notificationId: number) => {
-  return await prisma.notification.findUnique({
+const getNotification = async (notificationId: number): Promise<Notification> => {
+  const notification = await prisma.notification.findUnique({
     where: {
       id: notificationId
     }
   })
+
+  if (!notification) {
+    throw new NotFoundError('Notification not found');
+  }
+
+  // set read to true after reading notification
+  await prisma.notification.update({
+    where: { 
+      id: notification.id 
+    },
+    data: {
+      read: true
+    }
+  })
+
+  return notification;
 }
 
 // find all notifications for logged in user
@@ -34,6 +51,23 @@ const getAllNotifications = async (user) => {
   return await prisma.notification.findMany({
     where: {
       userId: user.id
+    }
+  })
+}
+
+const getUnreadNotifications = async (user) => {
+  return await prisma.notification.findMany({
+    where: {
+      userId: user.id,
+      read: false,
+    },
+  })
+}
+
+const deleteNotification = async (notificationId) => {
+  const deletedNotification = await prisma.notification.delete({
+    where: {
+      id: notificationId
     }
   })
 }
@@ -66,6 +100,7 @@ const getNewNotifications = (req, res) => {
       res.write(`data: ${JSON.stringify(newNotifications)}\n\n`);
       console.log('test')
 
+      // set isNew to false after sending to client
       await prisma.notification.updateMany({
         where: { 
           id: { 
@@ -80,10 +115,10 @@ const getNewNotifications = (req, res) => {
 
   };
   
-  // check for notifications every 100 seconds
+  // check for notifications every 100 seconds = 100000 ms
   // shorten as needed, just setting this as the default so that if someone forgets
   // to shutdown the server, we won't go over the Supabase free tier as easily
-  const notificationsInterval = setInterval(sendNotifications, 100000);
+  const notificationsInterval = setInterval(sendNotifications, 1000);
   
   req.on('close', () => {
     console.log('Client disconnected');
@@ -93,4 +128,11 @@ const getNewNotifications = (req, res) => {
 
 };
 
-export default { createNotification, getNotification, getAllNotifications, getNewNotifications };
+export default { 
+  createNotification, 
+  getNotification, 
+  getAllNotifications, 
+  getNewNotifications, 
+  getUnreadNotifications,
+  deleteNotification
+};

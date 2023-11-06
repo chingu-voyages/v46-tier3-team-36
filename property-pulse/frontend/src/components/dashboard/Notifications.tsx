@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Notification } from '../../../../backend/utils/prisma-proxy';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/features/users/userReducer';
+import { useGetUnreadNotificationsQuery } from '@/features/notifications/notificationsSlice';
 
 const Notifications = () => {
-  const [newNotifications, setNewNotifications] = useState<Notification[]>([]);
-  // TODO: fetch unread count to initialize newNotificationsCount state
-  const [newNotificationsCount, setNewNotificationsCount] = useState(0);
+  const { data } = useGetUnreadNotificationsQuery()
+  const [newNotifications, setNewNotifications] = useState<Notification[]>(data || []);
+  // fetch unread count to initialize newNotificationsCount state
+  // why doesn't this work? newNotificationsCount undefined
+  const [newNotificationsCount, setNewNotificationsCount] = useState(data?.length);
   const user = useSelector(selectUser);
+
+  console.log(data?.length, newNotificationsCount)
 
   useEffect(() => {
     const eventSource = new EventSource(`/api/users/${user?.id}/notifications/new`);
@@ -15,10 +20,6 @@ const Notifications = () => {
     eventSource.onopen = (event) => {
       console.log('Connection opened', event);
     };
-
-    // eventSource.onmessage = (event) => {
-    //   console.log(event)
-    // }
     
     eventSource.addEventListener('update', (event) => {
       console.log(eventSource, 'event listener');
@@ -29,7 +30,7 @@ const Notifications = () => {
 
     eventSource.onerror = (error) => {
       console.error('SSE error:', error);
-      eventSource.close();
+      // eventSource.close();
     };
     
     return () => {
@@ -39,7 +40,7 @@ const Notifications = () => {
   console.log(newNotifications);
   return (
     <div>
-      {newNotificationsCount > 0 && (
+      {newNotificationsCount && (
         <span className="">{newNotificationsCount}</span>
         )}
     </div>

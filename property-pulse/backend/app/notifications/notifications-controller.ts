@@ -33,7 +33,27 @@ router
     
     return res.status(200).json(notifications)
   })
+
+  /**
+ * Get unread notifications for the logged in user
+ */
+  .get('/api/users/:userId/notifications/unread', async (req, res) => {
+    const user = req.user;
+    const notifications = await notificationsService.getUnreadNotifications(user)
+    
+    return res.status(200).json(notifications)
+  })
   
+    /**
+	 * Delete notification for the logged in user
+	 */
+  .delete('/api/users/:userId/notifications/:id', async (req, res) => {
+    const user = req.user;
+    const notification = await notificationsService.deleteNotification(Number(req.params.id))
+
+    res.status(200).json(notification);
+  })
+
     /**
 	 * SSE route: Get new notifications for the logged in user
 	 */
