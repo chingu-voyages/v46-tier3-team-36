@@ -4,7 +4,7 @@ import {useState} from 'react';
 import { LegacyRef } from "react";
 import ErrorDisplay from "../../ErrorDisplay";
 import { useCreateIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
-import { getUpdatedObject } from '@/utils/utilityFunctions';
+
 import { 
 	formOpened,
 	formClosed,
@@ -39,9 +39,7 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 			const { type, title, description } = newIssue;
 			const { id } = issue;
 			let editedIssue:Record<string,any> = { id, type, title, description };
-			//only include any changed values to send to BE. * a value of <""> is "unchanged"
-			//for purposes of edit form.
-			editedIssue = getUpdatedObject(editedIssue)
+			
 			try{
 				await updatedIssue(editedIssue)
 			}
@@ -60,7 +58,7 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 				<div className={formSection}>
 					<label>Title</label>
 					{/*Update or Create?*/}
-					{!isCreate && <input name="title" placeholder={issue.title} className={inputStyles} type = "text" />}
+					{!isCreate && <input name="title" defaultValue={issue.title} className={inputStyles} type = "text" />}
 					{isCreate && <input name="title" placeholder="e.g.Broken window" className={inputStyles} type = "text" />}
 				</div>
 				<div className={formSection}>
@@ -75,7 +73,7 @@ const IssuesForm = ({issue, isCreate, isOpen, formRef}:{issue:{id:number,type:st
 				</div>
 				<div className={formSection}>
 					{/*Update or Create?*/}
-					{!isCreate && <textarea rows={10} name="description" placeholder={issue.description} className={textAreaStyles} />}
+					{!isCreate && <textarea rows={10} name="description" defaultValue={issue.description} className={textAreaStyles} />}
 					{isCreate && <textarea rows={10} name="description" placeholder="details" className={textAreaStyles} />}
 				</div>
 				<input className={btnInputStyles} type = "submit" />
