@@ -55,8 +55,9 @@ const createIssue = async (user, issue:Issue) => {
               ${description.slice(0, 20)}...`,
     userId: landlord.id
   }
-
-  await notificationsService.createNotification(user, newNotification as Notification)
+	
+  const newNotificationTest = await notificationsService.createNotification(user, newNotification as Notification)
+	console.log(newNotificationTest)
 	return createdIssue;
 }
 
