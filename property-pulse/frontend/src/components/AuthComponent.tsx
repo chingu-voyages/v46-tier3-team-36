@@ -2,14 +2,16 @@
 "use client"
 
 import React, { useState } from 'react';
+import { apiSlice } from '@/features/api/apiSlice';
 import { FaGoogle, FaGithub } from 'react-icons/fa';
 import { useAppDispatch } from '@/store/store';
-import { userLoggedIn } from '@/features/user/userSlice';
+import { useLoginUserMutation } from '@/features/users/usersSlice';
+import { userLoggedIn } from '@/features/users/userReducer';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
 
 const AuthComponent: React.FC = () => {
-
+  const [loginUser, loginUserResult] = useLoginUserMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
@@ -43,20 +45,15 @@ const AuthComponent: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await response.json();
-      if(!response?.ok) throw new Error(data.msg);
-      dispatch(userLoggedIn(data.user));
-      sessionStorage.setItem('login', JSON.stringify(data.user));
-      router.push('/dashboard');
+      const response = await loginUser({ email, password }).unwrap();
+      if(response.user) {
+        dispatch(userLoggedIn(response.user));
+        dispatch(apiSlice.util.resetApiState());
+        sessionStorage.setItem('login', JSON.stringify(response.user));
+        router.push('/dashboard');
+      }
     } catch (error:any) {
-      toast.error(error.message, {
+      toast.error(error.data.msg, {
         toastId: 'login-failure',
         position: toast.POSITION.TOP_CENTER
       });

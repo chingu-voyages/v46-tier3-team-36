@@ -18,8 +18,24 @@ export interface PaginationOption {
 	search?: string;
 };
 
+export interface UserLogin {
+	email: string;
+	password: string;
+};
+
+export interface UserResponse {
+	user: User;
+};
+
 export const usersApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
+		loginUser: builder.mutation<UserResponse, UserLogin> ({
+			query: userLogin => ({
+				url: '/auth/login',
+				method: 'POST',
+				body: userLogin
+			})
+		}),
 		getPaginatedUsers: builder.query<PaginatedUsers<User>, PaginationOption> ({
 			query: (op:PaginationOption) => {
 				let url = `/admin/users/${op.role}/${op.per_page}/${op.page}?sortby=${op.sortBy}`;
@@ -32,7 +48,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 			query: () => '/admin/users',
 			providesTags: ['Users']
 		}),
-		createUser: builder.mutation<User, User>({
+		createUser: builder.mutation<UserResponse, User>({
 			query: user => ({
 				url: '/admin/users',
 				method: 'POST',
@@ -40,7 +56,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Users']
 		}),
-		updateUser: builder.mutation<User, User>({
+		updateUser: builder.mutation<UserResponse, User>({
 			query: user => ({
 				url: `/admin/users/${user.id}`,
 				method: 'PATCH',
@@ -48,7 +64,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Users']
 		}),
-		deleteUser: builder.mutation<User, number>({
+		deleteUser: builder.mutation<UserResponse, number>({
 			query: userId => ({
 				url: `/admin/users/${userId}`,
 				method: 'DELETE'
@@ -59,6 +75,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+	useLoginUserMutation,
 	useGetUsersQuery,
 	useGetPaginatedUsersQuery,
 	useCreateUserMutation,
