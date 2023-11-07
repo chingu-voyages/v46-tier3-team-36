@@ -2,7 +2,6 @@ import { apiSlice } from '../api/apiSlice';
 import { Property } from '../../../../backend/utils/prisma-proxy';
 import { PropertyWithOwner, NewPropertyData } from './PropertyTypes';
 
-
 export const propertiesApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getProperties: builder.query<PropertyWithOwner[], void>({

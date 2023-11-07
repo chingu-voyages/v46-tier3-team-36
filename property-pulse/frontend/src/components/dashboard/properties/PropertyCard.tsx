@@ -2,12 +2,12 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Decimal } from 'decimal.js';
 import { PropertyWithOwner } from '@/features/properties/PropertyTypes';
 import UnitsList from './UnitsList';
 import { toast } from "react-toastify";
 import { useUpdatePropertyMutation, useDeletePropertyMutation } from '@/features/properties/propertiesSlice';
 import { useCreateUnitMutation } from '@/features/units/unitsSlice';
+import { Unit } from '@/features/units/unitType';
 
 type PropertyCardProps = {
   property: PropertyWithOwner;
@@ -46,12 +46,13 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const handleCreateUnitSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const newUnitData = {
+      const newUnitData:Unit = {
+        id: 0,
         propertyId:property.id,
         name: '',
         description: '',
-        rent: 0,
-      } as unknown as { id: number; propertyId: number; name: string; description: string | null; rent: Decimal; };
+        rent: 0
+      };
       await createUnit(newUnitData).unwrap();
       toast.success("Unit successfully created");
     } catch (error) {
@@ -113,7 +114,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       {showUnits && (
         <UnitsList
           property={property}
-          createUnit={createUnit}
           // Pass the rest of your CRUD methods as needed
         />
       )}

@@ -8,6 +8,7 @@ import {
   useUpdateUnitMutation,
   useDeleteUnitMutation,
 } from '@/features/units/unitsSlice';
+import { PropertyWithOwner } from '@/features/properties/PropertyTypes';
 
 // Assuming these types are defined somewhere in your project
 interface Tenant {
@@ -34,11 +35,11 @@ interface Property {
 }
 
 interface UnitsListProps {
-  property: Property;
+  property: PropertyWithOwner;
 }
 
 const UnitsList: React.FC<UnitsListProps> = ({ property }) => {
-  // const [createUnit, { isLoading: isCreating }] = useCreateUnitMutation();
+  const [createUnit, { isLoading: isCreating }] = useCreateUnitMutation();
   // const [updateUnit] = useUpdateUnitMutation();
   // const [deleteUnit] = useDeleteUnitMutation();
 

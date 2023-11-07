@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '@/store/store';
-import User from './userType';
+import { User } from './userType';
 
 const userSlice = createSlice({
 	name: 'user',
