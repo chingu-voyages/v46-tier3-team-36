@@ -5,14 +5,18 @@ import { selectUser } from '@/features/users/userReducer';
 import { useGetUnreadNotificationsQuery } from '@/features/notifications/notificationsSlice';
 
 const Notifications = () => {
-  const { data, isLoading, isSuccess } = useGetUnreadNotificationsQuery()
-  const [newNotifications, setNewNotifications] = useState<Notification[]>(data || []);
-  // fetch unread count to initialize newNotificationsCount state
-  // why doesn't this work? newNotificationsCount undefined
-  const [newNotificationsCount, setNewNotificationsCount] = useState(data?.length);
   const user = useSelector(selectUser);
-const testcount = data?.length
-  console.log(data?.length, newNotificationsCount)
+  const { data, isLoading, isSuccess } = useGetUnreadNotificationsQuery();
+
+  const [newNotifications, setNewNotifications] = useState<Notification[]>([]);
+  const [newNotificationsCount, setNewNotificationsCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setNewNotifications(data || []);
+      setNewNotificationsCount(data?.length);
+    }
+  }, [data, isSuccess]);
 
   useEffect(() => {
     const eventSource = new EventSource(`/api/users/${user?.id}/notifications/new`);
@@ -20,40 +24,33 @@ const testcount = data?.length
     eventSource.onopen = (event) => {
       console.log('Connection opened', event);
     };
-    
+
     eventSource.addEventListener('update', (event) => {
       console.log(eventSource, 'event listener');
       const notifications = JSON.parse(event.data);
       setNewNotifications((newNotifications: Notification[]) => [notifications, ...newNotifications]);
       setNewNotificationsCount((count) => count + notifications.length);
-    })
+    });
 
     eventSource.onerror = (error) => {
       console.error('SSE error:', error);
       // eventSource.close();
     };
-    
+
     return () => {
       eventSource.close();
     };
   }, []);
+
   console.log(newNotifications);
+
   return (
     <div>
-      {testcount && (
-        <span className="">{testcount}</span>
-        )}
+      {newNotificationsCount !== null && (
+        <span className="">{newNotificationsCount}</span>
+      )}
     </div>
   );
 };
 
 export default Notifications;
-
-// eventSource.onmessage = (event) => {
-//   console.log('on message')
-//   console.log(event)
-//   const notifications = JSON.parse(event.data);
-//   setNewNotifications((newNotifications: Notification[]) => [notifications, ...newNotifications]);
-//   setNewNotificationsCount((count) => count + 1);
-//   console.log(newNotifications)
-// };

@@ -6,22 +6,30 @@ const prisma = new PrismaClient();
 
 const createIssue = async (user, issue:Issue) => {
 	const {type, unitId=null, title, description} = issue;
+
+	// TODO: fix
+	// might have to associate issues with the landlord too for inquiries
+	// for null unitId, find a unit they reside in
+	const defaultUnit = await prisma.unit.findFirst({
+		where: {
+			tenants: {
+				some: {
+					id: user.id
+				}
+			}
+		}
+	})
+
 	const createdIssue = await prisma.issue.create({
 		data: {
 			type,
 			tenantId: user.id,
-			unitId,
+			unitId: unitId ? unitId : defaultUnit?.id,
 			title,
 			description
 		}
 	})
 	console.log(createdIssue)
-
-	  // TODO: fix
-  // might have to associate issues with the landlord too for inquiries
-  if (unitId === null) {
-    return;
-  }
 
 	// find landlord to create notification
 	const landlord = await prisma.user.findFirst({
@@ -37,7 +45,7 @@ const createIssue = async (user, issue:Issue) => {
 				some: {
 					units: {
 						some: {
-							id: unitId
+							id: unitId ? unitId : defaultUnit?.id
 						}
 					}
 				}
@@ -55,7 +63,6 @@ const createIssue = async (user, issue:Issue) => {
               ${description.slice(0, 20)}...`,
     userId: landlord.id
   }
-	
   const newNotificationTest = await notificationsService.createNotification(user, newNotification as Notification)
 	console.log(newNotificationTest)
 	return createdIssue;
