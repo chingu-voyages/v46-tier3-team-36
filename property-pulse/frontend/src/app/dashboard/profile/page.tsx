@@ -5,20 +5,26 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
+import { useSelector } from 'react-redux';
+import { selectUser, userLoggedIn } from '@/features/users/userReducer';
+import { $Enums } from '../../../../../backend/utils/prisma-proxy';
+
 const UserProfileUpdate = () => {
 
 
   // DUMMY USER! CONNECT WITH DATABASE
-  const [user, setUser] = useState({
-    name: 'I am Example',
-    email: 'user@example.com',
-    role: 'tenant',
-  });
+  // const [user, setUser] = useState({
+  //   name: 'I am Example',
+  //   email: 'user@example.com',
+  //   role: 'tenant',
+  // });
   //
+  const user = useSelector(selectUser);
 
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [isManager, setIsManager] = useState(user.role === 'manager');
+
+  // const [name, setName] = useState(user.name);
+  // const [email, setEmail] = useState(user.email);
+  // const [isManager, setIsManager] = useState(user.role === 'manager');
 
   const [showPromoInput, setShowPromoInput] = useState(false);
   const [promoCode, setPromoCode] = useState("");
@@ -28,31 +34,35 @@ const UserProfileUpdate = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-  useEffect(() => {
-    setIsManager(user.role === 'manager');
-  }, [user]);
+  if (!user){
+    return(<p>Loading user</p>)
+  }
 
-  const handlePromoCodeSubmit = () => {
-    if (promoCode === "promote") {
-      setUser({ ...user, role: 'manager' });
-      setIsManager(true);
-      toast.success("You are now a manager!");
-    } else if (promoCode === "demote" && isManager) {
-      setUser({ ...user, role: 'tenant' });
-      setIsManager(false);
-      toast.success("You are now a tenant!");
-    } else {
-      toast.error("Invalid promo code");
-    }
-    setPromoCode("");
-    setShowPromoInput(false);
-  };
+  // useEffect(() => {
+  //   setIsManager(user.role === 'manager');
+  // }, [user]);
 
-  const handleDemote = () => {
-    setIsManager(false);
-    setUser({ ...user, role: 'tenant' });
-    toast.success("You are now a tenant!");
-  };
+  // const handlePromoCodeSubmit = () => {
+  //   if (promoCode === "promote") {
+  //     setUser({ ...user, role: 'manager' });
+  //     setIsManager(true);
+  //     toast.success("You are now a manager!");
+  //   } else if (promoCode === "demote" && isManager) {
+  //     setUser({ ...user, role: 'tenant' });
+  //     setIsManager(false);
+  //     toast.success("You are now a tenant!");
+  //   } else {
+  //     toast.error("Invalid promo code");
+  //   }
+  //   setPromoCode("");
+  //   setShowPromoInput(false);
+  // };
+
+  // const handleDemote = () => {
+  //   setIsManager(false);
+  //   setUser({ ...user, role: 'tenant' });
+  //   toast.success("You are now a tenant!");
+  // };
 
   const handleChangePassword = () => {
     if (!oldPassword || !newPassword || !confirmNewPassword) {
@@ -82,22 +92,22 @@ const UserProfileUpdate = () => {
   };
 
   return (
-  <div className="flex items-center justify-center min-h-screen bg-gray-100">
+  <div className="flex items-center justify-center mt-4 py-4 min-h-[80vh] bg-gray-100">
     <div className="p-6 bg-white rounded shadow-md w-full md:w-96">
       <h2 className="text-xl font-semibold mb-4">Update Profile</h2>
       <label className="block mb-2">Name:</label>
       <input
         type="text"
         className="mb-4 p-2 w-full border rounded text-gray-900"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={user.name}
+        // onChange={(e) => setName(e.target.value)}
       />
       <label className="block mb-2">Email:</label>
       <input
         type="email"
         className="mb-4 p-2 w-full border rounded text-gray-900"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={user.email}
+        // onChange={(e) => setEmail(e.target.value)}
       />
 
 <div className="mb-4">
@@ -138,10 +148,10 @@ const UserProfileUpdate = () => {
       </div>
 
       <div className="mb-4">
-        {isManager ? (
+        {user.role === $Enums.Role.manager ? (
           <span
             className="p-2 cursor-pointer text-blue-600 hover:bg-red-400 rounded"
-            onClick={handleDemote}
+            // onClick={handleDemote}
           >
             Demote to Tenant
           </span>
@@ -162,7 +172,7 @@ const UserProfileUpdate = () => {
                 />
                 <button
                   className="mt-2 w-full p-2 bg-green-800 hover:bg-green-600 text-white rounded"
-                  onClick={handlePromoCodeSubmit}
+                  // onClick={handlePromoCodeSubmit}
                 >
                   Submit Code
                 </button>

@@ -1,4 +1,8 @@
-import { PrismaClient, Property } from '@prisma/client';
+import { PrismaClient, Property, Prisma } from '@prisma/client';
+
+const unitsWithTenants: Prisma.UnitInclude = {
+  tenants: true
+};
 
 const prisma = new PrismaClient();
 
@@ -27,6 +31,20 @@ const getProperty = async (propertyId: number) => {
 
 const getAllProperties = async (user) => {
   return await prisma.property.findMany({
+    select: {
+      id:true,
+      name: true,
+      description: true,
+      owner: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
+      units: {
+        include: unitsWithTenants
+      }
+    },
     where: {
       ownerId: user.id
     }

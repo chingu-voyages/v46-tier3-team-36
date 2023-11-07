@@ -1,9 +1,10 @@
 import { apiSlice } from '../api/apiSlice';
-import { Unit } from '../../../../backend/utils/prisma-proxy';
+import { Unit } from './unitType';
+import { UnitWithProperty } from './unitType';
 
 export const unitsApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		getUnitsForProperty: builder.query<Unit[], number>({
+		getUnitsForProperty: builder.query<UnitWithProperty[], number>({
 			query: propertyId => `/admin/units?propertyid=${propertyId}`,
 			providesTags: ['Units']
 		}),
