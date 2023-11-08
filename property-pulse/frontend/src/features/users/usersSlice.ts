@@ -1,5 +1,5 @@
 import { apiSlice } from '../api/apiSlice';
-import User from './userType';
+import { User, UserWithResidence } from './userType';
 
 export interface PaginatedUsers<T> {
 	role: string;
@@ -24,7 +24,7 @@ export interface UserLogin {
 };
 
 export interface UserResponse {
-	user: User;
+	user: UserWithResidence;
 };
 
 export const usersApiSlice = apiSlice.injectEndpoints({
@@ -36,7 +36,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 				body: userLogin
 			})
 		}),
-		getPaginatedUsers: builder.query<PaginatedUsers<User>, PaginationOption> ({
+		getPaginatedUsers: builder.query<PaginatedUsers<UserWithResidence>, PaginationOption> ({
 			query: (op:PaginationOption) => {
 				let url = `/admin/users/${op.role}/${op.per_page}/${op.page}?sortby=${op.sortBy}`;
 				if(op.search) url += `&search=${op.search}`;
@@ -44,7 +44,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 			},
 			providesTags: ['Users']
 		}),
-		getUsers: builder.query<User[], void>({
+		getUsers: builder.query<UserWithResidence[], void>({
 			query: () => '/admin/users',
 			providesTags: ['Users']
 		}),

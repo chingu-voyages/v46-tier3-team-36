@@ -1,6 +1,6 @@
 import { useGetPaginatedUsersQuery, PaginationOption } from '@/features/users/usersSlice';
 import { $Enums } from '../../../../../backend/utils/prisma-proxy';
-import User from '@/features/users/userType';
+import { UserWithResidence } from '@/features/users/userType';
 import { useDashboardContext } from '@/app/dashboard/layout'; 
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDeleteUserMutation } from '@/features/users/usersSlice';
@@ -154,7 +154,7 @@ const UserList = ({userRole}:{userRole:$Enums.Role}) => {
 				</label>
 			</div>
 			<ul className="flex flex-col gap-3">
-				{paginatedUsers.data.map((user:User) => (
+				{paginatedUsers.data.map((user:UserWithResidence) => (
 					<li key={user.id} className="flex flex-col shadow-md hover:bg-green-50">
 						<div className="flex flex-col gap-5 p-10 items-center xl:flex-row">
 							<div className={`flex flex-col text-sm gap-9 w-full ${!showSideMenu ? 'lg:flex-row lg:gap-0 lg:justify-between' : 'xl:flex-row xl:justify-start'}`}>

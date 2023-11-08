@@ -17,6 +17,36 @@ router
 			units = await unitsService.getAllUnits();
 		}
 		res.status(200).json(units);
-	});
+	})
+
+/**
+ * Create a new unit
+ */
+	.post('/units', async (req, res) => {
+		const user = req.user;
+		const newUnit = await unitsService.createUnit(user, req.body);
+
+		return res.status(201).json(newUnit);
+	})
+
+	/**
+	 * Update a unit
+	 */
+	.patch('/units/:id', async (req, res) => {
+		const user = req.user;
+		const updatedUnit = await unitsService.updateUnit(user, req.body);
+
+		return res.status(200).json(updatedUnit);
+	})
+
+	/**
+	 * Delete a unit
+	 */
+	.delete('/units/:id', async (req, res) => {
+		const user = req.user;
+		const deletedUnit = await unitsService.deleteUnit(user, req.body);
+
+		return res.status(200).json(deletedUnit);
+	})
 
 export default router;

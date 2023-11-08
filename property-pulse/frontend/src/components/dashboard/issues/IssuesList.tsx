@@ -67,7 +67,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 								<li className={date}>Created:{item.createdAt}</li>
 								<li className={date}>Updated:{item.updatedAt}</li>
 							</ul>							
-								<DescriptionModal  description={item.description}/>
+								<DescriptionModal  id={`modal ${item.id}`} description={item.description}/>
 						</div>
 						<div className={listItemSection}>
 							<div className={buttonBox}>
