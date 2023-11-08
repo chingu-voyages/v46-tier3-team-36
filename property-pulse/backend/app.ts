@@ -8,17 +8,18 @@ const app = express();
 const cors = require('cors');
 import { PrismaClient } from '@prisma/client';
 import { Strategy as LocalStrategy } from './libs/strategy';
-import { authorize } from './middleware/authMiddleware';
+import { authenticate, authorize } from './middleware/authMiddleware';
 import { $Enums } from '@prisma/client';
 import errorMiddleware from './middleware/errorMiddleware';
 import signupController from './app/auth/signup/signup-controller';
 import logoutController from './app/auth/logout/logout-controller';
 import loginController from './app/auth/login/login-controller';
-import usersController from './app/users/users-controller';
+import usersController from './app/users/admin/users-controller';
 import issuesController from './app/issues/admin/issues-controller';
 import tenantIssuesController from './app/issues/tenant/issues-controller';
 import propertiesController from './app/properties/properties-controller';
 import unitsController from './app/units/units-controller';
+import profileController from './app/users/profile-controller';
 
 const prisma = new PrismaClient();
 
@@ -45,6 +46,7 @@ app.use(logoutController);
 app.use(issuesController);
 app.use(tenantIssuesController);
 app.use(propertiesController);
+app.use('/api', authenticate(), profileController);
 app.use('/api/admin', authorize($Enums.Role.manager), usersController);
 app.use('/api/admin', authorize($Enums.Role.manager), unitsController);
 
