@@ -2,15 +2,13 @@
 
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/features/users/userReducer';
-import { useGetIssuesQuery } from '@/features/issues/issuesSlice';
+import { useGetIssuesAdminQuery } from '@/features/issues/issuesSlice';
 
 import IssuesList from '@/components/dashboard/issues/IssuesList';
 
 const IssueAdminPage = () => {
 	const user = useSelector(selectUser);
-	const { data, isLoading, isSuccess } =useGetIssuesQuery(user);
-	console.log(data)
-	console.log(user);
+	const { data, isLoading, isSuccess } =useGetIssuesAdminQuery(user);
 	
 	const tempFunc = () => {
 	//This is aplace holder for editing function
@@ -21,7 +19,7 @@ const IssueAdminPage = () => {
 	if(!isSuccess)return<h1>Failed</h1>
 	return (
 		<section>
-			<h1 className="text-3xl text-green-900 font-bold">Issues</h1>
+			<h1 className="text-3xl text-center text-green-900 font-bold">Issues</h1>
 			<IssuesList openForm={tempFunc}issues={data}/>
 		</section>
 	)

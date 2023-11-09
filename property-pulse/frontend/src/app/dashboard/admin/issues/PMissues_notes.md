@@ -50,8 +50,8 @@ Units:
 ```
 # TO DO
 1. Add tenant's name to issue.
-2. Pagination.
-3. Filtering, sorting.
-4. Deleting and issue (toggle to 'close' in PM view?).
-5. Responding? (this happens from notifications?).
-6. Format date to make more readable.
+1. Deleting and issue (toggle to 'close' in PM view?).
+1. Format date to make more readable.
+1. Pagination.
+1. Filtering, sorting.
+1. Responding? (this happens from notifications?).
