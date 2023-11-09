@@ -48,3 +48,10 @@ Units:
 { id: 22, propertyId: 17, name: '', description: '', rent: 0 }
 { id: 23, propertyId: 16, name: '', description: '', rent: 0 }
 ```
+# TO DO
+1. Add tenant's name to issue.
+2. Pagination.
+3. Filtering, sorting.
+4. Deleting and issue (toggle to 'close' in PM view?).
+5. Responding? (this happens from notifications?).
+6. Format date to make more readable.
