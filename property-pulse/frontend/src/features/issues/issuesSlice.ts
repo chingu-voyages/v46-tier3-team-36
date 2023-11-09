@@ -1,9 +1,9 @@
 import { apiSlice } from '../api/apiSlice';
 
-export const issuesApiSlice = apiSlice.injectEndpoints({
+export const issuesApiSliceAdmin = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		getIssues: builder.query({
-			query: () => '/issues',
+			query: () => '/admin/issues',
 			providesTags: ['Issues']
 		}),
 		createIssue: builder.mutation({
@@ -37,4 +37,4 @@ export const {
 	useCreateIssueMutation,
 	useUpdateIssueMutation,
 	useDeleteIssueMutation
-} = issuesApiSlice;
+} = issuesApiSliceAdmin;
