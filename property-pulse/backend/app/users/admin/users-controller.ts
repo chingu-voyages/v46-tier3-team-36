@@ -1,8 +1,8 @@
 import { $Enums } from '@prisma/client';
 import usersService from './users-service';
 import express from 'express';
-import hashPassword from '../../middleware/passwordHashMiddleware';
-import { BadRequestError } from '../../middleware/errorMiddleware';
+import hashPassword from '../../../middleware/passwordHashMiddleware';
+import { BadRequestError } from '../../../middleware/errorMiddleware';
 
 const router = express.Router();
 
