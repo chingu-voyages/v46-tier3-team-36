@@ -2,25 +2,33 @@
 "use client"
 
 import React, { useState } from 'react';
-import { PropertyWithOwner } from '@/features/properties/PropertyTypes';
-import UnitsList from './UnitsList';
 import { toast } from "react-toastify";
 import { useUpdatePropertyMutation, useDeletePropertyMutation } from '@/features/properties/propertiesSlice';
-import { useCreateUnitMutation } from '@/features/units/unitsSlice';
-import { Unit } from '@/features/units/unitType';
+import { useCreateUnitMutation, useGetUnitsForPropertyQuery, useUpdateUnitMutation, useDeleteUnitMutation } from '@/features/units/unitsSlice';
+import { PropertyWithOwner } from '@/features/properties/PropertyTypes';
+import { NewUnitData } from './UnitsList'; 
+import UnitCard from './UnitCard';
 
 type PropertyCardProps = {
   property: PropertyWithOwner;
+  refetch: () => void;
 };
 
-export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+
+export const PropertyCard: React.FC<PropertyCardProps> = ({ property, refetch }) => {
+  const { data: units } = useGetUnitsForPropertyQuery(property.id);
   const [updateProperty] = useUpdatePropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
-
   const [createUnit] = useCreateUnitMutation();
+  const [updateUnit] = useUpdateUnitMutation();
+const [deleteUnit] = useDeleteUnitMutation();
 
   const [showUnits, setShowUnits] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [newUnitName, setNewUnitName] = useState('');
+  const [newUnitDescription, setNewUnitDescription] = useState('');
+  const [newUnitRent, setNewUnitRent] = useState('');
+
   const [updatedName, setUpdatedName] = useState(property.name);
   const [updatedDescription, setUpdatedDescription] = useState(property.description || '');
 
@@ -46,15 +54,18 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const handleCreateUnitSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const newUnitData:Unit = {
-        id: 0,
-        propertyId:property.id,
-        name: '',
-        description: '',
-        rent: 0
+      const newUnitData: NewUnitData = {
+        propertyId: property.id,
+        name: newUnitName,
+        description: newUnitDescription,
+        rent: parseFloat(newUnitRent),
       };
       await createUnit(newUnitData).unwrap();
+      setNewUnitName('');
+      setNewUnitDescription('');
+      setNewUnitRent('');
       toast.success("Unit successfully created");
+      refetch()
     } catch (error) {
       toast.error("Unit creation failed");
     }
@@ -75,6 +86,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         <h3 className="text-lg font-semibold">{property.name}</h3>
         <span className="text-sm text-gray-600">Owned by: {property.owner.name}</span>
       </div>
+
       {editing ? (
         <form onSubmit={handleUpdateSubmit} className="p-4">
           <input
@@ -83,6 +95,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             onChange={(e) => setUpdatedName(e.target.value)}
             placeholder="Property Name"
             className="border p-2 mr-2"
+            required
           />
           <input
             type="text"
@@ -90,6 +103,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             onChange={(e) => setUpdatedDescription(e.target.value)}
             placeholder="Property Description"
             className="border p-2"
+            required
           />
           <button type="submit" className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Save Changes
@@ -112,27 +126,46 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
 
       {/* Units section */}
       {showUnits && (
-        <UnitsList
-          property={property}
-          // Pass the rest of your CRUD methods as needed
-        />
-      )}
+          <div>
+            {/* Replace this comment with the code to map over the units and display them */}
+            {units?.map((unit) => (
+              <UnitCard key={unit.id} unit={unit} updateUnit={updateUnit} deleteUnit={deleteUnit} refetch={refetch} />
+            ))}
+          </div>
+        )}
       <button
         onClick={handleToggleUnits}
         className="w-full text-blue-500 hover:text-blue-700 p-4"
       >
         {showUnits ? 'Hide Units' : 'Show Units'}
       </button>
+
       {showUnits && (
         <form onSubmit={handleCreateUnitSubmit} className="p-4 border-t border-gray-300">
-          {/* Define your inputs for the new unit here */}
           <input
             type="text"
-            // You'll need to handle state for newUnitName and other new unit attributes as well
+            value={newUnitName}
+            onChange={(e) => setNewUnitName(e.target.value)}
             placeholder="New Unit Name"
             className="border p-2 mr-2"
+            required
           />
-          {/* Include other inputs as necessary */}
+          <input
+            type="text"
+            value={newUnitDescription}
+            onChange={(e) => setNewUnitDescription(e.target.value)}
+            placeholder="New Unit Description"
+            className="border p-2"
+            required
+          />
+          <input
+            type="number"
+            value={newUnitRent}
+            onChange={(e) => setNewUnitRent(e.target.value)}
+            placeholder="New Unit Rent"
+            className="border p-2"
+            required
+          />
           <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Add New Unit
           </button>

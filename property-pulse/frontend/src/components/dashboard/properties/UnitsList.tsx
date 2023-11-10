@@ -18,12 +18,19 @@ interface Tenant {
 }
 
 interface Unit {
-  id: number;
+  id?: number;
   propertyId: number;
   name: string;
   description: string;
   rent: string;
   tenants: Tenant[];
+}
+
+export interface NewUnitData {
+  propertyId: number;
+  name: string;
+  description: string;
+  rent: number;
 }
 
 interface Property {
