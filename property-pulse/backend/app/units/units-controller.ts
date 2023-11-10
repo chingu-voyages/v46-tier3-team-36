@@ -44,8 +44,14 @@ router
 	 */
 	.delete('/units/:id', async (req, res) => {
 		const user = req.user;
-		const deletedUnit = await unitsService.deleteUnit(user, req.body);
-
+		const { id } = req.params;
+		const unitId = parseInt(id, 10);
+	
+		if (!unitId) {
+			return res.status(400).json({ message: 'Unit ID is required' });
+		}
+	
+		const deletedUnit = await unitsService.deleteUnit(user, unitId);
 		return res.status(200).json(deletedUnit);
 	})
 
