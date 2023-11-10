@@ -1,19 +1,23 @@
 import { apiSlice } from '../api/apiSlice';
 import { User } from './userType';
 
+export interface UserData extends User {
+	oldPassword?: string;
+};
+
 interface UserResponse {
 	user: User;
 };
 
 interface PromotionCode {
 	code: string;
-}
+};
 
 export const profileApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		updateProfile: builder.mutation<UserResponse, User>({
+		updateProfile: builder.mutation<UserResponse, UserData>({
 			query: user => ({
-				url: '/admin/profile',
+				url: '/users/profile',
 				method: 'PATCH',
 				body: user
 			})
