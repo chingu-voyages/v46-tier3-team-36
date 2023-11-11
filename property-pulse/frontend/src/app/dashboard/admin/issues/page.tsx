@@ -5,6 +5,8 @@ import { selectUser } from '@/features/users/userReducer';
 import { useGetIssuesAdminQuery } from '@/features/issues/issuesSlice';
 
 import IssuesList from '@/components/dashboard/issues/IssuesList';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import ErrorDisplay from '@/components/ErrorDisplay';
 
 const IssueAdminPage = () => {
 	const user = useSelector(selectUser);
@@ -15,8 +17,8 @@ const IssueAdminPage = () => {
 		console.log("I am a temp func.")
 	}
 
-	if(isLoading)return <h1>I am loading</h1>
-	if(!isSuccess)return<h1>Failed</h1>
+	if(isLoading)return <LoadingSpinner />
+	if(!isSuccess)return <ErrorDisplay message={"Data retrieval failed. Please refresh your browser and try again."}/>
 	return (
 		<section>
 			<h1 className="text-3xl text-center text-green-900 font-bold">Issues</h1>
