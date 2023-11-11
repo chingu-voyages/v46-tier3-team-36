@@ -17,6 +17,14 @@ const getAllUnits = async () => {
  */
 const getUnitsForProperty = async (propertyId:number) => {
 	return await prisma.unit.findMany({
+		select: {
+			id: true,
+			name: true,
+			description: true,
+			propertyId: true,
+			rent: true,
+			tenants:true
+		},
 		where: {
 			propertyId
 		}
