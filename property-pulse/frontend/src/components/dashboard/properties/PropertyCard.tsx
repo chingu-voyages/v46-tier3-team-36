@@ -6,22 +6,20 @@ import { toast } from "react-toastify";
 import { useUpdatePropertyMutation, useDeletePropertyMutation } from '@/features/properties/propertiesSlice';
 import { useCreateUnitMutation, useGetUnitsForPropertyQuery, useUpdateUnitMutation, useDeleteUnitMutation } from '@/features/units/unitsSlice';
 import { PropertyWithOwner } from '@/features/properties/PropertyTypes';
-import { NewUnitData } from './UnitsList'; 
 import UnitCard from './UnitCard';
+import { UnitWithTenants } from '@/features/properties/PropertyTypes';
+import { Unit } from '@/features/units/unitType';
 
 type PropertyCardProps = {
   property: PropertyWithOwner;
   refetch: () => void;
 };
 
-
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property, refetch }) => {
   const { data: units } = useGetUnitsForPropertyQuery(property.id);
   const [updateProperty] = useUpdatePropertyMutation();
   const [deleteProperty] = useDeletePropertyMutation();
   const [createUnit] = useCreateUnitMutation();
-  const [updateUnit] = useUpdateUnitMutation();
-const [deleteUnit] = useDeleteUnitMutation();
 
   const [showUnits, setShowUnits] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -54,7 +52,7 @@ const [deleteUnit] = useDeleteUnitMutation();
   const handleCreateUnitSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const newUnitData: NewUnitData = {
+      const newUnitData:Unit = {
         propertyId: property.id,
         name: newUnitName,
         description: newUnitDescription,
@@ -129,7 +127,7 @@ const [deleteUnit] = useDeleteUnitMutation();
           <div>
             {/* Replace this comment with the code to map over the units and display them */}
             {units?.map((unit) => (
-              <UnitCard key={unit.id} unit={unit} updateUnit={updateUnit} deleteUnit={deleteUnit} refetch={refetch} />
+              <UnitCard key={unit.id} unit={unit} />
             ))}
           </div>
         )}

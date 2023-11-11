@@ -21,12 +21,12 @@ export const PropertyView: React.FC<PropertyViewProps> = ({ property, onEdit, on
     // You might want to handle errors and show a success message
   };
 
-  const handleUpdate = async (unitId) => {
+  const handleUpdate = async (unitId:number) => {
     // Call your API to update the unit with the given id
     // You might want to handle errors and show a success message
   };
 
-  const handleDelete = async (unitId) => {
+  const handleDelete = async (unitId:number) => {
     // Call your API to delete the unit with the given id
     // You might want to handle errors and show a success message
   };
@@ -38,10 +38,10 @@ export const PropertyView: React.FC<PropertyViewProps> = ({ property, onEdit, on
         <div key={unit.id} className="mb-4">
           <p className="font-medium">{unit.name} ({unit.description}) - ${unit.rent}</p>
           <p className="text-sm text-gray-500">Tenants: {unit.tenants.map(t => t.name).join(", ")}</p>
-          <button onClick={() => handleUpdate(unit.id)} className="text-blue-500 hover:text-blue-700">
+          <button onClick={() => handleUpdate(Number(unit.id))} className="text-blue-500 hover:text-blue-700">
             Edit
           </button>
-          <button onClick={() => handleDelete(unit.id)} className="text-red-500 hover:text-red-700 ml-2">
+          <button onClick={() => handleDelete(Number(unit.id))} className="text-red-500 hover:text-red-700 ml-2">
             Delete
           </button>
         </div>

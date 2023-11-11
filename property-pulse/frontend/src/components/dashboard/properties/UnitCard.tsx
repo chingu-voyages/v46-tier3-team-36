@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { toast } from "react-toastify";
 import { useUpdateUnitMutation, useDeleteUnitMutation } from '@/features/units/unitsSlice';
-import { UnitWithTenants } from '@/features/properties/PropertyTypes'; 
+import { UnitWithPropertyTenants } from '@/features/units/unitType'; 
 
 type UnitCardProps = {
-  unit: UnitWithTenants;
-  refetch: () => void;
+  unit: UnitWithPropertyTenants;
 };
 
-export const UnitCard: React.FC<UnitCardProps> = ({ unit, refetch }) => {
+export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
   const [updateUnit] = useUpdateUnitMutation();
   const [deleteUnit] = useDeleteUnitMutation();
 
@@ -30,7 +29,6 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit, refetch }) => {
       await updateUnit(updatedUnitData).unwrap();
       toast.success("Unit updated successfully");
       setEditing(false);
-      refetch();
     } catch (error) {
       toast.error("Unit update failed");
     }
@@ -38,9 +36,8 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit, refetch }) => {
 
   const handleDeleteUnitClick = async () => {
     try {
-      await deleteUnit(unit.id).unwrap();
+      await deleteUnit(unit.id!).unwrap();
       toast.success("Unit deleted successfully");
-      refetch();
     } catch (error) {
       toast.error("Unit deletion failed");
     }

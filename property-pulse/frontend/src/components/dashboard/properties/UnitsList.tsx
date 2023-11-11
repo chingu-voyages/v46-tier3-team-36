@@ -10,42 +10,11 @@ import {
 } from '@/features/units/unitsSlice';
 import { PropertyWithOwner } from '@/features/properties/PropertyTypes';
 
-// Assuming these types are defined somewhere in your project
-interface Tenant {
-  id: number;
-  name: string;
-  // Other tenant properties
+interface UnitsListProp {
+	property:PropertyWithOwner;
 }
 
-interface Unit {
-  id?: number;
-  propertyId: number;
-  name: string;
-  description: string;
-  rent: string;
-  tenants: Tenant[];
-}
-
-export interface NewUnitData {
-  propertyId: number;
-  name: string;
-  description: string;
-  rent: number;
-}
-
-interface Property {
-  id: number;
-  name: string;
-  description: string;
-  units: Unit[];
-  // Other property properties
-}
-
-interface UnitsListProps {
-  property: PropertyWithOwner;
-}
-
-const UnitsList: React.FC<UnitsListProps> = ({ property }) => {
+const UnitsList: React.FC<UnitsListProp> = ({ property }) => {
   const [createUnit, { isLoading: isCreating }] = useCreateUnitMutation();
   // const [updateUnit] = useUpdateUnitMutation();
   // const [deleteUnit] = useDeleteUnitMutation();
