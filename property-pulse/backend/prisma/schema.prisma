@@ -87,7 +87,7 @@ model Property {
 
 model Unit {
   id              Int              @id @default(autoincrement())
-  property        Property         @relation(fields: [propertyId], references: [id])
+  property        Property         @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   propertyId      Int
   tenants         User[]
   issues          Issue[]
