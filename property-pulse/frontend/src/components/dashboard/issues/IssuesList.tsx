@@ -1,5 +1,6 @@
 'use client'
 import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { toast } from "react-toastify";
 import { selectUser } from '@/features/users/userReducer';
 import DescriptionModal from './DescriptionModal';
 import { useDeleteIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
@@ -59,6 +60,7 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 		if(role==="manager"){
 			try{
 				await updateIssue(item);
+				toast.success("Issue status changed.")
 				
 			}catch(err){
 				console.log(err)
@@ -66,8 +68,10 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 		}else if(role==="tenant"){
 			try{
 				await deleteIssue(item.id).unwrap();
+				toast.success("Issue deleted.")
 				
 			}catch(err){
+				toast.error("Something went wrong.")
 				console.log(err)
 			}
 		}else{
