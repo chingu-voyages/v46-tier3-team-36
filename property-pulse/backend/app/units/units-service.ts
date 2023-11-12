@@ -17,6 +17,14 @@ const getAllUnits = async () => {
  */
 const getUnitsForProperty = async (propertyId:number) => {
 	return await prisma.unit.findMany({
+		select: {
+			id: true,
+			name: true,
+			description: true,
+			propertyId: true,
+			rent: true,
+			tenants:true
+		},
 		where: {
 			propertyId
 		}
@@ -65,10 +73,10 @@ const updateUnit = async (user, unit: Unit) => {
 /**
  * Delete a unit belonging to the given property.
  */
-const deleteUnit = async (user, unit: Unit) => {
+const deleteUnit = async (user, unitId: number) => {
   const deletedUnit = await prisma.unit.delete({
     where: {
-      id: unit.id
+      id: unitId
     }
   })
 

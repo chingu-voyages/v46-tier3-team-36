@@ -13,7 +13,7 @@ import {
 } from '@/features/properties/propertiesSlice';
 
 const PropertiesPage: React.FC = () => {
-  const { data: properties, isLoading, isSuccess } = useGetPropertiesQuery();
+  const { data: properties, isLoading, isSuccess, refetch } = useGetPropertiesQuery();
   const [createProperty, { isLoading: isCreating }] = useCreatePropertyMutation();
   const [newPropertyName, setNewPropertyName] = useState('');
   const [newPropertyDescription, setNewPropertyDescription] = useState('');
@@ -93,7 +93,7 @@ const PropertiesPage: React.FC = () => {
       <div className="flex flex-wrap -m-2">
         {properties.map(property => (
           <div key={property.id} className="w-full pb-10">
-            <PropertyCard key={property.id} property={property} />
+            <PropertyCard key={property.id} property={property} refetch={refetch} />
           </div>
         ))}
       </div>

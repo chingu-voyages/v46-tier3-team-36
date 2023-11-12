@@ -23,7 +23,7 @@ export interface UserLogin {
 	password: string;
 };
 
-export interface UserResponse {
+interface UserResponse {
 	user: UserWithResidence;
 };
 

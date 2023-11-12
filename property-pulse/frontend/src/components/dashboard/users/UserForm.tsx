@@ -42,7 +42,7 @@ const UserForm = (
 	});
 
 	const unitOptions = units.map(unit => {
-		return { value: unit.id, label: unit.name };
+		return { value: unit.id!, label: unit.name! };
 	});
 
 	const onPasswordResetChange = (event:ChangeEvent<HTMLInputElement>) => {
