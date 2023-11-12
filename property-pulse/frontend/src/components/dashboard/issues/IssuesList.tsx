@@ -73,17 +73,17 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 		}
 	
 	}
-
+/*UI version returned depends on if called from Mangaer or Tenant. */
 	return(
 		<ul>
 			{issues.map((item)=>{
 				const property = item.tenant.residence[0].property.name;
-				const unit = item.tenant.residence[0].name; //blank string at creation/assignment (see properties & tenants page)
+				const unit = item.tenant.residence[0].id; 
 				const heading = formatTitle(item.type)
 				return(
 					 <li className={listItem} key={item.id}>
 						{/*Show property if manager */}
-						{role==="manager" && <h1 className="m-2 text-slate-500">{property}</h1>}
+						{role==="manager" && <h1 className="m-2 text-slate-500">{property}unit:{unit}</h1>}
 						<div className={listItemSection}>
 							<h1 className={headingStyles}>{heading}</h1>
 							<p className={statusStyles}>Status:{item.status}</p>
