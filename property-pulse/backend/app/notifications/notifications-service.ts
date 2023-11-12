@@ -121,7 +121,7 @@ const getNewNotifications = (req, res) => {
   // check for notifications every 100 seconds = 100000 ms
   // shorten as needed, just setting this as the default so that if someone forgets
   // to shutdown the server, we won't go over the Supabase free tier as easily
-  const notificationsInterval = setInterval(sendNotifications, 1000);
+  const notificationsInterval = setInterval(sendNotifications, 100000);
   
   req.on('close', () => {
     console.log('Client disconnected');
