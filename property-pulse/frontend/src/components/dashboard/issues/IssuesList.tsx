@@ -11,13 +11,15 @@ import {
 	date, 
 	buttonBox, 
 	editBtn, 
-	deleteBtn
+	deleteBtn,
+	statusStyles
 } from '@/lib/issuesListStyles';
 import { useUpdateIssueAdminMutation } from '@/features/issues/issuesSlice';
 
 type Issue ={
 	id: number;
 	status: string;
+	tenant:any; //any for now just to get up and running.
 	type: string;
 	title: string;
 	createdAt: string;
@@ -75,12 +77,16 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 	return(
 		<ul>
 			{issues.map((item)=>{
+				const property = item.tenant.residence[0].property.name;
+				const unit = item.tenant.residence[0].name; //blank string at creation/assignment (see properties & tenants page)
 				const heading = formatTitle(item.type)
 				return(
 					 <li className={listItem} key={item.id}>
+						{/*Show property if manager */}
+						{role==="manager" && <h1 className="m-2 text-slate-500">{property}</h1>}
 						<div className={listItemSection}>
 							<h1 className={headingStyles}>{heading}</h1>
-							<p className="w-1/2">Status:{item.status}</p>
+							<p className={statusStyles}>Status:{item.status}</p>
 							<ul className="md:w-3/4">
 								<li className={issueTitle}>{item.title}</li>
 								<li className={date}>Created:{item.createdAt}</li>
@@ -90,14 +96,14 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 						</div>
 						<div className={listItemSection}>
 							<div className={buttonBox}>
-								{/*if tenant */}
+								{/*Buttons if tenant */}
 								{role==="tenant" &&
 								<>
 								<button className={editBtn} onClick={()=>openForm(item)}>Edit</button>
 								<button className={deleteBtn} onClick={()=>handleClick(item)}>Delete</button>
 								</>
 								}
-								{/*if PM */}
+								{/*Buttons if PM */}
 								{role==="manager" && <button className={deleteBtn} onClick={()=>handleClick(item)}>update</button> }
 							</div>
 						</div>
