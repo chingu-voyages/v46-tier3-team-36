@@ -15,7 +15,7 @@ const IssuesPage: React.FC = () => {
 	const user = useSelector(selectUser);
 	const ref = useRef<HTMLFormElement>(null);
 	const {data, isLoading, isSuccess}=useGetIssuesQuery(user);
-
+	
 	const openAddForm = () =>{
 		if(isOpen === false){
 			setIsOpen(true)
@@ -28,7 +28,6 @@ const IssuesPage: React.FC = () => {
 		setIsOpen(true);
 		setIsCreate(false);
 		setIssueToEdit(issue)
-		console.log(issue)
 	}
 
 	const closeForm = (e:MouseEvent) =>{
@@ -48,7 +47,6 @@ const IssuesPage: React.FC = () => {
 	return(
 		<section>
 			<h1>{user && user.name +"'s"} Requests</h1>
-			<p></p>
 			<button className="bg-green-600 text-white p-2 m-2 rounded-xl" onClick={openAddForm}>New issue</button>
 			{isOpen && <IssuesForm issue={issueToEdit} isCreate={isCreate} isOpen={isOpen} setIsOpen={setIsOpen} formRef={ref}/>}
 			<IssuesList openForm={openEditForm} issues={data}/>

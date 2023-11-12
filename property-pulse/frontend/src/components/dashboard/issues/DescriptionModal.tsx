@@ -1,13 +1,15 @@
 import {useState} from 'react';
 
+import {
+	descriptionHidden, 
+	descriptionShowing, 
+	descriptionModalStyles
+} from '@/lib/descriptionModalStyles'
+
 type  DescriptionModalProps = {
 	id: string;
 	description: string;
 };
-//will move styles to lib folder.
-const descriptionHidden ="hidden"
-const descriptionShowing = "absolute z-10 p-3 h-96 w-64 border-2 border-slate-400 rounded-xl bg-green-200"
-const descriptionModalStyles = "relative flex-col justify-center w-1/3"
 
 const DescriptionModal: React.FC<DescriptionModalProps> = ({id,description}) => {
 	const [descriptionStyles, setDescriptionStyles] = useState(descriptionHidden);
@@ -38,7 +40,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({id,description}) => 
 	};
 	return (
 		<div id={`${id}Container`} className={descriptionModalStyles} onClick={closeDescription}>
-			<button onClick={showDescription}>Details</button>
+			<button className="w-full"onClick={showDescription}>Details</button>
 			<div id={id} className={descriptionStyles}>
 				<p>{description}</p>
 			</div>

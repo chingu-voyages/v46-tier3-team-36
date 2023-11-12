@@ -1,6 +1,7 @@
 'use client';
 
 import {useState,  Dispatch, SetStateAction, LegacyRef} from 'react';
+import { toast } from "react-toastify";
 import ErrorDisplay from "../../ErrorDisplay";
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { useCreateIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
@@ -45,8 +46,10 @@ const IssuesForm = ({issue, isCreate, isOpen, setIsOpen, formRef}:IssueFormProps
 			try{
 				setLoading(true);
 				await createdIssue(newIssue);
+				toast.success("Issue created.")
 			}catch(error){
 				console.log(error)
+				toast.error("Something went wrong.")
 				setError(true)
 			}
 		}else if(!isCreate){
@@ -56,10 +59,12 @@ const IssuesForm = ({issue, isCreate, isOpen, setIsOpen, formRef}:IssueFormProps
 			
 			try{
 				setLoading(true);
-				const data = await updatedIssue(editedIssue)
+				const data = await updatedIssue(editedIssue);
+				toast.success("Issue updated.")
 			}
 			catch(error){
 				console.log(error);
+				toast.success("Something went wrong.")
 			}
 		}
 		setIsOpen(false);
