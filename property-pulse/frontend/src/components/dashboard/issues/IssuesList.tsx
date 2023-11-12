@@ -31,12 +31,14 @@ type IssuesListProps = {
 	openForm: Function;
 };
 
-
+/*UI version returned depends on if 'role' equals "mangaer" or "tenant". */
 const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 	const [ deleteIssue ] = useDeleteIssueMutation();
 	const [ updateIssue ] = useUpdateIssueAdminMutation();
 	const user:any = useSelector(selectUser);
 	const role = user.role;
+	let property ="";
+	let unit = 0;
 
 
 	const formatTitle= (inquiryType:string)=>{
@@ -71,15 +73,15 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 		}else{
 			console.log("something wrong in del/update btn click on issue item.")
 		}
-	
 	}
-/*UI version returned depends on if called from Mangaer or Tenant. */
 	return(
 		<ul>
 			{issues.map((item)=>{
-				const property = item.tenant.residence[0].property.name;
-				const unit = item.tenant.residence[0].id; 
-				const heading = formatTitle(item.type)
+			if(role==="manager"){
+				 property = item.tenant.residence[0].property.name;
+				 unit = item.tenant.residence[0].id; 
+			}
+			const heading = formatTitle(item.type)
 				return(
 					 <li className={listItem} key={item.id}>
 						{/*Show property if manager */}

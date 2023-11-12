@@ -15,8 +15,6 @@ const IssuesPage: React.FC = () => {
 	const user = useSelector(selectUser);
 	const ref = useRef<HTMLFormElement>(null);
 	const {data, isLoading, isSuccess}=useGetIssuesQuery(user);
-	//log user to see if residence prop exits.
-	console.log(user)
 	
 	const openAddForm = () =>{
 		if(isOpen === false){
@@ -30,7 +28,6 @@ const IssuesPage: React.FC = () => {
 		setIsOpen(true);
 		setIsCreate(false);
 		setIssueToEdit(issue)
-		console.log(issue)
 	}
 
 	const closeForm = (e:MouseEvent) =>{
