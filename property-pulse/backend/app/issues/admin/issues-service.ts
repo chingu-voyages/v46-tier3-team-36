@@ -101,19 +101,19 @@ const getAllIssues = async (user) => {
 
 
 const updateIssue = async (issueId: number, data: Issue) => {
-  const { type, title, description } = data;
-
+  let { status } = data;
+  status === 'open' ? status = "closed" : status = "open"
+  
   const updatedIssue = await prisma.issue.update({
     where: {
       id: issueId
     },
     data: {
-      type,
-      title,
-      description
+      status
     }
   })
 
+  
   return updatedIssue;
 }
 

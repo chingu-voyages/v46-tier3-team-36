@@ -3,7 +3,7 @@ import { UnauthenticatedError, UnauthorizedError } from './errorMiddleware';
 import { $Enums } from '@prisma/client';
 
 // Middleware to check if user is authenticated. Use this middlware for any routes that requires authenticated users
-export const authenticate = (req: Request, res:Response, next:NextFunction) => {
+export const authenticate = () => (req: Request, res:Response, next:NextFunction) => {
 	if(!req.user) throw new UnauthenticatedError("Unauthenticated");
 	next();
 };

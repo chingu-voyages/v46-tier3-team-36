@@ -33,17 +33,15 @@ router
     
     return res.status(200).json(issues)
   })
-
   /**
-	 * Update an issue
+	 * Update an issue's status
 	 */
-  .patch('/api/admin/issues/:id', async (req, res) => {
+  .patch('/api/admin/issue/:id', async (req, res) => {
     const user = req.user;
     const issue = await issuesService.updateIssue(Number(req.params.id), req.body)
 
     res.status(200).json(issue);
   })
-
   /**
 	 * Delete an issue
 	 */

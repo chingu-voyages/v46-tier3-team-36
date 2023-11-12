@@ -1,4 +1,4 @@
-import { $Enums, PrismaClient, User, Prisma } from '@prisma/client';
+import { $Enums, PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -139,6 +139,11 @@ const getPaginatedUsers = async (userId:number, role:$Enums.Role, page: number, 
 }
 
 const createUser = async (data:UserWithResidence) => {
+	// Only need the unit id from residence data
+	const residenceData = data.residence.map((unit) => {
+		return { id: unit.id };
+	});
+
 	// Do not take any id given by the client. Let prisma auto-generate.
 	const newUser = await prisma.user.create({
 		data: {
@@ -146,7 +151,7 @@ const createUser = async (data:UserWithResidence) => {
 			email: data.email,
 			role: data.role,
 			residence: {
-				connect: data.residence
+				connect: residenceData
 			},
 			password: data.password
 		}
@@ -155,6 +160,11 @@ const createUser = async (data:UserWithResidence) => {
 };
 
 const updateUser = async (id:number, data:UserWithResidence) => {
+	// Only need the unit id from residence data
+	const residenceData = data.residence.map((unit) => {
+		return { id: unit.id };
+	});
+
 	const updatedUser = await prisma.user.update({
 		where: { id },
 		data: {
@@ -162,7 +172,7 @@ const updateUser = async (id:number, data:UserWithResidence) => {
 			email: data.email,
 			role: data.role,
 			residence: {
-				set: data.residence
+				set: residenceData
 			},
 			...data.password && {password: data.password}
 		}
