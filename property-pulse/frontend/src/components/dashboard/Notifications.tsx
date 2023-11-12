@@ -19,6 +19,7 @@ const Notifications = () => {
   }, [data, isSuccess]);
 
   useEffect(() => {
+    // user is showing up as undefined sometimes?
     const eventSource = new EventSource(`/api/users/${user?.id}/notifications/new`);
 
     eventSource.onopen = (event) => {

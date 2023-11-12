@@ -51,7 +51,8 @@ const getAllNotifications = async (user) => {
   return await prisma.notification.findMany({
     where: {
       userId: user.id,
-    }
+    },
+    orderBy: { createdAt: 'desc' },
   })
 }
 
@@ -62,6 +63,7 @@ const getUnreadNotifications = async (user) => {
       read: false,
       isNew: false // to avoid double counting when notifications arrive while SSE not active?
     },
+    orderBy: { createdAt: 'desc' },
   })
 }
 
@@ -92,7 +94,7 @@ const getNewNotifications = (req, res) => {
         userId: user.id,
         isNew: true,
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
     });
     console.log(newNotifications)
 
