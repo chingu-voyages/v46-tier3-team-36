@@ -1,4 +1,6 @@
 'use client'
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { selectUser } from '@/features/users/userReducer';
 import DescriptionModal from './DescriptionModal';
 import { useDeleteIssueMutation, useUpdateIssueMutation } from '@/features/issues/tenantIssuesSlice';
 import {
@@ -11,6 +13,7 @@ import {
 	editBtn, 
 	deleteBtn
 } from '@/lib/issuesListStyles';
+import { useUpdateIssueAdminMutation } from '@/features/issues/issuesSlice';
 
 type Issue ={
 	id: number;
@@ -29,6 +32,10 @@ type IssuesListProps = {
 
 const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 	const [ deleteIssue ] = useDeleteIssueMutation();
+	const [ updateIssue ] = useUpdateIssueAdminMutation();
+	const user:any = useSelector(selectUser);
+	const role = user.role;
+
 
 	const formatTitle= (inquiryType:string)=>{
 		/*Makes a more readable title for the UI*/
@@ -44,13 +51,25 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 		//Tidy up returned date obj.
 	};
 
-	const handleDeleteClick = async (id:number) => {
-		try{
-			await deleteIssue(id).unwrap()
-			
-		}catch(err){
-			console.log(err)
+	const handleClick = async (item:any) => {
+		if(role==="manager"){
+			try{
+				await updateIssue(item);
+				
+			}catch(err){
+				console.log(err)
+			}
+		}else if(role==="tenant"){
+			try{
+				await deleteIssue(item.id).unwrap();
+				
+			}catch(err){
+				console.log(err)
+			}
+		}else{
+			console.log("something wrong in del/update btn click on issue item.")
 		}
+	
 	}
 
 	return(
@@ -71,8 +90,15 @@ const IssuesList:React.FC<IssuesListProps> = ({issues, openForm}) => {
 						</div>
 						<div className={listItemSection}>
 							<div className={buttonBox}>
+								{/*if tenant */}
+								{role==="tenant" &&
+								<>
 								<button className={editBtn} onClick={()=>openForm(item)}>Edit</button>
-								<button className={deleteBtn} onClick={()=>handleDeleteClick(item.id)}>Delete</button>
+								<button className={deleteBtn} onClick={()=>handleClick(item)}>Delete</button>
+								</>
+								}
+								{/*if PM */}
+								{role==="manager" && <button className={deleteBtn} onClick={()=>handleClick(item)}>update</button> }
 							</div>
 						</div>
 					</li>

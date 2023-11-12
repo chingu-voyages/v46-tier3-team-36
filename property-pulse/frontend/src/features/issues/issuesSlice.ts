@@ -8,7 +8,7 @@ export const issuesApiSliceAdmin = apiSlice.injectEndpoints({
 		}),
 		createIssueAdmin: builder.mutation({
 			query: issue => ({
-				url: '/issues/create',
+				url: '/admin/issues',
 				method: 'POST',
 				body: issue
 			}),
@@ -16,7 +16,7 @@ export const issuesApiSliceAdmin = apiSlice.injectEndpoints({
 		}),
 		updateIssueAdmin: builder.mutation({
 			query: issue => ({
-				url: `/issues/update/${issue.id}`,
+				url: `/admin/issue/${issue.id}`,
 				method: 'PATCH',
 				body: issue
 			}),
@@ -24,7 +24,7 @@ export const issuesApiSliceAdmin = apiSlice.injectEndpoints({
 		}),
 		deleteIssueAdmin: builder.mutation({
 			query: issueId => ({
-				url: `/issues/delete/${issueId}`,
+				url: `/admin/issues/${issueId}`,
 				method: 'DELETE'
 			}),
 			invalidatesTags: ['Issues']
