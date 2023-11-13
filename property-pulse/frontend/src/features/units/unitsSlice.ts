@@ -1,9 +1,13 @@
 import { apiSlice } from '../api/apiSlice';
-import { Unit } from '../../../../backend/utils/prisma-proxy';
+import { Unit, UnitWithPropertyTenants } from './unitType';
+
+export interface UnitResponse {
+	unit: Unit;
+};
 
 export const unitsApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		getUnitsForProperty: builder.query<Unit[], number>({
+		getUnitsForProperty: builder.query<UnitWithPropertyTenants[], number>({
 			query: propertyId => `/admin/units?propertyid=${propertyId}`,
 			providesTags: ['Units']
 		}),
@@ -11,7 +15,7 @@ export const unitsApiSlice = apiSlice.injectEndpoints({
 			query: () => '/admin/units',
 			providesTags: ['Units']
 		}),
-		createUnit: builder.mutation<Unit, Unit>({
+		createUnit: builder.mutation<UnitResponse, Unit>({
 			query: unit => ({
 				url: '/admin/units',
 				method: 'POST',
@@ -19,7 +23,7 @@ export const unitsApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Units']
 		}),
-		updateUnit: builder.mutation<Unit, Unit>({
+		updateUnit: builder.mutation<UnitResponse, Unit>({
 			query: unit => ({
 				url: `/admin/units/${unit.id}`,
 				method: 'PATCH',
@@ -27,7 +31,7 @@ export const unitsApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Units']
 		}),
-		deleteUnit: builder.mutation<Unit, number>({
+		deleteUnit: builder.mutation<UnitResponse, number>({
 			query: unitId => ({
 				url: `/admin/units/${unitId}`,
 				method: 'DELETE'

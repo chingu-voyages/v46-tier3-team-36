@@ -8,7 +8,7 @@ import {testimonials, text} from '../components/landing/content';
 export default function Home() {
   return (
     <main className="h-screen">
-      <nav className="flex justify-between bg-lime-500 border-b-2 border-lime-600 w-full fixed">
+      <nav className="flex justify-between bg-green-100 border-b-2 border-lime-600 w-full fixed">
         <Logo/>
         <div className="flex justify-end w-1/2 m-1 md:w-1/6 md:m-4">
           <Link className="m-2" href="/login">Login</Link>

@@ -1,7 +1,7 @@
 import { $Enums } from '../../../../../backend/utils/prisma-proxy';
 import { useGetPropertiesQuery } from '@/features/properties/propertiesSlice';
 import { useGetUnitsForPropertyQuery } from '@/features/units/unitsSlice';
-import User from '@/features/users/userType';
+import { UserWithResidence } from '@/features/users/userType';
 import { toast } from "react-toastify";
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useUpdateUserMutation, useCreateUserMutation } from '@/features/users/usersSlice';
@@ -18,7 +18,7 @@ import FormInput from '../FormInput';
  */
 const UserForm = (
 	{user, userRole, formCloseHandler}:
-	{user?:User, userRole:$Enums.Role, formCloseHandler:()=>void}
+	{user?:UserWithResidence, userRole:$Enums.Role, formCloseHandler:()=>void}
 ) => {
 	const [updateUser, updateUserResult] = useUpdateUserMutation();
 	const [createUser, createUserResult] = useCreateUserMutation();
@@ -42,7 +42,7 @@ const UserForm = (
 	});
 
 	const unitOptions = units.map(unit => {
-		return { value: unit.id, label: unit.name };
+		return { value: unit.id!, label: unit.name! };
 	});
 
 	const onPasswordResetChange = (event:ChangeEvent<HTMLInputElement>) => {
@@ -67,14 +67,14 @@ const UserForm = (
 					return false;
 				}
 			}
-			const userData = {
+			const userData:UserWithResidence = {
 				id: user ? Number(user.id) : undefined,
 				email: String(formData.email),
 				name: String(formData.name),
 				password: !user || resetPassword ? String(formData.password) : undefined,
 				role: userRole,
 				residence: userRole === $Enums.Role.tenant ? units.filter(unit => unit.id === Number(formData.unitId)): []
-			} as User;
+			};
 			if(user) {
 				await updateUser(userData).unwrap();
 				toast.success('User successfully updated', {

@@ -19,14 +19,40 @@ router
 		res.status(200).json(units);
 	})
 
-		/**
-	 * Create a new unit
+/**
+ * Create a new unit
+ */
+	.post('/units', async (req, res) => {
+		const user = req.user;
+		const newUnit = await unitsService.createUnit(user, req.body);
+
+		return res.status(201).json(newUnit);
+	})
+
+	/**
+	 * Update a unit
 	 */
-		.post('/units', async (req, res) => {
-			const user = req.user;
-			const newUnit = await unitsService.createUnit(user, req.body);
+	.patch('/units/:id', async (req, res) => {
+		const user = req.user;
+		const updatedUnit = await unitsService.updateUnit(user, req.body);
+
+		return res.status(200).json(updatedUnit);
+	})
+
+	/**
+	 * Delete a unit
+	 */
+	.delete('/units/:id', async (req, res) => {
+		const user = req.user;
+		const { id } = req.params;
+		const unitId = parseInt(id, 10);
 	
-			return res.status(201).json(newUnit);
-		})
+		if (!unitId) {
+			return res.status(400).json({ message: 'Unit ID is required' });
+		}
+	
+		const deletedUnit = await unitsService.deleteUnit(user, unitId);
+		return res.status(200).json(deletedUnit);
+	})
 
 export default router;

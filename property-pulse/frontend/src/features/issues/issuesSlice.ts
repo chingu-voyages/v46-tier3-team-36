@@ -1,30 +1,30 @@
 import { apiSlice } from '../api/apiSlice';
 
-export const issuesApiSlice = apiSlice.injectEndpoints({
+export const issuesApiSliceAdmin = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		getIssues: builder.query({
-			query: () => '/issues',
+		getIssuesAdmin: builder.query({
+			query: () => '/admin/issues',
 			providesTags: ['Issues']
 		}),
-		createIssue: builder.mutation({
+		createIssueAdmin: builder.mutation({
 			query: issue => ({
-				url: '/issues/create',
+				url: '/admin/issues',
 				method: 'POST',
 				body: issue
 			}),
 			invalidatesTags: ['Issues']
 		}),
-		updateIssue: builder.mutation({
+		updateIssueAdmin: builder.mutation({
 			query: issue => ({
-				url: `/issues/update/${issue.id}`,
+				url: `/admin/issue/${issue.id}`,
 				method: 'PATCH',
 				body: issue
 			}),
 			invalidatesTags: ['Issues']
 		}),
-		deleteIssue: builder.mutation({
+		deleteIssueAdmin: builder.mutation({
 			query: issueId => ({
-				url: `/issues/delete/${issueId}`,
+				url: `/admin/issues/${issueId}`,
 				method: 'DELETE'
 			}),
 			invalidatesTags: ['Issues']
@@ -33,8 +33,8 @@ export const issuesApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-	useGetIssuesQuery,
-	useCreateIssueMutation,
-	useUpdateIssueMutation,
-	useDeleteIssueMutation
-} = issuesApiSlice;
+	useGetIssuesAdminQuery,
+	useCreateIssueAdminMutation,
+	useUpdateIssueAdminMutation,
+	useDeleteIssueAdminMutation
+} = issuesApiSliceAdmin;
