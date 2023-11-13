@@ -8,6 +8,7 @@ import { selectUser, userLoggedIn } from '@/features/users/userReducer';
 import { useAppDispatch } from '@/store/store';
 import Navbar from '@/components/dashboard/Navbar';
 import SideMenuBar from '@/components/dashboard/SideMenuBar';
+import Footer from '@/components/dashboard/Footer';
 
 interface Context {
 	activeRoute: string;
@@ -102,9 +103,10 @@ const DashboardLayout = ({children}: {children: React.ReactNode}) => {
 			<main onClick={closeDropdownMenus}>
 				<Navbar profileBtnRef={profileBtnRef} hamburgerRef={hamburgerRef} />
 				<SideMenuBar />
-				<div className={`p-4 pt-20 min-h-screen ${showSideMenu ? 'md:ml-80' : 'ml-5'}`}>
+				<div className={`p-4 pt-20 pb-14 min-h-screen ${showSideMenu ? 'md:ml-80' : 'ml-5'}`}>
 					{children}
 				</div>
+				<Footer />
 			</main>
 		</DashboardContext.Provider>
 	)
