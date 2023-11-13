@@ -1,10 +1,4 @@
 export const ManagerMenuItems = [{
-	path: "/admin/contractors",
-	label: "Contractors",
-},{
-	path: "/admin/notice",
-	label: "Manage Notices",
-},{
 	path: "/admin/issues",
 	label: "Manage Issues"
 },{
@@ -19,9 +13,6 @@ export const ManagerMenuItems = [{
 }];
 
 export const TenantMenuItems = [{
-	path: "/notices",
-	label: "Notices"
-},{
 	path: "/issues",
 	label: "Issues"
 }];

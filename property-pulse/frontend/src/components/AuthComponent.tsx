@@ -9,9 +9,10 @@ import { useLoginUserMutation } from '@/features/users/usersSlice';
 import { userLoggedIn } from '@/features/users/userReducer';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
+import LoadingSpinner from './LoadingSpinner';
 
 const AuthComponent: React.FC = () => {
-  const [loginUser, loginUserResult] = useLoginUserMutation();
+  const [loginUser, { isLoading: isLoggingIn }] = useLoginUserMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
@@ -61,11 +62,9 @@ const AuthComponent: React.FC = () => {
     }
   };
 
-
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white rounded shadow-md w-80 md:w-96 flex flex-col justify-between">
+      <div className="p-8 bg-white rounded shadow-md w-80 md:w-96 flex flex-col justify-between gap-1">
         <div>
           <div className="flex justify-between text-xl font-semibold mb-6">
             <span
@@ -132,7 +131,7 @@ const AuthComponent: React.FC = () => {
             </>
           )}
         </div>
-
+        {isLoggingIn && <LoadingSpinner />}
         <div>
           {isLogin ? 
           (<button className="mb-4 w-full p-2 bg-green-800 hover:bg-green-600 text-white rounded" onClick={handleLogin}>

@@ -15,7 +15,7 @@ const SideMenuBar = () => {
 	};
 	const toggleSideMenu = () => { setShowSideMenu((value) => !value); }
 	return (
-		<aside className={`fixed transition-[width] left-0 bottom-0 top-0 bg-green-900 hidden md:grid grid-rows-min justify-center text-white ${showSideMenu ? 'w-72': 'w-0 overflow-hidden'}`}>
+		<aside className={`fixed transition-[width] left-0 bottom-12 top-0 bg-green-900 hidden md:grid grid-rows-min justify-center text-white ${showSideMenu ? 'w-72': 'w-0 overflow-hidden'}`}>
 			<div className="row-span-1 pt-4 bg-white h-16 w-full px-6">
 				<Logo  />
 			</div>
