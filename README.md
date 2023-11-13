@@ -57,6 +57,13 @@
 ## About The Project
 
 Property Pulse - A property management application that streamlines all aspects of managing rental properties and fosters a harmonious relationship between landlord and tenant.
+<p>Visitor Login</p>
+
+* URL: https://property-pulse.vercel.app
+* Email: visitor@manager.com
+* Password: password
+
+Please note that our backend server is deployed on Render while our frontend is deployed on Vercel. Render application shuts down after a period of inactivity and it can take a minute or two to start up. After you click "Login", you may have to wait a minute or two and click the Login button again.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
