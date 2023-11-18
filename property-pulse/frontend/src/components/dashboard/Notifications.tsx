@@ -19,29 +19,30 @@ const Notifications = () => {
   }, [data, isSuccess]);
 
   useEffect(() => {
-    // user is showing up as undefined sometimes?
-    const eventSource = new EventSource(`/api/users/${user?.id}/notifications/new`);
+    if (user?.id) {
+      const eventSource = new EventSource(`/api/users/${user.id}/notifications/new`);
 
-    eventSource.onopen = (event) => {
-      console.log('Connection opened', event);
-    };
+      eventSource.onopen = (event) => {
+        console.log('Connection opened', event);
+      };
 
-    eventSource.addEventListener('update', (event) => {
-      console.log(eventSource, 'event listener');
-      const notifications = JSON.parse(event.data);
-      setNewNotifications((newNotifications: Notification[]) => [notifications, ...newNotifications]);
-      setNewNotificationsCount((count) => count + notifications.length);
-    });
+      eventSource.addEventListener('update', (event) => {
+        console.log(eventSource, 'event listener');
+        const notifications = JSON.parse(event.data);
+        setNewNotifications((newNotifications: Notification[]) => [notifications, ...newNotifications]);
+        setNewNotificationsCount((count) => count + notifications.length);
+      });
 
-    eventSource.onerror = (error) => {
-      console.error('SSE error:', error);
-      // eventSource.close();
-    };
+      eventSource.onerror = (error) => {
+        console.error('SSE error:', error);
+        // eventSource.close();
+      };
 
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+      return () => {
+        eventSource.close();
+      };
+    }
+  }, [user?.id]);
 
   console.log(newNotifications);
 
