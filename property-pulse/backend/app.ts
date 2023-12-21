@@ -28,6 +28,13 @@ app.use(cors());
 // app.use(express.static('dist'));
 app.use(express.json());
 
+app.use((req, res, next) => {
+	req.setTimeout(500000, () => {
+		console.log("Request timed out.");
+	});
+	next();
+});
+
 app.use(
   session({
     store: new PgSession({}),
