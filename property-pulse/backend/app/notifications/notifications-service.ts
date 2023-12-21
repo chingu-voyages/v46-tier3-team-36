@@ -75,7 +75,7 @@ const deleteNotification = async (notificationId) => {
   })
 }
 
-const getNewNotifications = (req, res) => {
+const getNewNotifications = async (req, res) => {
   // SSE headers
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -114,18 +114,23 @@ const getNewNotifications = (req, res) => {
       })
     } else {
       console.log('no notifications')
+	  res.write("event: noupdate");
     }
-
   };
   
   // check for notifications every 100 seconds = 100000 ms
   // shorten as needed, just setting this as the default so that if someone forgets
   // to shutdown the server, we won't go over the Supabase free tier as easily
   const notificationsInterval = setInterval(sendNotifications, 100000);
-  
+
+  const keepAliveInterval = setInterval(() => {
+	res.write(":keepalive");
+  }, 15000);
+
   req.on('close', () => {
     console.log('Client disconnected');
     clearInterval(notificationsInterval);
+	clearInterval(keepAliveInterval);
     res.end();
   });
 
