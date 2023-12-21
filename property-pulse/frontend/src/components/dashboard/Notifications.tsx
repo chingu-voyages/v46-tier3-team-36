@@ -41,7 +41,7 @@ const Notifications = () => {
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [user]);
 
   console.log(newNotifications);
 
